@@ -1,0 +1,106 @@
+/**
+ * Requiem Color Palette
+ * Grey scale from white to black
+ * Usage: var(--grey-50), var(--grey-950), etc.
+ */
+
+:root {
+  /* Grey Scale - White to Black */
+  --grey-0: #ffffff;
+  --grey-50: #fafafa;
+  --grey-100: #f4f4f5;
+  --grey-150: #ececed;
+  --grey-200: #e4e4e7;
+  --grey-250: #d4d4d8;
+  --grey-300: #c4c4c9;
+  --grey-350: #a1a1aa;
+  --grey-400: #8e8e96;
+  --grey-450: #71717a;
+  --grey-500: #5c5c66;
+  --grey-550: #4a4a52;
+  --grey-600: #3f3f46;
+  --grey-650: #333338;
+  --grey-700: #27272a;
+  --grey-750: #202023;
+  --grey-800: #18181b;
+  --grey-850: #121214;
+  --grey-900: #0d0d0e;
+  --grey-950: #09090b;
+  --grey-1000: #000000;
+
+  /* Semantic Aliases */
+  --color-bg-primary: var(--grey-900);
+  --color-bg-secondary: var(--grey-850);
+  --color-bg-tertiary: var(--grey-800);
+  --color-bg-elevated: var(--grey-750);
+  --color-bg-hover: var(--grey-700);
+
+  --color-text-primary: var(--grey-50);
+  --color-text-secondary: var(--grey-350);
+  --color-text-muted: var(--grey-450);
+  --color-text-disabled: var(--grey-550);
+
+  --color-border-default: var(--grey-700);
+  --color-border-subtle: var(--grey-800);
+  --color-border-strong: var(--grey-600);
+
+  /* Accent (indigo for interactive elements) */
+  --color-accent: #6366f1;
+  --color-accent-hover: #818cf8;
+  --color-accent-active: #4f46e5;
+  --color-accent-subtle: rgba(99, 102, 241, 0.15);
+
+  /* Status Colors */
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.5);
+
+  /* Blur */
+  --blur-sm: 4px;
+  --blur-md: 8px;
+  --blur-lg: 12px;
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* Spacing Scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Typography */
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  --text-xs: 11px;
+  --text-sm: 13px;
+  --text-base: 15px;
+  --text-lg: 17px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 30px;
+
+  /* Transitions */
+  --transition-fast: 0.1s ease;
+  --transition-normal: 0.2s ease;
+  --transition-slow: 0.3s ease;
+}
+
