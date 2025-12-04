@@ -1,36 +1,39 @@
 import { BufferGeometry } from 'three'
 
 /**
- * UV Mapping Utilities for 3D Character Models
+ * UV Mapping Utilities - Exact port from legacy Three.js
  * 
- * COORDINATE SYSTEM (matching legacy):
- * - X axis: Forward/Back (front of character faces +X)
- * - Y axis: Up/Down
- * - Z axis: Left/Right
+ * Legacy Three.js CubeGeometry face indices:
+ *   0 = Front  (+X)
+ *   1 = Back   (-X)
+ *   2 = Top    (+Y)
+ *   3 = Bottom (-Y)
+ *   4 = Left   (+Z)
+ *   5 = Right  (-Z)
  * 
- * MODERN THREE.JS BoxGeometry:
- * Face vertex order when viewed from outside:
- *   2 --- 3
- *   |     |
- *   0 --- 1
+ * Modern Three.js BoxGeometry UV attribute face order:
+ *   0-3:   +X
+ *   4-7:   -X
+ *   8-11:  +Y
+ *   12-15: -Y
+ *   16-19: +Z
+ *   20-23: -Z
  * 
- * Vertex positions: 0=bottom-left, 1=bottom-right, 2=top-left, 3=top-right
+ * Legacy UV coordinate system: V=0 at top of texture
+ * Modern UV coordinate system: V=0 at bottom of texture
+ * So we need: modern_v = 1 - legacy_v
  * 
- * Face indices in UV attribute buffer:
- *   0-3:   +X (right)
- *   4-7:   -X (left)
- *   8-11:  +Y (top)
- *   12-15: -Y (bottom)
- *   16-19: +Z (front)
- *   20-23: -Z (back)
+ * Legacy vertex order per face: 0=top-left, 1=bottom-left, 2=bottom-right, 3=top-right
+ * Modern vertex order per face: 0=bottom-left, 1=bottom-right, 2=top-left, 3=top-right
+ * Mapping: legacy[0,1,2,3] -> modern[2,0,1,3]
  */
 
 /** UV face coordinates in texture pixels */
 export interface UVFaceCoords {
   x: number
   y: number
-  w: number  // Negative = flip horizontally
-  h: number  // Negative = flip vertically
+  w: number
+  h: number
 }
 
 /** Dimensions for UV calculation */
@@ -39,66 +42,86 @@ export interface TextureDimensions {
   height: number
 }
 
-const DEFAULT_TEXTURE_SIZE: TextureDimensions = { width: 64, height: 64 }
-
-/** Modern BoxGeometry face start indices */
-const FACE_START = {
-  px: 0,   // +X (right side of cube)
-  nx: 4,   // -X (left side)
-  py: 8,   // +Y (top)
-  ny: 12,  // -Y (bottom)
-  pz: 16,  // +Z (front)
-  nz: 20,  // -Z (back)
-} as const
-
-type FaceName = 'px' | 'nx' | 'py' | 'ny' | 'pz' | 'nz'
+/** Legacy face index to modern UV attribute start index */
+const LEGACY_TO_MODERN_FACE: Record<number, number> = {
+  0: 0,   // Front (+X) -> +X
+  1: 4,   // Back (-X) -> -X
+  2: 8,   // Top (+Y) -> +Y
+  3: 12,  // Bottom (-Y) -> -Y
+  4: 16,  // Left (+Z) -> +Z
+  5: 20,  // Right (-Z) -> -Z
+}
 
 /**
- * Apply UV mapping to a single face
+ * Apply UV mapping to a face - exact port of legacy uvmap function
  * 
  * @param geometry - BoxGeometry to modify
- * @param face - Face name (px, nx, py, ny, pz, nz)
- * @param coords - Texture coordinates in pixels
- * @param texSize - Texture dimensions
- * @param rotate - Rotation in 90° steps (0-3)
+ * @param legacyFace - Legacy face index (0-5)
+ * @param x - Texture X in pixels
+ * @param y - Texture Y in pixels
+ * @param w - Width in pixels (negative = flip)
+ * @param h - Height in pixels (negative = flip)
+ * @param texWidth - Texture width
+ * @param texHeight - Texture height
+ * @param rotateBy - Rotation in 90° steps (0-3)
  */
-function applyFaceUV(
+export function uvmap(
   geometry: BufferGeometry,
-  face: FaceName,
-  coords: UVFaceCoords,
-  texSize: TextureDimensions,
-  rotate = 0
+  legacyFace: number,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  texWidth: number,
+  texHeight: number,
+  rotateBy = 0
 ): void {
   const uvAttr = geometry.getAttribute('uv')
   if (!uvAttr) return
 
-  const startIdx = FACE_START[face]
+  const startIdx = LEGACY_TO_MODERN_FACE[legacyFace]
+  if (startIdx === undefined) return
 
-  // Convert pixel coords to UV (0-1 range)
-  // UV V-axis: 0 at bottom, 1 at top
-  // Texture Y-axis: 0 at top, increases downward
-  const u0 = coords.x / texSize.width
-  const u1 = (coords.x + coords.w) / texSize.width
-  // Flip V: texture top (y=0) maps to V=1, texture bottom maps to V=0
-  const v0 = 1 - (coords.y + coords.h) / texSize.height  // bottom of texture region -> higher V
-  const v1 = 1 - coords.y / texSize.height               // top of texture region -> lower V
+  // Calculate UV coordinates exactly like legacy
+  // tileUvWidth = 1 / WIDTH, tileUvHeight = 1 / HEIGHT
+  const tileUvWidth = 1 / texWidth
+  const tileUvHeight = 1 / texHeight
 
-  // UV coordinates for each vertex position
-  // BoxGeometry vertex order: 0=bottom-left, 1=bottom-right, 2=top-left, 3=top-right
-  // Texture should appear right-side-up when viewed from outside the face
-  const baseUVs: [number, number][] = [
-    [u0, v0],  // vertex 0: bottom-left (low V)
-    [u1, v0],  // vertex 1: bottom-right
-    [u0, v1],  // vertex 2: top-left (high V)
-    [u1, v1],  // vertex 3: top-right
+  // Legacy UV coordinates (V=0 at top)
+  // Vertex 0: top-left
+  // Vertex 1: bottom-left
+  // Vertex 2: bottom-right
+  // Vertex 3: top-right
+  const legacyUVs: [number, number][] = [
+    [x * tileUvWidth, y * tileUvHeight],                           // 0: top-left
+    [x * tileUvWidth, y * tileUvHeight + h * tileUvHeight],        // 1: bottom-left
+    [x * tileUvWidth + w * tileUvWidth, y * tileUvHeight + h * tileUvHeight], // 2: bottom-right
+    [x * tileUvWidth + w * tileUvWidth, y * tileUvHeight],         // 3: top-right
   ]
 
-  // Apply rotation (each step = 90° clockwise when viewing face)
-  // Rotation shifts which UV coordinate goes to which vertex
-  const rotatedUVs = rotateUVs(baseUVs, rotate)
+  // Apply rotation (legacy style: vertex (i + rotateBy) % 4 gets UV i)
+  const rotatedLegacyUVs: [number, number][] = [
+    legacyUVs[(0 - rotateBy + 4) % 4] ?? [0, 0],
+    legacyUVs[(1 - rotateBy + 4) % 4] ?? [0, 0],
+    legacyUVs[(2 - rotateBy + 4) % 4] ?? [0, 0],
+    legacyUVs[(3 - rotateBy + 4) % 4] ?? [0, 0],
+  ]
 
+  // Convert to modern UV system (V = 1 - legacy_V)
+  // And map legacy vertex order to modern vertex order
+  // Legacy: 0=top-left, 1=bottom-left, 2=bottom-right, 3=top-right
+  // Modern: 0=bottom-left, 1=bottom-right, 2=top-left, 3=top-right
+  // So: modern[0] <- legacy[1], modern[1] <- legacy[2], modern[2] <- legacy[0], modern[3] <- legacy[3]
+  const modernUVs: [number, number][] = [
+    [rotatedLegacyUVs[1]![0], 1 - rotatedLegacyUVs[1]![1]], // modern 0 <- legacy 1
+    [rotatedLegacyUVs[2]![0], 1 - rotatedLegacyUVs[2]![1]], // modern 1 <- legacy 2
+    [rotatedLegacyUVs[0]![0], 1 - rotatedLegacyUVs[0]![1]], // modern 2 <- legacy 0
+    [rotatedLegacyUVs[3]![0], 1 - rotatedLegacyUVs[3]![1]], // modern 3 <- legacy 3
+  ]
+
+  // Apply to UV attribute
   for (let i = 0; i < 4; i++) {
-    const uv = rotatedUVs[i]
+    const uv = modernUVs[i]
     if (uv) {
       uvAttr.setXY(startIdx + i, uv[0], uv[1])
     }
@@ -108,61 +131,116 @@ function applyFaceUV(
 }
 
 /**
- * Rotate UV array by 90° steps
+ * Apply HEAD UV mapping (8x8x8 cube)
  */
-function rotateUVs(uvs: [number, number][], steps: number): [number, number][] {
-  if (steps === 0) return uvs
-  
-  const s = ((steps % 4) + 4) % 4  // Normalize to 0-3
-  
-  // Rotation maps: which vertex gets which UV after rotation
-  // For clockwise rotation when viewing face from outside
-  const rotationMaps: [number, number, number, number][] = [
-    [0, 1, 2, 3],  // 0: No rotation
-    [1, 3, 0, 2],  // 1: 90° CW
-    [3, 2, 1, 0],  // 2: 180°
-    [2, 0, 3, 1],  // 3: 270° CW (90° CCW)
-  ]
-
-  const map = rotationMaps[s]
-  if (!map) return uvs
-
-  const fallback: [number, number] = [0, 0]
-  return [
-    uvs[map[0]] ?? fallback,
-    uvs[map[1]] ?? fallback,
-    uvs[map[2]] ?? fallback,
-    uvs[map[3]] ?? fallback,
-  ]
+export function applyHeadUVs(geometry: BufferGeometry, texSize = 64): void {
+  const scale = texSize / 64
+  uvmap(geometry, 0, 8 * scale, 8 * scale, 8 * scale, 8 * scale, texSize, texSize)      // Front
+  uvmap(geometry, 1, 24 * scale, 8 * scale, 8 * scale, 8 * scale, texSize, texSize)     // Back
+  uvmap(geometry, 2, 8 * scale, 0 * scale, 8 * scale, 8 * scale, texSize, texSize, 1)   // Top
+  uvmap(geometry, 3, 16 * scale, 0 * scale, 8 * scale, 8 * scale, texSize, texSize, 3)  // Bottom
+  uvmap(geometry, 4, 0 * scale, 8 * scale, 8 * scale, 8 * scale, texSize, texSize)      // Left
+  uvmap(geometry, 5, 16 * scale, 8 * scale, 8 * scale, 8 * scale, texSize, texSize)     // Right
 }
 
 /**
- * Skin texture layout reference:
- * 
- * HEAD (0-31, 0-15):
- *        8   16  24
- *     +---+---+
- *     | T |Bot|        y: 0-7
- * +---+---+---+---+
- * | L | F | R | Bk|    y: 8-15
- * +---+---+---+---+
- * 0   8   16  24  32
- * 
- * T=Top, Bot=Bottom, L=Left, F=Front, R=Right, Bk=Back
+ * Apply HELMET/HAT UV mapping (overlay layer)
  */
+export function applyHelmetUVs(geometry: BufferGeometry, texSize = 64): void {
+  const scale = texSize / 64
+  uvmap(geometry, 0, 40 * scale, 8 * scale, 8 * scale, 8 * scale, texSize, texSize)     // Front
+  uvmap(geometry, 1, 56 * scale, 8 * scale, 8 * scale, 8 * scale, texSize, texSize)     // Back
+  uvmap(geometry, 2, 40 * scale, 0 * scale, 8 * scale, 8 * scale, texSize, texSize, 1)  // Top
+  uvmap(geometry, 3, 48 * scale, 0 * scale, 8 * scale, 8 * scale, texSize, texSize, 3)  // Bottom
+  uvmap(geometry, 4, 32 * scale, 8 * scale, 8 * scale, 8 * scale, texSize, texSize)     // Left
+  uvmap(geometry, 5, 48 * scale, 8 * scale, 8 * scale, 8 * scale, texSize, texSize)     // Right
+}
 
+/**
+ * Apply BODY UV mapping (4x12x8)
+ */
+export function applyBodyUVs(geometry: BufferGeometry, texSize = 64): void {
+  const scale = texSize / 64
+  uvmap(geometry, 0, 20 * scale, 20 * scale, 8 * scale, 12 * scale, texSize, texSize)    // Front
+  uvmap(geometry, 1, 32 * scale, 20 * scale, 8 * scale, 12 * scale, texSize, texSize)    // Back
+  uvmap(geometry, 2, 20 * scale, 16 * scale, 8 * scale, 4 * scale, texSize, texSize, 1)  // Top
+  uvmap(geometry, 3, 28 * scale, 16 * scale, 8 * scale, 4 * scale, texSize, texSize, 3)  // Bottom
+  uvmap(geometry, 4, 16 * scale, 20 * scale, 4 * scale, 12 * scale, texSize, texSize)    // Left
+  uvmap(geometry, 5, 28 * scale, 20 * scale, 4 * scale, 12 * scale, texSize, texSize)    // Right
+}
+
+/**
+ * Apply RIGHT ARM UV mapping (4x12x4)
+ */
+export function applyRightArmUVs(geometry: BufferGeometry, texSize = 64): void {
+  const scale = texSize / 64
+  uvmap(geometry, 0, 44 * scale, 20 * scale, 4 * scale, 12 * scale, texSize, texSize)    // Front
+  uvmap(geometry, 1, 52 * scale, 20 * scale, 4 * scale, 12 * scale, texSize, texSize)    // Back
+  uvmap(geometry, 2, 44 * scale, 16 * scale, 4 * scale, 4 * scale, texSize, texSize, 1)  // Top
+  uvmap(geometry, 3, 48 * scale, 20 * scale, 4 * scale, -4 * scale, texSize, texSize, 3) // Bottom
+  uvmap(geometry, 4, 40 * scale, 20 * scale, 4 * scale, 12 * scale, texSize, texSize)    // Left
+  uvmap(geometry, 5, 48 * scale, 20 * scale, 4 * scale, 12 * scale, texSize, texSize)    // Right
+}
+
+/**
+ * Apply LEFT ARM UV mapping (4x12x4) - mirrored
+ */
+export function applyLeftArmUVs(geometry: BufferGeometry, texSize = 64): void {
+  const scale = texSize / 64
+  uvmap(geometry, 0, 48 * scale, 20 * scale, -4 * scale, 12 * scale, texSize, texSize)   // Front (mirrored)
+  uvmap(geometry, 1, 56 * scale, 20 * scale, -4 * scale, 12 * scale, texSize, texSize)   // Back (mirrored)
+  uvmap(geometry, 2, 48 * scale, 16 * scale, -4 * scale, 4 * scale, texSize, texSize, 1) // Top
+  uvmap(geometry, 3, 52 * scale, 20 * scale, -4 * scale, -4 * scale, texSize, texSize, 3)// Bottom
+  uvmap(geometry, 4, 52 * scale, 20 * scale, -4 * scale, 12 * scale, texSize, texSize)   // Left (mirrored)
+  uvmap(geometry, 5, 44 * scale, 20 * scale, -4 * scale, 12 * scale, texSize, texSize)   // Right (mirrored)
+}
+
+/**
+ * Apply RIGHT LEG UV mapping (4x12x4)
+ */
+export function applyRightLegUVs(geometry: BufferGeometry, texSize = 64): void {
+  const scale = texSize / 64
+  uvmap(geometry, 0, 4 * scale, 20 * scale, 4 * scale, 12 * scale, texSize, texSize)     // Front
+  uvmap(geometry, 1, 12 * scale, 20 * scale, 4 * scale, 12 * scale, texSize, texSize)    // Back
+  uvmap(geometry, 2, 8 * scale, 16 * scale, -4 * scale, 4 * scale, texSize, texSize, 3)  // Top
+  uvmap(geometry, 3, 12 * scale, 16 * scale, -4 * scale, 4 * scale, texSize, texSize, 1) // Bottom
+  uvmap(geometry, 4, 0 * scale, 20 * scale, 4 * scale, 12 * scale, texSize, texSize)     // Left
+  uvmap(geometry, 5, 8 * scale, 20 * scale, 4 * scale, 12 * scale, texSize, texSize)     // Right
+}
+
+/**
+ * Apply LEFT LEG UV mapping (4x12x4) - mirrored
+ */
+export function applyLeftLegUVs(geometry: BufferGeometry, texSize = 64): void {
+  const scale = texSize / 64
+  uvmap(geometry, 0, 8 * scale, 20 * scale, -4 * scale, 12 * scale, texSize, texSize)    // Front (mirrored)
+  uvmap(geometry, 1, 16 * scale, 20 * scale, -4 * scale, 12 * scale, texSize, texSize)   // Back (mirrored)
+  uvmap(geometry, 2, 4 * scale, 16 * scale, 4 * scale, 4 * scale, texSize, texSize, 3)   // Top
+  uvmap(geometry, 3, 8 * scale, 16 * scale, 4 * scale, 4 * scale, texSize, texSize, 1)   // Bottom
+  uvmap(geometry, 4, 12 * scale, 20 * scale, -4 * scale, 12 * scale, texSize, texSize)   // Left (mirrored)
+  uvmap(geometry, 5, 4 * scale, 20 * scale, -4 * scale, 12 * scale, texSize, texSize)    // Right (mirrored)
+}
+
+/**
+ * Apply CAPE UV mapping (1x16x10)
+ */
+export function applyCapeUVs(geometry: BufferGeometry, texSize = 64): void {
+  const scale = texSize / 64
+  uvmap(geometry, 0, 1 * scale, 1 * scale, 10 * scale, 16 * scale, texSize, 32)    // Front
+  uvmap(geometry, 1, 12 * scale, 1 * scale, 10 * scale, 16 * scale, texSize, 32)   // Back
+  uvmap(geometry, 2, 1 * scale, 0 * scale, 10 * scale, 1 * scale, texSize, 32)     // Top
+  uvmap(geometry, 3, 11 * scale, 0 * scale, 10 * scale, 1 * scale, texSize, 32, 1) // Bottom
+  uvmap(geometry, 4, 0 * scale, 1 * scale, 1 * scale, 16 * scale, texSize, 32)     // Left
+  uvmap(geometry, 5, 11 * scale, 1 * scale, 1 * scale, 16 * scale, texSize, 32)    // Right
+}
+
+// Legacy export aliases for compatibility
 export interface CubeUVConfig {
-  /** +X face (front in character space) */
   front: UVFaceCoords
-  /** -X face (back) */
   back: UVFaceCoords
-  /** +Y face (top) */
   top: UVFaceCoords
-  /** -Y face (bottom) */
   bottom: UVFaceCoords
-  /** +Z face (right side of character) */
   right: UVFaceCoords
-  /** -Z face (left side of character) */
   left: UVFaceCoords
 }
 
@@ -175,171 +253,16 @@ export interface CubeRotations {
   left?: number
 }
 
-/**
- * Apply UV mapping to all faces of a BoxGeometry
- * Uses character-space naming: front/back/top/bottom/left/right
- * 
- * Character coordinate system:
- * - Front of character faces +X
- * - Top of character is +Y
- * - Right side of character is +Z
- */
 export function applyCubeUVs(
   geometry: BufferGeometry,
   uvs: CubeUVConfig,
-  texSize: TextureDimensions = DEFAULT_TEXTURE_SIZE,
+  texSize: TextureDimensions = { width: 64, height: 64 },
   rotations: CubeRotations = {}
 ): void {
-  // Map character space to BoxGeometry faces
-  // Character front (+X) = BoxGeometry +X face
-  applyFaceUV(geometry, 'px', uvs.front, texSize, rotations.front ?? 0)
-  applyFaceUV(geometry, 'nx', uvs.back, texSize, rotations.back ?? 0)
-  applyFaceUV(geometry, 'py', uvs.top, texSize, rotations.top ?? 0)
-  applyFaceUV(geometry, 'ny', uvs.bottom, texSize, rotations.bottom ?? 0)
-  applyFaceUV(geometry, 'pz', uvs.right, texSize, rotations.right ?? 0)
-  applyFaceUV(geometry, 'nz', uvs.left, texSize, rotations.left ?? 0)
+  uvmap(geometry, 0, uvs.front.x, uvs.front.y, uvs.front.w, uvs.front.h, texSize.width, texSize.height, rotations.front ?? 0)
+  uvmap(geometry, 1, uvs.back.x, uvs.back.y, uvs.back.w, uvs.back.h, texSize.width, texSize.height, rotations.back ?? 0)
+  uvmap(geometry, 2, uvs.top.x, uvs.top.y, uvs.top.w, uvs.top.h, texSize.width, texSize.height, rotations.top ?? 0)
+  uvmap(geometry, 3, uvs.bottom.x, uvs.bottom.y, uvs.bottom.w, uvs.bottom.h, texSize.width, texSize.height, rotations.bottom ?? 0)
+  uvmap(geometry, 4, uvs.left.x, uvs.left.y, uvs.left.w, uvs.left.h, texSize.width, texSize.height, rotations.left ?? 0)
+  uvmap(geometry, 5, uvs.right.x, uvs.right.y, uvs.right.w, uvs.right.h, texSize.width, texSize.height, rotations.right ?? 0)
 }
-
-/*
- * ===========================================
- * PRESET UV CONFIGURATIONS
- * ===========================================
- */
-
-/** Head UV mapping (8x8x8) */
-export function getHeadUVConfig(): CubeUVConfig {
-  return {
-    front: { x: 8, y: 8, w: 8, h: 8 },
-    back: { x: 24, y: 8, w: 8, h: 8 },
-    top: { x: 8, y: 0, w: 8, h: 8 },
-    bottom: { x: 16, y: 0, w: 8, h: 8 },
-    left: { x: 0, y: 8, w: 8, h: 8 },
-    right: { x: 16, y: 8, w: 8, h: 8 },
-  }
-}
-
-/** Helmet/overlay UV mapping - offset by 32px */
-export function getHelmetUVConfig(): CubeUVConfig {
-  return {
-    front: { x: 40, y: 8, w: 8, h: 8 },
-    back: { x: 56, y: 8, w: 8, h: 8 },
-    top: { x: 40, y: 0, w: 8, h: 8 },
-    bottom: { x: 48, y: 0, w: 8, h: 8 },
-    left: { x: 32, y: 8, w: 8, h: 8 },
-    right: { x: 48, y: 8, w: 8, h: 8 },
-  }
-}
-
-/** Body UV mapping (4x12x8) */
-export function getBodyUVConfig(): CubeUVConfig {
-  return {
-    front: { x: 20, y: 20, w: 8, h: 12 },
-    back: { x: 32, y: 20, w: 8, h: 12 },
-    top: { x: 20, y: 16, w: 8, h: 4 },
-    bottom: { x: 28, y: 16, w: 8, h: 4 },
-    left: { x: 16, y: 20, w: 4, h: 12 },
-    right: { x: 28, y: 20, w: 4, h: 12 },
-  }
-}
-
-/** Right arm UV mapping (4x12x4) */
-export function getRightArmUVConfig(): CubeUVConfig {
-  return {
-    front: { x: 44, y: 20, w: 4, h: 12 },
-    back: { x: 52, y: 20, w: 4, h: 12 },
-    top: { x: 44, y: 16, w: 4, h: 4 },
-    bottom: { x: 48, y: 16, w: 4, h: 4 },
-    left: { x: 40, y: 20, w: 4, h: 12 },
-    right: { x: 48, y: 20, w: 4, h: 12 },
-  }
-}
-
-/** Left arm UV mapping (4x12x4) - uses 64x64 skin region */
-export function getLeftArmUVConfig(): CubeUVConfig {
-  return {
-    front: { x: 36, y: 52, w: 4, h: 12 },
-    back: { x: 44, y: 52, w: 4, h: 12 },
-    top: { x: 36, y: 48, w: 4, h: 4 },
-    bottom: { x: 40, y: 48, w: 4, h: 4 },
-    left: { x: 32, y: 52, w: 4, h: 12 },
-    right: { x: 40, y: 52, w: 4, h: 12 },
-  }
-}
-
-/** Right leg UV mapping (4x12x4) */
-export function getRightLegUVConfig(): CubeUVConfig {
-  return {
-    front: { x: 4, y: 20, w: 4, h: 12 },
-    back: { x: 12, y: 20, w: 4, h: 12 },
-    top: { x: 4, y: 16, w: 4, h: 4 },
-    bottom: { x: 8, y: 16, w: 4, h: 4 },
-    left: { x: 0, y: 20, w: 4, h: 12 },
-    right: { x: 8, y: 20, w: 4, h: 12 },
-  }
-}
-
-/** Left leg UV mapping (4x12x4) - uses 64x64 skin region */
-export function getLeftLegUVConfig(): CubeUVConfig {
-  return {
-    front: { x: 20, y: 52, w: 4, h: 12 },
-    back: { x: 28, y: 52, w: 4, h: 12 },
-    top: { x: 20, y: 48, w: 4, h: 4 },
-    bottom: { x: 24, y: 48, w: 4, h: 4 },
-    left: { x: 16, y: 52, w: 4, h: 12 },
-    right: { x: 24, y: 52, w: 4, h: 12 },
-  }
-}
-
-/** Cape UV mapping (1x16x10) */
-export function getCapeUVConfig(): CubeUVConfig {
-  return {
-    front: { x: 1, y: 1, w: 10, h: 16 },
-    back: { x: 12, y: 1, w: 10, h: 16 },
-    top: { x: 1, y: 0, w: 10, h: 1 },
-    bottom: { x: 11, y: 0, w: 10, h: 1 },
-    left: { x: 0, y: 1, w: 1, h: 16 },
-    right: { x: 11, y: 1, w: 1, h: 16 },
-  }
-}
-
-// Legacy compatibility exports
-export const applyFullCubeUV = applyCubeUVs
-export const getHeadUVs = () => {
-  const c = getHeadUVConfig()
-  return [c.front, c.back, c.top, c.bottom, c.left, c.right] as const
-}
-export const getHelmetUVs = () => {
-  const c = getHelmetUVConfig()
-  return [c.front, c.back, c.top, c.bottom, c.left, c.right] as const
-}
-export const getBodyUVs = () => {
-  const c = getBodyUVConfig()
-  return [c.front, c.back, c.top, c.bottom, c.left, c.right] as const
-}
-export const getRightArmUVs = () => {
-  const c = getRightArmUVConfig()
-  return [c.front, c.back, c.top, c.bottom, c.left, c.right] as const
-}
-export const getLeftArmUVs = () => {
-  const c = getLeftArmUVConfig()
-  return [c.front, c.back, c.top, c.bottom, c.left, c.right] as const
-}
-export const getRightLegUVs = () => {
-  const c = getRightLegUVConfig()
-  return [c.front, c.back, c.top, c.bottom, c.left, c.right] as const
-}
-export const getLeftLegUVs = () => {
-  const c = getLeftLegUVConfig()
-  return [c.front, c.back, c.top, c.bottom, c.left, c.right] as const
-}
-export const getCapeUVs = () => {
-  const c = getCapeUVConfig()
-  return [c.front, c.back, c.top, c.bottom, c.left, c.right] as const
-}
-
-// Rotation presets
-export const getHeadRotations = () => ({ top: 0, bottom: 2 })
-export const getBodyRotations = () => ({ top: 0, bottom: 2 })
-export const getRightArmRotations = () => ({ top: 0, bottom: 2 })
-export const getRightLegRotations = () => ({ top: 0, bottom: 2 })
-export const getCapeRotations = () => ({})

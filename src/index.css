@@ -23,13 +23,7 @@ body {
   color: var(--color-text-primary);
 }
 
-/* Global H1 styling - Ethnocentric font */
-h1 {
-  font-family: var(--font-ethnocentric);
-  font-weight: 400;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
+/* Typography is now handled by Typography component */
 
 /* Main content area - shifted when sidebar is present */
 .main-content {
@@ -313,17 +307,7 @@ h1 {
   padding: var(--space-8);
 }
 
-.home-content h1 {
-  font-size: var(--text-4xl);
-  margin-bottom: var(--space-2);
-  color: var(--grey-100);
-}
-
-.home-content p {
-  font-size: var(--text-base);
-  color: var(--color-text-secondary);
-  margin-bottom: var(--space-6);
-}
+/* Home content spacing handled by Typography component */
 
 /* ===========================================
    Profile Page
@@ -352,11 +336,7 @@ h1 {
   max-width: 900px;
 }
 
-.ladder-content h1 {
-  font-size: var(--text-2xl);
-  margin-bottom: var(--space-2);
-  color: var(--grey-100);
-}
+/* Ladder content typography handled by Typography component */
 
 /* ===========================================
    Map Page
@@ -386,37 +366,7 @@ h1 {
   padding: var(--space-8);
 }
 
-.not-found-title {
-  font-size: 8rem;
-  line-height: 1;
-  color: var(--grey-700);
-  margin-bottom: var(--space-4);
-}
-
-.not-found-subtitle {
-  font-family: var(--font-orbitron);
-  font-size: var(--text-xl);
-  color: var(--grey-300);
-  margin-bottom: var(--space-4);
-}
-
-.not-found-message {
-  font-size: var(--text-base);
-  color: var(--grey-500);
-  margin-bottom: var(--space-6);
-}
-
-.not-found-redirect {
-  font-size: var(--text-sm);
-  color: var(--grey-600);
-  margin-bottom: var(--space-6);
-}
-
-.not-found-redirect .countdown {
-  color: var(--grey-300);
-  font-weight: 700;
-  font-family: var(--font-mono);
-}
+/* 404 page typography handled by Typography component */
 
 /* ===========================================
    Table Component

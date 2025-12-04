@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Table } from '../components/Table'
+import { Typography, TypographyVariant } from '../components/Typography'
 import { fetchLadder } from '../api/client'
 import type { PlayerDTO, TableColumn, SortParams, ListRequest } from '../types/api'
 
@@ -26,13 +27,6 @@ const LADDER_COLUMNS: TableColumn<PlayerDTO>[] = [
     align: 'right',
     sortable: true,
     render: (value) => Number(value).toLocaleString(),
-  },
-  {
-    key: 'gamesPlayed',
-    label: 'Games',
-    width: '100px',
-    align: 'center',
-    sortable: true,
   },
   {
     key: 'winRate',
@@ -114,8 +108,14 @@ export function LadderPage() {
   return (
     <div className="page ladder-page">
       <div className="ladder-content">
-        <h1>Leaderboard</h1>
-        <p className="page-subtitle">Top players ranked by score</p>
+        <Typography variant={TypographyVariant.H1}>Leaderboard</Typography>
+        <Typography 
+          variant={TypographyVariant.Caption} 
+          color="var(--color-text-secondary)"
+          style={{ marginBottom: 'var(--space-6)' }}
+        >
+          Top players ranked by score
+        </Typography>
 
         <Table<PlayerDTO>
           columns={LADDER_COLUMNS}
@@ -132,4 +132,3 @@ export function LadderPage() {
     </div>
   )
 }
-

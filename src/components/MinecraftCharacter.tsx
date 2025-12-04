@@ -11,19 +11,14 @@ import {
 } from 'three'
 import type { MinecraftCharacterProps } from '../types/skin'
 import {
-  applyCubeUVs,
-  getHeadUVConfig,
-  getHeadRotations,
-  getHelmetUVConfig,
-  getBodyUVConfig,
-  getBodyRotations,
-  getRightArmUVConfig,
-  getRightArmRotations,
-  getLeftArmUVConfig,
-  getRightLegUVConfig,
-  getRightLegRotations,
-  getLeftLegUVConfig,
-  getCapeUVConfig,
+  applyHeadUVs,
+  applyHelmetUVs,
+  applyBodyUVs,
+  applyRightArmUVs,
+  applyLeftArmUVs,
+  applyRightLegUVs,
+  applyLeftLegUVs,
+  applyCapeUVs,
 } from '../utils/uvMapping'
 
 /** Scale: 1 unit = 1/8 of model height */
@@ -64,7 +59,7 @@ function BodyPartMesh({ geometry, texture, transparent = false }: BodyPartMeshPr
 /**
  * 3D Character Model
  * 
- * Coordinate system:
+ * Coordinate system (matching legacy):
  * - X: Forward/Back (front faces +X)
  * - Y: Up/Down
  * - Z: Left/Right (character's right is +Z)
@@ -85,45 +80,42 @@ export function MinecraftCharacter({
   const capeRef = useRef<Group>(null)
 
   const geometries = useMemo(() => {
-    const texSize = { width: 64, height: 64 }
-    const capeTexSize = { width: 64, height: 32 }
-
     // Head (8x8x8)
     const headGeo = new BoxGeometry(8, 8, 8)
-    applyCubeUVs(headGeo, getHeadUVConfig(), texSize, getHeadRotations())
+    applyHeadUVs(headGeo, 64)
 
     // Helmet (9x9x9)
     const helmetGeo = new BoxGeometry(9, 9, 9)
-    applyCubeUVs(helmetGeo, getHelmetUVConfig(), texSize, getHeadRotations())
+    applyHelmetUVs(helmetGeo, 64)
 
     // Body (4 deep × 12 tall × 8 wide)
     const bodyGeo = new BoxGeometry(4, 12, 8)
-    applyCubeUVs(bodyGeo, getBodyUVConfig(), texSize, getBodyRotations())
+    applyBodyUVs(bodyGeo, 64)
 
     // Right arm (4×12×4) - pivot at shoulder
     const rightArmGeo = new BoxGeometry(4, 12, 4)
-    rightArmGeo.translate(0, -6, 0)
-    applyCubeUVs(rightArmGeo, getRightArmUVConfig(), texSize, getRightArmRotations())
+    rightArmGeo.translate(0, -4, 0)
+    applyRightArmUVs(rightArmGeo, 64)
 
     // Left arm (4×12×4) - pivot at shoulder
     const leftArmGeo = new BoxGeometry(4, 12, 4)
-    leftArmGeo.translate(0, -6, 0)
-    applyCubeUVs(leftArmGeo, getLeftArmUVConfig(), texSize, getRightArmRotations())
+    leftArmGeo.translate(0, -4, 0)
+    applyLeftArmUVs(leftArmGeo, 64)
 
     // Right leg (4×12×4) - pivot at hip
     const rightLegGeo = new BoxGeometry(4, 12, 4)
     rightLegGeo.translate(0, -6, 0)
-    applyCubeUVs(rightLegGeo, getRightLegUVConfig(), texSize, getRightLegRotations())
+    applyRightLegUVs(rightLegGeo, 64)
 
     // Left leg (4×12×4) - pivot at hip
     const leftLegGeo = new BoxGeometry(4, 12, 4)
     leftLegGeo.translate(0, -6, 0)
-    applyCubeUVs(leftLegGeo, getLeftLegUVConfig(), texSize, getRightLegRotations())
+    applyLeftLegUVs(leftLegGeo, 64)
 
     // Cape (1×16×10)
     const capeGeo = new BoxGeometry(1, 16, 10)
     capeGeo.translate(0, -8, 0)
-    applyCubeUVs(capeGeo, getCapeUVConfig(), capeTexSize)
+    applyCapeUVs(capeGeo, 64)
 
     return { headGeo, helmetGeo, bodyGeo, rightArmGeo, leftArmGeo, rightLegGeo, leftLegGeo, capeGeo }
   }, [])
@@ -199,7 +191,7 @@ export function MinecraftCharacter({
 
   return (
     <group ref={playerGroupRef} scale={[SCALE, SCALE, SCALE]}>
-      {/* Head at y=10 */}
+      {/* Head at y=10 (on top of body) */}
       <group ref={headRef} position={[0, 10, 0]}>
         <BodyPartMesh geometry={geometries.headGeo} texture={skinTexture} />
         <BodyPartMesh geometry={geometries.helmetGeo} texture={skinTexture} transparent />
