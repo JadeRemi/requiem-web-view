@@ -88,15 +88,19 @@ export function uvmap(
   const tileUvHeight = 1 / texHeight
 
   // Legacy UV coordinates (V=0 at top)
-  // Vertex 0: top-left
-  // Vertex 1: bottom-left
-  // Vertex 2: bottom-right
-  // Vertex 3: top-right
+  // To fix 180° rotation: swap the diagonal - put bottom-right where top-left was, etc.
+  // Original: 0=top-left, 1=bottom-left, 2=bottom-right, 3=top-right
+  // Rotated 180°: 0=bottom-right, 1=top-right, 2=top-left, 3=bottom-left
+  const u0 = x * tileUvWidth
+  const u1 = x * tileUvWidth + w * tileUvWidth
+  const v0 = y * tileUvHeight
+  const v1 = y * tileUvHeight + h * tileUvHeight
+  
   const legacyUVs: [number, number][] = [
-    [x * tileUvWidth, y * tileUvHeight],                           // 0: top-left
-    [x * tileUvWidth, y * tileUvHeight + h * tileUvHeight],        // 1: bottom-left
-    [x * tileUvWidth + w * tileUvWidth, y * tileUvHeight + h * tileUvHeight], // 2: bottom-right
-    [x * tileUvWidth + w * tileUvWidth, y * tileUvHeight],         // 3: top-right
+    [u1, v1],  // 0: was top-left, now bottom-right
+    [u1, v0],  // 1: was bottom-left, now top-right
+    [u0, v0],  // 2: was bottom-right, now top-left
+    [u0, v1],  // 3: was top-right, now bottom-left
   ]
 
   // Apply rotation (legacy style: vertex (i + rotateBy) % 4 gets UV i)
