@@ -3,12 +3,20 @@
  * All project-wide constants and configuration values
  */
 
+/** 
+ * Default skin hash (base64 encoded JSON with texture URL)
+ * This is PJesus's skin from the example
+ */
+export const DEFAULT_SKIN_HASH = 'eyJ0aW1lc3RhbXAiOjE1MDQ4NjI0NzMyMDksInByb2ZpbGVJZCI6IjQ4ZGZiYmJmZGUwOTRjOGVhZTlhNTVkZWQ0M2IxMDA5IiwicHJvZmlsZU5hbWUiOiJQSmVzdXMiLCJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjg0MWUyNDliOGJjNTMyYTRiNWViNTM5YTE2ZmQ1YmYxMGE5ZGQyMWY1ZWExOGM3ZjhlMzIzOGVjNGZkZmIifX19'
+
 /** Default skin hashes for preset characters */
 export const PRESET_SKINS = {
   /** Steve - default male skin */
   STEVE: '8667ba71-b85a-4004-af54-457a9734eed7',
   /** Alex - default female skin */
   ALEX: '6ab43178-89fd-4905-97f6-0f67d9d76fd9',
+  /** PJesus - example skin */
+  PJESUS: '48dfbbbf-de09-4c8e-ae9a-55ded43b1009',
 } as const
 
 /** Minecraft texture server base URL */
@@ -21,6 +29,7 @@ export const CRAFATAR_BASE = 'https://crafatar.com'
 export const ROUTES = {
   HOME: '/',
   PROFILE: '/profile',
+  MAP: '/map',
 } as const
 
 /** Skin viewer default settings */
@@ -34,11 +43,11 @@ export const SKIN_VIEWER_DEFAULTS = {
   /** Default cape visibility */
   SHOW_CAPE: true,
   /** Camera field of view */
-  CAMERA_FOV: 45,
+  CAMERA_FOV: 35,
   /** Camera min distance */
-  CAMERA_MIN_DISTANCE: 2,
+  CAMERA_MIN_DISTANCE: 4,
   /** Camera max distance */
-  CAMERA_MAX_DISTANCE: 10,
+  CAMERA_MAX_DISTANCE: 15,
 } as const
 
 /** Minecraft model dimensions (in pixels, 1 unit = 1 pixel) */
@@ -84,4 +93,3 @@ export const ANIMATION = {
   /** Leg swing amplitude (running) */
   LEG_SWING_RUN: 1.4,
 } as const
-

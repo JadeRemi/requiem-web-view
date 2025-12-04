@@ -6,7 +6,6 @@ export function HomePage() {
     <div className="page home-page">
       <div className="home-content">
         <h1>Requiem</h1>
-        <p>Minecraft Skin Viewer</p>
         <Link to={ROUTES.PROFILE} className="nav-link">
           View Profile
         </Link>
@@ -14,4 +13,3 @@ export function HomePage() {
     </div>
   )
 }
-

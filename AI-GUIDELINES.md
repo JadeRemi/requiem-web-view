@@ -31,6 +31,7 @@ This document contains project preferences and guidelines for AI assistants work
 - Keep dependencies minimal and intentional
 - Prefer functional components with hooks
 - Keep `ErrorBoundary` component - it's a useful utility
+- **Minimize "Minecraft" references** - avoid in file names, visible text, and component names where possible
 
 ### Code Style
 
@@ -84,7 +85,7 @@ dist/               # Production build output
 | `/pages` | Route page components |
 | `/hooks` | Custom React hooks |
 | `/scenes` | Three.js scene-specific components |
-| `/legacy` | **Inspection only** - dump of reference files, never import or execute |
+| `/legacy` | **Inspection only** - dump of reference files, never import or execute. Contains commented legacy code for UV mapping and animation reference. |
 
 ## Configuration (`/config`)
 
@@ -106,14 +107,28 @@ import { ROUTES, PRESET_SKINS, ANIMATION } from '../config'
 
 The project uses CSS custom properties defined in `src/styles/palette.css`:
 
-- **Grey scale**: `--grey-0` (white) to `--grey-1000` (black)
+- **Grey scale**: `--grey-0` (white) to `--grey-1000` (black) - **grey tones only for now**
 - **Semantic colors**: `--color-bg-*`, `--color-text-*`, `--color-border-*`
-- **Accent colors**: `--color-accent`, `--color-accent-hover`, etc.
+- **Interactive colors**: `--color-interactive-*` (using light greys)
 - **Spacing**: `--space-1` through `--space-16`
-- **Typography**: `--font-mono`, `--font-sans`, `--text-xs` through `--text-3xl`
 - **Shadows**: `--shadow-sm`, `--shadow-md`, `--shadow-lg`, `--shadow-xl`
 
+### Fonts
+
+Available font variables:
+- `--font-orbitron` - Orbitron (Google Fonts) - **primary for /profile**
+- `--font-pixelify` - Pixelify Sans (Google Fonts)
+- `--font-ethnocentric` - Ethnocentric (requires local install)
+- `--font-nirmala` - Nirmala UI (system font)
+- `--font-mono` - Monospace fallback stack
+- `--font-sans` - System sans-serif fallback
+
+### Typography Sizes
+
+`--text-xs` through `--text-5xl`
+
 Always use these CSS variables instead of hardcoded values.
+**Do not use accent/colored styles** - grey palette only until magenta is added later.
 
 ## Routing
 

@@ -5,9 +5,8 @@ import { TextureLoader, Texture, NearestFilter, SRGBColorSpace } from 'three'
 import { MinecraftCharacter } from './MinecraftCharacter'
 import type { SkinViewerProps, SkinViewerConfig } from '../types/skin'
 import { DEFAULT_CONFIG } from '../types/skin'
-
-// Default Steve skin (base64 encoded minimal placeholder)
-const DEFAULT_SKIN_URL = 'https://crafatar.com/skins/8667ba71-b85a-4004-af54-457a9734eed7'
+import { decodeSkinHash } from '../utils/skinHash'
+import { DEFAULT_SKIN_HASH } from '../config'
 
 interface ControlPanelProps {
   config: SkinViewerConfig
@@ -95,14 +94,15 @@ function SceneContent({
 }) {
   return (
     <>
-      <PerspectiveCamera makeDefault position={[0, 2, 5]} fov={45} />
+      {/* Camera positioned further back for smaller model appearance */}
+      <PerspectiveCamera makeDefault position={[0, 2, 8]} fov={35} />
       <OrbitControls
         autoRotate={config.autoRotate}
         autoRotateSpeed={2}
         enablePan={false}
-        minDistance={2}
-        maxDistance={10}
-        target={[0, 1.5, 0]}
+        minDistance={4}
+        maxDistance={15}
+        target={[0, 1, 0]}
       />
       <ambientLight intensity={0.6} />
       <directionalLight position={[5, 10, 5]} intensity={1} />
@@ -118,13 +118,31 @@ function SceneContent({
   )
 }
 
+/**
+ * Load skin URL from a Minecraft skin hash
+ * Returns the texture URL or null if decoding fails
+ */
+function getSkinUrlFromHash(hash: string): string | null {
+  const decoded = decodeSkinHash(hash)
+  return decoded?.skinUrl ?? null
+}
+
+/**
+ * Load cape URL from a Minecraft skin hash
+ */
+function getCapeUrlFromHash(hash: string): string | null {
+  const decoded = decodeSkinHash(hash)
+  return decoded?.capeUrl ?? null
+}
+
 export function SkinViewer({
-  skinUrl = DEFAULT_SKIN_URL,
+  skinUrl,
+  skinHash,
   capeUrl,
   config: initialConfig,
   width = 400,
   height = 600,
-}: SkinViewerProps) {
+}: SkinViewerProps & { skinHash?: string }) {
   const [config, setConfig] = useState<SkinViewerConfig>({
     ...DEFAULT_CONFIG,
     ...initialConfig,
@@ -132,36 +150,64 @@ export function SkinViewer({
 
   const [skinTexture, setSkinTexture] = useState<Texture | null>(null)
   const [capeTexture, setCapeTexture] = useState<Texture | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
-  // Load skin texture
+  // Determine final skin URL - priority: skinUrl prop > skinHash prop > default hash
+  const finalSkinUrl = skinUrl ?? getSkinUrlFromHash(skinHash ?? DEFAULT_SKIN_HASH)
+  const finalCapeUrl = capeUrl ?? (skinHash ? getCapeUrlFromHash(skinHash) : null)
+
+  // Load skin texture with lazy loading
   useEffect(() => {
+    if (!finalSkinUrl) {
+      setIsLoading(false)
+      return
+    }
+
+    setIsLoading(true)
     const loader = new TextureLoader()
-    loader.load(
-      skinUrl,
-      (texture) => {
-        texture.magFilter = NearestFilter
-        texture.minFilter = NearestFilter
-        texture.colorSpace = SRGBColorSpace
-        texture.needsUpdate = true
-        setSkinTexture(texture)
-      },
-      undefined,
-      (error) => {
-        console.error('Failed to load skin texture:', error)
-      }
-    )
-  }, [skinUrl])
+    
+    // Create an image to handle CORS and lazy loading
+    const img = new Image()
+    img.crossOrigin = 'anonymous'
+    
+    img.onload = () => {
+      loader.load(
+        finalSkinUrl,
+        (texture) => {
+          texture.magFilter = NearestFilter
+          texture.minFilter = NearestFilter
+          texture.colorSpace = SRGBColorSpace
+          texture.needsUpdate = true
+          setSkinTexture(texture)
+          setIsLoading(false)
+        },
+        undefined,
+        (error) => {
+          console.error('Failed to load skin texture:', error)
+          setIsLoading(false)
+        }
+      )
+    }
+    
+    img.onerror = () => {
+      console.error('Failed to load skin image')
+      setIsLoading(false)
+    }
+    
+    // Start loading
+    img.src = finalSkinUrl
+  }, [finalSkinUrl])
 
   // Load cape texture
   useEffect(() => {
-    if (!capeUrl) {
+    if (!finalCapeUrl) {
       setCapeTexture(null)
       return
     }
 
     const loader = new TextureLoader()
     loader.load(
-      capeUrl,
+      finalCapeUrl,
       (texture) => {
         texture.magFilter = NearestFilter
         texture.minFilter = NearestFilter
@@ -175,7 +221,7 @@ export function SkinViewer({
         setCapeTexture(null)
       }
     )
-  }, [capeUrl])
+  }, [finalCapeUrl])
 
   const handleConfigChange = useCallback((key: keyof SkinViewerConfig, value: boolean) => {
     setConfig((prev) => ({ ...prev, [key]: value }))
@@ -204,6 +250,11 @@ export function SkinViewer({
 
   return (
     <div className="skin-viewer" style={{ width, height }}>
+      {isLoading && (
+        <div className="skin-viewer-loading">
+          <span>Loading...</span>
+        </div>
+      )}
       <Canvas>
         <Suspense fallback={null}>
           <SceneContent
@@ -221,4 +272,3 @@ export function SkinViewer({
     </div>
   )
 }
-

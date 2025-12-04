@@ -11,32 +11,31 @@ import {
 } from 'three'
 import type { MinecraftCharacterProps } from '../types/skin'
 import {
-  applyCubeUV,
-  getHeadUV,
-  getHelmetUV,
-  getBodyUV,
-  getRightArmUV,
-  getLeftArmUV,
-  getRightLegUV,
-  getLeftLegUV,
-  getCapeUV,
+  applyCubeUVs,
+  getHeadUVConfig,
+  getHeadRotations,
+  getHelmetUVConfig,
+  getBodyUVConfig,
+  getBodyRotations,
+  getRightArmUVConfig,
+  getRightArmRotations,
+  getLeftArmUVConfig,
+  getRightLegUVConfig,
+  getRightLegRotations,
+  getLeftLegUVConfig,
+  getCapeUVConfig,
 } from '../utils/uvMapping'
-import { ANIMATION } from '../config'
 
-/**
- * Scale factor: converts Minecraft pixels to Three.js units
- * 1 Minecraft pixel = 1/8 Three.js unit
- */
+/** Scale: 1 unit = 1/8 of model height */
 const SCALE = 1 / 8
 
 interface BodyPartMeshProps {
   geometry: BoxGeometry
   texture: Texture | null
   transparent?: boolean
-  position?: [number, number, number]
 }
 
-function BodyPartMesh({ geometry, texture, transparent = false, position }: BodyPartMeshProps) {
+function BodyPartMesh({ geometry, texture, transparent = false }: BodyPartMeshProps) {
   const material = useMemo(() => {
     const mat = new MeshStandardMaterial({
       map: texture,
@@ -59,20 +58,16 @@ function BodyPartMesh({ geometry, texture, transparent = false, position }: Body
     }
   }, [texture, material])
 
-  return <mesh geometry={geometry} material={material} position={position} />
+  return <mesh geometry={geometry} material={material} />
 }
 
 /**
- * MinecraftCharacter Component
+ * 3D Character Model
  * 
- * Renders a 3D Minecraft character model with proper UV mapping.
- * 
- * Coordinate System (matching legacy code):
- * - X axis: forward/back (front of character faces +X)
- * - Y axis: up/down
- * - Z axis: left/right
- * 
- * Body part order in legacy CubeGeometry: (depth, height, width) = (x, y, z)
+ * Coordinate system:
+ * - X: Forward/Back (front faces +X)
+ * - Y: Up/Down
+ * - Z: Left/Right (character's right is +Z)
  */
 export function MinecraftCharacter({
   skinTexture,
@@ -89,132 +84,112 @@ export function MinecraftCharacter({
   const rightLegRef = useRef<Group>(null)
   const capeRef = useRef<Group>(null)
 
-  // Create geometries with UV mapping
-  // Legacy format: CubeGeometry(depth, height, width) where depth is X-axis
-  // Modern Three.js BoxGeometry(width, height, depth) where width is X-axis
-  // We need to match legacy orientation where X is forward
   const geometries = useMemo(() => {
-    // Head (8x8x8) - same all dimensions
+    const texSize = { width: 64, height: 64 }
+    const capeTexSize = { width: 64, height: 32 }
+
+    // Head (8x8x8)
     const headGeo = new BoxGeometry(8, 8, 8)
-    applyCubeUV(headGeo, getHeadUV())
+    applyCubeUVs(headGeo, getHeadUVConfig(), texSize, getHeadRotations())
 
-    // Helmet overlay (slightly larger)
+    // Helmet (9x9x9)
     const helmetGeo = new BoxGeometry(9, 9, 9)
-    applyCubeUV(helmetGeo, getHelmetUV())
+    applyCubeUVs(helmetGeo, getHelmetUVConfig(), texSize, getHeadRotations())
 
-    // Body: legacy was CubeGeometry(4, 12, 8) = (depth=4, height=12, width=8)
-    // Modern BoxGeometry(width, height, depth) so we need (8, 12, 4)
-    // But to match legacy orientation where front faces X+, we use (4, 12, 8)
+    // Body (4 deep × 12 tall × 8 wide)
     const bodyGeo = new BoxGeometry(4, 12, 8)
-    applyCubeUV(bodyGeo, getBodyUV())
+    applyCubeUVs(bodyGeo, getBodyUVConfig(), texSize, getBodyRotations())
 
-    // Right arm: legacy CubeGeometry(4, 12, 4)
-    // Pivot shifted to top for rotation
+    // Right arm (4×12×4) - pivot at shoulder
     const rightArmGeo = new BoxGeometry(4, 12, 4)
-    rightArmGeo.translate(0, -6, 0) // Shift pivot to top
-    applyCubeUV(rightArmGeo, getRightArmUV())
+    rightArmGeo.translate(0, -6, 0)
+    applyCubeUVs(rightArmGeo, getRightArmUVConfig(), texSize, getRightArmRotations())
 
-    // Left arm: legacy CubeGeometry(4, 12, 4)
+    // Left arm (4×12×4) - pivot at shoulder
     const leftArmGeo = new BoxGeometry(4, 12, 4)
     leftArmGeo.translate(0, -6, 0)
-    applyCubeUV(leftArmGeo, getLeftArmUV())
+    applyCubeUVs(leftArmGeo, getLeftArmUVConfig(), texSize, getRightArmRotations())
 
-    // Right leg: legacy CubeGeometry(4, 12, 4)
+    // Right leg (4×12×4) - pivot at hip
     const rightLegGeo = new BoxGeometry(4, 12, 4)
     rightLegGeo.translate(0, -6, 0)
-    applyCubeUV(rightLegGeo, getRightLegUV())
+    applyCubeUVs(rightLegGeo, getRightLegUVConfig(), texSize, getRightLegRotations())
 
-    // Left leg: legacy CubeGeometry(4, 12, 4)
+    // Left leg (4×12×4) - pivot at hip
     const leftLegGeo = new BoxGeometry(4, 12, 4)
     leftLegGeo.translate(0, -6, 0)
-    applyCubeUV(leftLegGeo, getLeftLegUV())
+    applyCubeUVs(leftLegGeo, getLeftLegUVConfig(), texSize, getRightLegRotations())
 
-    // Cape: legacy CubeGeometry(1, 16, 10) = (depth=1, height=16, width=10)
+    // Cape (1×16×10)
     const capeGeo = new BoxGeometry(1, 16, 10)
     capeGeo.translate(0, -8, 0)
-    applyCubeUV(capeGeo, getCapeUV(), { width: 64, height: 32 })
+    applyCubeUVs(capeGeo, getCapeUVConfig(), capeTexSize)
 
-    return {
-      head: headGeo,
-      helmet: helmetGeo,
-      body: bodyGeo,
-      rightArm: rightArmGeo,
-      leftArm: leftArmGeo,
-      rightLeg: rightLegGeo,
-      leftLeg: leftLegGeo,
-      cape: capeGeo,
-    }
+    return { headGeo, helmetGeo, bodyGeo, rightArmGeo, leftArmGeo, rightLegGeo, leftLegGeo, capeGeo }
   }, [])
 
-  // Animation loop
+  // Animation
   useFrame((state) => {
     if (!animate) return
-
     const time = state.clock.elapsedTime
 
-    // Head bob animation
+    // Head bob
     if (headRef.current) {
-      headRef.current.rotation.y = Math.sin(time * ANIMATION.HEAD_BOB_SPEED) / 5
-      headRef.current.rotation.x = Math.sin(time) / 6
+      headRef.current.rotation.y = Math.sin(time * 1.5) / 5
+      headRef.current.rotation.z = Math.sin(time) / 6
     }
 
     if (running) {
-      // Running animation (matching legacy rotation.z for arm/leg swing)
-      const runTime = time * ANIMATION.RUN_SPEED
-
+      const t = time * 10
+      
       if (rightArmRef.current) {
-        rightArmRef.current.rotation.x = ANIMATION.ARM_SWING_RUN * Math.cos(0.6662 * runTime + Math.PI)
-        rightArmRef.current.rotation.z = Math.cos(0.2812 * runTime) - 1
+        rightArmRef.current.rotation.z = 2 * Math.cos(0.6662 * t + Math.PI)
+        rightArmRef.current.rotation.x = Math.cos(0.2812 * t) - 1
       }
       if (leftArmRef.current) {
-        leftArmRef.current.rotation.x = ANIMATION.ARM_SWING_RUN * Math.cos(0.6662 * runTime)
-        leftArmRef.current.rotation.z = Math.cos(0.2312 * runTime) + 1
+        leftArmRef.current.rotation.z = 2 * Math.cos(0.6662 * t)
+        leftArmRef.current.rotation.x = Math.cos(0.2312 * t) + 1
       }
       if (rightLegRef.current) {
-        rightLegRef.current.rotation.x = ANIMATION.LEG_SWING_RUN * Math.cos(0.6662 * runTime)
+        rightLegRef.current.rotation.z = 1.4 * Math.cos(0.6662 * t)
       }
       if (leftLegRef.current) {
-        leftLegRef.current.rotation.x = ANIMATION.LEG_SWING_RUN * Math.cos(0.6662 * runTime + Math.PI)
+        leftLegRef.current.rotation.z = 1.4 * Math.cos(0.6662 * t + Math.PI)
       }
       if (playerGroupRef.current) {
-        playerGroupRef.current.position.y = Math.cos(0.6662 * runTime * 2)
+        playerGroupRef.current.position.y = Math.cos(0.6662 * t * 2)
       }
       if (capeRef.current) {
-        capeRef.current.rotation.x = 0.1 * Math.sin(0.6662 * runTime * 2) + Math.PI / 2.5
+        capeRef.current.rotation.z = 0.1 * Math.sin(0.6662 * t * 2) + Math.PI / 2.5
       }
     } else {
-      // Idle animation (matching legacy)
-      const idleTime = time * ANIMATION.IDLE_SPEED
+      const t = time * 3
 
       if (leftArmRef.current) {
-        leftArmRef.current.rotation.x = -Math.sin(idleTime) * ANIMATION.ARM_SWING_IDLE
-        leftArmRef.current.rotation.z = (Math.cos(idleTime) + Math.PI / 2) / 30
+        leftArmRef.current.rotation.z = -Math.sin(t) / 2
+        leftArmRef.current.rotation.x = (Math.cos(t) + Math.PI / 2) / 30
       }
       if (rightArmRef.current) {
-        rightArmRef.current.rotation.x = Math.sin(idleTime) * ANIMATION.ARM_SWING_IDLE
-        rightArmRef.current.rotation.z = -(Math.cos(idleTime) + Math.PI / 2) / 30
+        rightArmRef.current.rotation.z = Math.sin(t) / 2
+        rightArmRef.current.rotation.x = -(Math.cos(t) + Math.PI / 2) / 30
       }
       if (leftLegRef.current) {
-        leftLegRef.current.rotation.x = Math.sin(idleTime) * ANIMATION.LEG_SWING_IDLE
+        leftLegRef.current.rotation.z = Math.sin(t) / 3
       }
       if (rightLegRef.current) {
-        rightLegRef.current.rotation.x = -Math.sin(idleTime) * ANIMATION.LEG_SWING_IDLE
+        rightLegRef.current.rotation.z = -Math.sin(t) / 3
       }
       if (playerGroupRef.current) {
         playerGroupRef.current.position.y = 0
       }
       if (capeRef.current) {
-        capeRef.current.rotation.x = Math.sin(time * 2) / 15 + Math.PI / 15
+        capeRef.current.rotation.z = Math.sin(time * 2) / 15 + Math.PI / 15
       }
     }
   })
 
-  // Cape material
   const capeMaterial = useMemo(() => {
-    const mat = new MeshStandardMaterial({
-      map: capeTexture,
-      side: DoubleSide,
-    })
+    const mat = new MeshStandardMaterial({ map: capeTexture, side: DoubleSide })
     if (capeTexture) {
       capeTexture.magFilter = NearestFilter
       capeTexture.minFilter = NearestFilter
@@ -222,68 +197,41 @@ export function MinecraftCharacter({
     return mat
   }, [capeTexture])
 
-  // Positions matching legacy code:
-  // Legacy body positions used Z for left/right offset
-  // playerModel.position.y = 6 (overall lift)
-  // headgroup.position.y = 8 (relative to body center)
-  // leftleg.position.z = -2, rightleg.position.z = 2
-  // leftarm.position.z = -6, rightarm.position.z = 6
-  // leftarm.position.y = 4, rightarm.position.y = 4 (shoulder height from body center)
-
   return (
     <group ref={playerGroupRef} scale={[SCALE, SCALE, SCALE]}>
-      {/* 
-        Model hierarchy matching legacy:
-        - playerModel.position.y = 6 (lifts entire model)
-        - headgroup.position.y = 8 (head sits on top of body)
-        - body is at origin of playerModel (center y=0 of upperbody)
-        
-        Total head Y from ground: 6 + 8 + 2(head offset) = 16 (but scaled)
-        
-        Body center is at y=6 from ground in legacy.
-        Head group at y=8 relative to body = y=14 from ground.
-        Legs pivot at y=-6 relative to body = y=0 from ground.
-      */}
-      
-      {/* Head group - position.y = 8 in legacy (relative to upperbody which is at model y=0) */}
+      {/* Head at y=10 */}
       <group ref={headRef} position={[0, 10, 0]}>
-        <BodyPartMesh geometry={geometries.head} texture={skinTexture} />
-        <BodyPartMesh geometry={geometries.helmet} texture={skinTexture} transparent />
+        <BodyPartMesh geometry={geometries.headGeo} texture={skinTexture} />
+        <BodyPartMesh geometry={geometries.helmetGeo} texture={skinTexture} transparent />
       </group>
 
-      {/* Body - at center of upperbody, model lifts it by 6 */}
-      <group position={[0, 0, 0]}>
-        <BodyPartMesh geometry={geometries.body} texture={skinTexture} />
+      {/* Body at center */}
+      <BodyPartMesh geometry={geometries.bodyGeo} texture={skinTexture} />
+
+      {/* Right arm at z=6, y=4 */}
+      <group ref={rightArmRef} position={[0, 4, 6]} rotation={[-Math.PI / 32, 0, 0]}>
+        <BodyPartMesh geometry={geometries.rightArmGeo} texture={skinTexture} />
       </group>
 
-      {/* Right arm: legacy position.z = 6, position.y = 4 */}
-      <group ref={rightArmRef} position={[0, 4, 6]}>
-        <BodyPartMesh geometry={geometries.rightArm} texture={skinTexture} />
+      {/* Left arm at z=-6, y=4 */}
+      <group ref={leftArmRef} position={[0, 4, -6]} rotation={[Math.PI / 32, 0, 0]}>
+        <BodyPartMesh geometry={geometries.leftArmGeo} texture={skinTexture} />
       </group>
 
-      {/* Left arm: legacy position.z = -6, position.y = 4 */}
-      <group ref={leftArmRef} position={[0, 4, -6]}>
-        <BodyPartMesh geometry={geometries.leftArm} texture={skinTexture} />
-      </group>
-
-      {/* Right leg: legacy position.z = 2, position.y = -6 */}
+      {/* Right leg at z=2, y=-6 */}
       <group ref={rightLegRef} position={[0, -6, 2]}>
-        <BodyPartMesh geometry={geometries.rightLeg} texture={skinTexture} />
+        <BodyPartMesh geometry={geometries.rightLegGeo} texture={skinTexture} />
       </group>
 
-      {/* Left leg: legacy position.z = -2, position.y = -6 */}
+      {/* Left leg at z=-2, y=-6 */}
       <group ref={leftLegRef} position={[0, -6, -2]}>
-        <BodyPartMesh geometry={geometries.leftLeg} texture={skinTexture} />
+        <BodyPartMesh geometry={geometries.leftLegGeo} texture={skinTexture} />
       </group>
 
-      {/* Cape: legacy capeOrigo.position.x = -2, position.y = 6 with rotation.y = PI */}
+      {/* Cape at x=-2, y=6 */}
       {showCape && capeTexture && (
-        <group 
-          ref={capeRef} 
-          position={[-2, 6, 0]} 
-          rotation={[Math.PI / 15, Math.PI, 0]}
-        >
-          <mesh geometry={geometries.cape} material={capeMaterial} />
+        <group ref={capeRef} position={[-2, 6, 0]} rotation={[0, Math.PI, Math.PI / 15]}>
+          <mesh geometry={geometries.capeGeo} material={capeMaterial} />
         </group>
       )}
     </group>
