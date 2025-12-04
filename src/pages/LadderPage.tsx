@@ -1,0 +1,135 @@
+import { useState, useEffect, useCallback } from 'react'
+import { Table } from '../components/Table'
+import { fetchLadder } from '../api/client'
+import type { PlayerDTO, TableColumn, SortParams, ListRequest } from '../types/api'
+
+const PAGE_SIZE = 10
+
+/** Table columns definition */
+const LADDER_COLUMNS: TableColumn<PlayerDTO>[] = [
+  {
+    key: 'rank',
+    label: '#',
+    width: '60px',
+    align: 'center',
+    sortable: false,
+  },
+  {
+    key: 'username',
+    label: 'Player',
+    sortable: true,
+  },
+  {
+    key: 'score',
+    label: 'Score',
+    width: '120px',
+    align: 'right',
+    sortable: true,
+    render: (value) => Number(value).toLocaleString(),
+  },
+  {
+    key: 'gamesPlayed',
+    label: 'Games',
+    width: '100px',
+    align: 'center',
+    sortable: true,
+  },
+  {
+    key: 'winRate',
+    label: 'Win Rate',
+    width: '100px',
+    align: 'center',
+    sortable: true,
+    render: (value) => `${(Number(value) * 100).toFixed(1)}%`,
+  },
+  {
+    key: 'lastActive',
+    label: 'Last Active',
+    width: '140px',
+    sortable: true,
+    render: (value) => {
+      const date = new Date(String(value))
+      return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+    },
+  },
+]
+
+/**
+ * Ladder Page
+ * Displays player rankings with sortable columns and infinite scroll
+ */
+export function LadderPage() {
+  const [players, setPlayers] = useState<PlayerDTO[]>([])
+  const [loading, setLoading] = useState(true)
+  const [hasMore, setHasMore] = useState(false)
+  const [page, setPage] = useState(1)
+  const [sort, setSort] = useState<SortParams>({ field: 'score', direction: 'desc' })
+
+  // Fetch data
+  const loadData = useCallback(async (pageNum: number, sortParams: SortParams, append = false) => {
+    setLoading(true)
+
+    const request: ListRequest = {
+      pagination: { page: pageNum, pageSize: PAGE_SIZE },
+      sort: sortParams,
+    }
+
+    const response = await fetchLadder(request)
+
+    if (response.success) {
+      const newPlayers = response.data.players
+      setPlayers((prev) => (append ? [...prev, ...newPlayers] : newPlayers))
+      setHasMore(response.meta?.hasMore ?? false)
+    }
+
+    setLoading(false)
+  }, [])
+
+  // Initial load
+  useEffect(() => {
+    loadData(1, sort)
+  }, [loadData, sort])
+
+  // Handle sort change
+  const handleSort = (newSort: SortParams) => {
+    setSort(newSort)
+    setPage(1)
+    setPlayers([])
+  }
+
+  // Handle infinite scroll
+  const handleLoadMore = () => {
+    if (!loading && hasMore) {
+      const nextPage = page + 1
+      setPage(nextPage)
+      loadData(nextPage, sort, true)
+    }
+  }
+
+  return (
+    <div className="page ladder-page">
+      <div className="ladder-content">
+        <h1>Leaderboard</h1>
+        <p className="page-subtitle">Top players ranked by score</p>
+
+        <Table<PlayerDTO>
+          columns={LADDER_COLUMNS}
+          data={players}
+          keyField="id"
+          loading={loading}
+          hasMore={hasMore}
+          onLoadMore={handleLoadMore}
+          onSort={handleSort}
+          currentSort={sort}
+          emptyMessage="No players found"
+        />
+      </div>
+    </div>
+  )
+}
+

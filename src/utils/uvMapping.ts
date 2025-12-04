@@ -75,19 +75,22 @@ function applyFaceUV(
   const startIdx = FACE_START[face]
 
   // Convert pixel coords to UV (0-1 range)
-  // UV origin is bottom-left, texture origin is top-left
+  // UV V-axis: 0 at bottom, 1 at top
+  // Texture Y-axis: 0 at top, increases downward
   const u0 = coords.x / texSize.width
   const u1 = (coords.x + coords.w) / texSize.width
-  const v0 = 1 - coords.y / texSize.height           // top of texture region
-  const v1 = 1 - (coords.y + coords.h) / texSize.height  // bottom of texture region
+  // Flip V: texture top (y=0) maps to V=1, texture bottom maps to V=0
+  const v0 = 1 - (coords.y + coords.h) / texSize.height  // bottom of texture region -> higher V
+  const v1 = 1 - coords.y / texSize.height               // top of texture region -> lower V
 
   // UV coordinates for each vertex position
   // BoxGeometry vertex order: 0=bottom-left, 1=bottom-right, 2=top-left, 3=top-right
+  // Texture should appear right-side-up when viewed from outside the face
   const baseUVs: [number, number][] = [
-    [u0, v1],  // vertex 0: bottom-left
-    [u1, v1],  // vertex 1: bottom-right
-    [u0, v0],  // vertex 2: top-left
-    [u1, v0],  // vertex 3: top-right
+    [u0, v0],  // vertex 0: bottom-left (low V)
+    [u1, v0],  // vertex 1: bottom-right
+    [u0, v1],  // vertex 2: top-left (high V)
+    [u1, v1],  // vertex 3: top-right
   ]
 
   // Apply rotation (each step = 90° clockwise when viewing face)

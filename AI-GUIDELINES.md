@@ -4,13 +4,15 @@ This document contains project preferences and guidelines for AI assistants work
 
 ## Project Overview
 
-**requiem-web-view** is a React TypeScript web application built with Vite. The project will utilize Three.js for 3D rendering.
+**requiem-web-view** is a React TypeScript web application built with Vite. The project is an analytics portal for a game project, featuring data tables, graphs, and 3D rendering.
 
 ## Tech Stack
 
 - **Framework**: React 18 with TypeScript
 - **Build Tool**: Vite (builds to `/dist`)
+- **Package Manager**: **Yarn** (always use `yarn add --exact`, never npm)
 - **Routing**: React Router v6
+- **State Management**: Zustand
 - **3D Graphics**: Three.js (with @react-three/fiber and @react-three/drei)
 - **Unit Testing**: Vitest
 - **E2E Testing**: Playwright
@@ -20,7 +22,8 @@ This document contains project preferences and guidelines for AI assistants work
 - **Never prompt to run the project** - user will run it themselves
 - **Never suggest `rm -rf` commands** - use file deletion tools or let user handle manually
 - **Never provide "getting started" instructions** at the end of responses
-- **Install all dependencies with `--exact`** - no ^ or ~ version prefixes
+- **Install all dependencies with `yarn add --exact`** - no ^ or ~ version prefixes
+- **Use yarn, not npm** - all commands should use yarn
 
 ## Development Preferences
 
@@ -40,7 +43,14 @@ This document contains project preferences and guidelines for AI assistants work
 - Use named exports for components
 - Keep components small and focused
 - **Never use `any`, `never`, or `unknown` types** - always provide explicit types
-- Run `npm run typecheck` to verify type safety
+- Run `yarn typecheck` to verify type safety
+
+### Mock Data
+
+Mock data for development lives in `/src/mock/`:
+- Use `satisfies` keyword to reference DTO-like interfaces
+- Use `as const` to freeze mock data
+- Example: `export const MOCK_PLAYERS = [...] as const satisfies readonly PlayerDTO[]`
 
 ### Testing
 
@@ -58,15 +68,24 @@ This document contains project preferences and guidelines for AI assistants work
 
 ```
 src/
-├── components/     # React components (includes ErrorBoundary)
+├── api/            # API client and backend communication
+├── components/     # React components
+│   ├── ErrorBoundary.tsx
+│   ├── Icon.tsx    # Colorable SVG icons
+│   ├── Sidebar.tsx # Navigation sidebar
+│   ├── Table.tsx   # Reusable data table
+│   └── Toast.tsx   # Notification system
 ├── config/         # Global configuration and constants
 │   └── index.ts    # All project-wide constants
 ├── hooks/          # Custom React hooks
+├── mock/           # Mock data for development
 ├── pages/          # Page components (route targets)
 ├── scenes/         # Three.js scene components
 ├── styles/         # CSS files and style utilities
 │   └── palette.css # Color palette CSS variables
 ├── types/          # TypeScript types, interfaces, enums
+│   ├── api.ts      # API DTOs and interfaces
+│   └── skin.ts     # 3D model types
 ├── utils/          # Reusable utility functions
 ├── legacy/         # INSPECTION ONLY - do not execute or import
 e2e/                # Playwright E2E tests
@@ -77,7 +96,9 @@ dist/               # Production build output
 
 | Folder | Contents |
 |--------|----------|
+| `/api` | API client functions and backend communication |
 | `/config` | **All global project constants** - routes, presets, dimensions, etc. |
+| `/mock` | **Mock data** - uses `satisfies` + `as const` pattern |
 | `/utils` | All reusable utility functions |
 | `/types` | All TypeScript types, interfaces, and enums |
 | `/styles` | CSS files including `palette.css` for design tokens |
@@ -85,13 +106,13 @@ dist/               # Production build output
 | `/pages` | Route page components |
 | `/hooks` | Custom React hooks |
 | `/scenes` | Three.js scene-specific components |
-| `/legacy` | **Inspection only** - dump of reference files, never import or execute. Contains commented legacy code for UV mapping and animation reference. |
+| `/legacy` | **Inspection only** - dump of reference files, never import or execute |
 
 ## Configuration (`/config`)
 
 All global project constants must be defined in `/config/index.ts`:
 
-- **Route paths**: `ROUTES.HOME`, `ROUTES.PROFILE`, etc.
+- **Route paths**: `ROUTES.HOME`, `ROUTES.PROFILE`, `ROUTES.LADDER`, `ROUTES.MAP`
 - **Preset values**: `PRESET_SKINS`, default UUIDs
 - **External URLs**: API bases, texture servers
 - **Model dimensions**: `MODEL_DIMENSIONS`, `TEXTURE_DIMENSIONS`
@@ -102,6 +123,41 @@ All global project constants must be defined in `/config/index.ts`:
 // Example usage
 import { ROUTES, PRESET_SKINS, ANIMATION } from '../config'
 ```
+
+## Components
+
+### Icon Component (`/components/Icon.tsx`)
+
+Colorable SVG icon component. Use instead of FontAwesome:
+
+```tsx
+import { Icon } from '../components/Icon'
+
+<Icon name="home" size={24} color="var(--grey-400)" />
+```
+
+Available icons: `home`, `user`, `trophy`, `map`, `menu`, `close`, `chevron-up`, `chevron-down`, `chevron-left`, `chevron-right`, `chart`, `settings`
+
+### Table Component (`/components/Table.tsx`)
+
+Reusable data table with:
+- Sortable columns (chevron icons)
+- Fixed header
+- Infinite scroll support
+- Loading states
+
+### Toast Component (`/components/Toast.tsx`)
+
+Notification system:
+```tsx
+const toast = useToast()
+toast.success('Operation completed')
+toast.error('Something went wrong')
+```
+
+### Sidebar (`/components/Sidebar.tsx`)
+
+Collapsible navigation sidebar. Add new pages to `SIDEBAR_ITEMS` array.
 
 ## CSS Palette
 
@@ -116,12 +172,14 @@ The project uses CSS custom properties defined in `src/styles/palette.css`:
 ### Fonts
 
 Available font variables:
-- `--font-orbitron` - Orbitron (Google Fonts) - **primary for /profile**
+- `--font-ethnocentric` - Ethnocentric - **H1 headings**
+- `--font-orbitron` - Orbitron (Google Fonts) - UI elements, profile page
 - `--font-pixelify` - Pixelify Sans (Google Fonts)
-- `--font-ethnocentric` - Ethnocentric (requires local install)
 - `--font-nirmala` - Nirmala UI (system font)
 - `--font-mono` - Monospace fallback stack
 - `--font-sans` - System sans-serif fallback
+
+**H1 Rule**: All `<h1>` elements use Ethnocentric font automatically (set in index.css)
 
 ### Typography Sizes
 
@@ -137,23 +195,35 @@ Routes are defined in `/config/index.ts` and used in `App.tsx`:
 | Route | Page | Description |
 |-------|------|-------------|
 | `/` | HomePage | Landing page |
-| `/profile` | ProfilePage | Skin viewer page |
+| `/profile` | ProfilePage | 3D skin viewer |
+| `/ladder` | LadderPage | Player rankings table |
+| `/map` | MapPage | World map (iframe) |
+| `*` | NotFoundPage | 404 with auto-redirect |
 
-Base URL is `/requiem-web-view/` for GitHub Pages deployment.
+Base URL is dynamic:
+- Development: `/`
+- Production (GitHub Pages): `/requiem-web-view/`
+
+## API Architecture
+
+The `/api/client.ts` provides a prototype for the future Go backend:
+- Currently returns mock data from `/mock/`
+- Uses typed interfaces from `/types/api.ts`
+- Pagination, sorting, and filtering support built-in
 
 ## Commands
 
-- `npm run dev` - Start development server (opens browser automatically)
-- `npm run build` - Build for production (outputs to /dist)
-- `npm run preview` - Preview production build locally
-- `npm run lint` - Run ESLint
-- `npm run typecheck` - TypeScript type checking
-- `npm run test` - Run unit tests
-- `npm run test:e2e` - Run Playwright tests
-- `npm run test:e2e:ui` - Run Playwright with UI
-- `npm run deploy` - Deploy to GitHub Pages (runs build first)
+- `yarn dev` - Start development server (opens browser automatically)
+- `yarn build` - Build for production (outputs to /dist)
+- `yarn preview` - Preview production build locally
+- `yarn lint` - Run ESLint
+- `yarn typecheck` - TypeScript type checking
+- `yarn test` - Run unit tests
+- `yarn test:e2e` - Run Playwright tests
+- `yarn test:e2e:ui` - Run Playwright with UI
+- `yarn deploy` - Deploy to GitHub Pages (runs build first)
 
 ## Deployment
 
 - **Platform**: GitHub Pages via gh-pages package
-- **Base URL**: `/requiem-web-view/` (configured in vite.config.ts)
+- **Base URL**: `/requiem-web-view/` (configured in vite.config.ts for production)

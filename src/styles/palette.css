@@ -7,6 +7,15 @@
 /* Google Fonts Import */
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Pixelify+Sans:wght@400;500;600;700&display=swap');
 
+/* Ethnocentric Font */
+@font-face {
+  font-family: 'Ethnocentric';
+  src: url('https://fonts.cdnfonts.com/s/12898/ethnocentric rg.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   /* Grey Scale - White to Black */
   --grey-0: #ffffff;

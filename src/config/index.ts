@@ -29,6 +29,7 @@ export const CRAFATAR_BASE = 'https://crafatar.com'
 export const ROUTES = {
   HOME: '/',
   PROFILE: '/profile',
+  LADDER: '/ladder',
   MAP: '/map',
 } as const
 
