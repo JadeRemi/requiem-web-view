@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback } from 'react'
+import { Link } from 'react-router-dom'
 import { Table } from '../components/Table'
 import { Typography, TypographyVariant } from '../components/Typography'
 import { fetchLadder } from '../api/client'
+import { ROUTES } from '../config'
 import type { PlayerDTO, TableColumn, SortParams, ListRequest } from '../types/api'
 
 const PAGE_SIZE = 10
@@ -19,6 +21,11 @@ const LADDER_COLUMNS: TableColumn<PlayerDTO>[] = [
     key: 'username',
     label: 'Player',
     sortable: true,
+    render: (value) => (
+      <Link to={ROUTES.PROFILE} className="player-link">
+        {String(value)}
+      </Link>
+    ),
   },
   {
     key: 'score',
@@ -29,25 +36,38 @@ const LADDER_COLUMNS: TableColumn<PlayerDTO>[] = [
     render: (value) => Number(value).toLocaleString(),
   },
   {
-    key: 'winRate',
-    label: 'Win Rate',
+    key: 'killRate',
+    label: 'Kill Rate',
     width: '100px',
     align: 'center',
     sortable: true,
     render: (value) => `${(Number(value) * 100).toFixed(1)}%`,
   },
   {
-    key: 'lastActive',
-    label: 'Last Active',
-    width: '140px',
+    key: 'firstJoined',
+    label: 'Joined',
+    width: '120px',
     sortable: true,
     render: (value) => {
       const date = new Date(String(value))
       return date.toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
+        year: 'numeric',
+      })
+    },
+  },
+  {
+    key: 'lastActive',
+    label: 'Last Active',
+    width: '120px',
+    sortable: true,
+    render: (value) => {
+      const date = new Date(String(value))
+      return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
       })
     },
   },
@@ -127,6 +147,7 @@ export function LadderPage() {
           onSort={handleSort}
           currentSort={sort}
           emptyMessage="No players found"
+          skeletonRows={10}
         />
       </div>
     </div>

@@ -190,7 +190,7 @@ export function MinecraftCharacter({
   }, [capeTexture])
 
   return (
-    <group ref={playerGroupRef} scale={[SCALE, SCALE, SCALE]}>
+    <group ref={playerGroupRef} scale={[SCALE, SCALE, SCALE]} rotation={[0, -Math.PI / 2, 0]}>
       {/* Head at y=10 (on top of body) */}
       <group ref={headRef} position={[0, 10, 0]}>
         <BodyPartMesh geometry={geometries.headGeo} texture={skinTexture} />

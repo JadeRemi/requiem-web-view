@@ -153,6 +153,8 @@ body {
     var(--grey-850) 0%,
     var(--grey-950) 100%
   );
+  border-radius: var(--radius-lg);
+  overflow: hidden;
 }
 
 .skin-viewer canvas {
@@ -182,11 +184,7 @@ body {
   flex-direction: column;
   gap: var(--space-3);
   padding: var(--space-4) var(--space-6);
-  background: rgba(13, 13, 14, 0.85);
-  backdrop-filter: blur(var(--blur-lg));
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-xl);
+  background: transparent;
 }
 
 .control-group {
@@ -217,7 +215,7 @@ body {
   cursor: pointer;
 }
 
-.control-panel button {
+.control-panel button:not(.icon-toggle) {
   padding: var(--space-2) var(--space-4);
   font-size: var(--text-sm);
   font-family: inherit;
@@ -231,15 +229,20 @@ body {
   box-shadow: var(--shadow-sm);
 }
 
-.control-panel button:hover {
+.control-panel button:not(.icon-toggle):hover {
   background: var(--grey-0);
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
 }
 
-.control-panel button:active {
+.control-panel button:not(.icon-toggle):active {
   transform: translateY(0);
   background: var(--grey-300);
+}
+
+/* Hide upload buttons for now */
+.control-panel .upload-buttons {
+  display: none;
 }
 
 /* Drag and drop visual feedback */
@@ -317,6 +320,14 @@ body {
   align-items: center;
   justify-content: center;
   font-family: var(--font-orbitron);
+  background: var(--color-bg-primary);
+}
+
+.viewer-card {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--color-border-default);
 }
 
 /* ===========================================
@@ -337,6 +348,17 @@ body {
 }
 
 /* Ladder content typography handled by Typography component */
+
+.player-link {
+  color: var(--grey-100);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.player-link:hover {
+  color: var(--grey-0);
+  text-decoration: underline;
+}
 
 /* ===========================================
    Map Page
@@ -484,6 +506,45 @@ body {
 }
 
 /* ===========================================
+   Table Skeleton / Loading State
+   =========================================== */
+.table-container-loading {
+  position: relative;
+}
+
+.table-loader-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(13, 13, 14, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: 10;
+  border-radius: var(--radius-lg);
+}
+
+.table-body-skeleton {
+  opacity: 0.6;
+}
+
+.skeleton-bar {
+  height: 14px;
+  background: var(--grey-750);
+  border-radius: var(--radius-sm);
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* ===========================================
    Toast Notifications
    =========================================== */
 .toast-container {
@@ -586,4 +647,178 @@ body {
 .toast-close:hover {
   background: var(--grey-700);
   color: var(--grey-200);
+}
+
+/* ===========================================
+   Tooltip
+   =========================================== */
+.tooltip-trigger {
+  display: inline-flex;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 10000;
+  pointer-events: none;
+  animation: tooltip-fade-in 0.15s ease;
+}
+
+@keyframes tooltip-fade-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -100%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.tooltip-top {
+  animation: tooltip-fade-in-top 0.15s ease forwards;
+}
+
+.tooltip-bottom {
+  animation: tooltip-fade-in-bottom 0.15s ease forwards;
+}
+
+.tooltip-left {
+  animation: tooltip-fade-in-left 0.15s ease forwards;
+}
+
+.tooltip-right {
+  animation: tooltip-fade-in-right 0.15s ease forwards;
+}
+
+@keyframes tooltip-fade-in-top {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-100% + 4px));
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -100%);
+  }
+}
+
+@keyframes tooltip-fade-in-bottom {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -4px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes tooltip-fade-in-left {
+  from {
+    opacity: 0;
+    transform: translate(calc(-100% + 4px), -50%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-100%, -50%);
+  }
+}
+
+@keyframes tooltip-fade-in-right {
+  from {
+    opacity: 0;
+    transform: translate(-4px, -50%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, -50%);
+  }
+}
+
+.tooltip-content {
+  padding: var(--space-1) var(--space-2);
+  background: var(--grey-800);
+  border: 1px solid var(--grey-700);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-nirmala);
+  font-size: var(--text-xs);
+  color: var(--grey-100);
+  white-space: nowrap;
+  box-shadow: var(--shadow-lg);
+}
+
+.tooltip-beak {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--grey-800);
+  border: 1px solid var(--grey-700);
+  transform: rotate(45deg);
+}
+
+.tooltip-beak-top {
+  bottom: -5px;
+  left: 50%;
+  margin-left: -4px;
+  border-top: none;
+  border-left: none;
+}
+
+.tooltip-beak-bottom {
+  top: -5px;
+  left: 50%;
+  margin-left: -4px;
+  border-bottom: none;
+  border-right: none;
+}
+
+.tooltip-beak-left {
+  right: -5px;
+  top: 50%;
+  margin-top: -4px;
+  border-bottom: none;
+  border-left: none;
+}
+
+.tooltip-beak-right {
+  left: -5px;
+  top: 50%;
+  margin-top: -4px;
+  border-top: none;
+  border-right: none;
+}
+
+/* ===========================================
+   Icon Toggle Button
+   =========================================== */
+.icon-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+  color: var(--grey-500);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.icon-toggle:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.icon-toggle:hover {
+  color: var(--grey-300);
+}
+
+.icon-toggle.active {
+  color: var(--grey-300);
+}
+
+.icon-toggle.active:hover {
+  color: var(--grey-50);
 }

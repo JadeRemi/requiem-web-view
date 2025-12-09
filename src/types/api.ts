@@ -55,8 +55,8 @@ export interface PlayerDTO {
   username: string
   score: number
   rank: number
-  gamesPlayed: number
-  winRate: number
+  killRate: number
+  firstJoined: string
   lastActive: string
   avatarUrl?: string
 }

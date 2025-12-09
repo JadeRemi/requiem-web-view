@@ -95,6 +95,6 @@ export const DEFAULT_CONFIG: SkinViewerConfig = {
   animate: true,
   running: false,
   showCape: true,
-  freezeCameraY: false,
+  freezeCameraY: true,
 }
 

@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import type { TableColumn, SortParams, SortDirection } from '../types/api'
 import { Icon } from './Icon'
+import { Loader } from './Loader'
 
 interface TableProps<T extends object> {
   columns: TableColumn<T>[]
@@ -12,6 +13,8 @@ interface TableProps<T extends object> {
   onSort?: (sort: SortParams) => void
   currentSort?: SortParams
   emptyMessage?: string
+  /** Number of skeleton rows to show when loading with no data */
+  skeletonRows?: number
 }
 
 /**
@@ -20,6 +23,13 @@ interface TableProps<T extends object> {
  * - Fixed header with scrollable body
  * - Infinite scroll support
  */
+// Generate varied widths for skeleton bars
+const SKELETON_WIDTHS = ['40%', '70%', '55%', '60%', '45%', '65%', '50%', '75%', '35%', '80%']
+
+function getSkeletonWidth(rowIndex: number, colIndex: number): string {
+  return SKELETON_WIDTHS[(rowIndex + colIndex * 3 + 7) % SKELETON_WIDTHS.length] ?? '50%'
+}
+
 export function Table<T extends object>({
   columns,
   data,
@@ -30,6 +40,7 @@ export function Table<T extends object>({
   onSort,
   currentSort,
   emptyMessage = 'No data available',
+  skeletonRows = 10,
 }: TableProps<T>) {
   const [sort, setSort] = useState<SortParams | undefined>(currentSort)
   const observerRef = useRef<IntersectionObserver | null>(null)
@@ -100,8 +111,43 @@ export function Table<T extends object>({
     )
   }
 
+  // Render skeleton rows
+  const renderSkeletonRows = () => (
+    <>
+      {Array.from({ length: skeletonRows }).map((_, rowIndex) => (
+        <tr key={`skeleton-${rowIndex}`} className="table-row table-skeleton-row">
+          {columns.map((column, colIndex) => (
+            <td
+              key={column.key}
+              className="table-td"
+              style={{ 
+                width: column.width,
+                textAlign: column.align ?? 'left' 
+              }}
+            >
+              <div 
+                className="skeleton-bar"
+                style={{ 
+                  width: column.width ? '70%' : getSkeletonWidth(rowIndex, colIndex),
+                  animationDelay: `${(rowIndex * 0.05) + (colIndex * 0.02)}s`
+                }}
+              />
+            </td>
+          ))}
+        </tr>
+      ))}
+    </>
+  )
+
+  const showSkeleton = loading && data.length === 0
+
   return (
-    <div className="table-container">
+    <div className={`table-container ${showSkeleton ? 'table-container-loading' : ''}`}>
+      {showSkeleton && (
+        <div className="table-loader-overlay">
+          <Loader size={48} color="var(--grey-300)" />
+        </div>
+      )}
       <div className="table-wrapper">
         <table className="data-table">
           <thead className="table-header">
@@ -124,8 +170,10 @@ export function Table<T extends object>({
               ))}
             </tr>
           </thead>
-          <tbody className="table-body">
-            {data.length === 0 && !loading ? (
+          <tbody className={`table-body ${showSkeleton ? 'table-body-skeleton' : ''}`}>
+            {showSkeleton ? (
+              renderSkeletonRows()
+            ) : data.length === 0 ? (
               <tr>
                 <td colSpan={columns.length} className="table-empty">
                   {emptyMessage}
@@ -153,9 +201,7 @@ export function Table<T extends object>({
       </div>
 
       {/* Infinite scroll trigger */}
-      <div ref={loadMoreRef} className="table-load-more">
-        {loading && <span className="table-loading">Loading...</span>}
-      </div>
+      <div ref={loadMoreRef} className="table-load-more" />
     </div>
   )
 }

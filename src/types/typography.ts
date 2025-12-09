@@ -25,6 +25,10 @@ export const enum TypographyVariant {
   Pixel = 'pixel',
   /** UI labels and buttons - Orbitron */
   Label = 'label',
+  /** Minecraft font */
+  Minecraft = 'minecraft',
+  /** Press Start 2P - Retro pixel font */
+  PressStart = 'pressStart',
 }
 
 /** Font family mapping for each variant */
@@ -39,6 +43,8 @@ export const VARIANT_FONTS: Record<TypographyVariant, string> = {
   [TypographyVariant.Mono]: 'var(--font-mono)',
   [TypographyVariant.Pixel]: 'var(--font-pixelify)',
   [TypographyVariant.Label]: 'var(--font-orbitron)',
+  [TypographyVariant.Minecraft]: 'var(--font-minecraft)',
+  [TypographyVariant.PressStart]: 'var(--font-press-start)',
 }
 
 /** Font size mapping for each variant */
@@ -53,6 +59,8 @@ export const VARIANT_SIZES: Record<TypographyVariant, string> = {
   [TypographyVariant.Mono]: 'var(--text-sm)',
   [TypographyVariant.Pixel]: 'var(--text-base)',
   [TypographyVariant.Label]: 'var(--text-xs)',
+  [TypographyVariant.Minecraft]: 'var(--text-sm)',
+  [TypographyVariant.PressStart]: 'var(--text-xs)',
 }
 
 /** Font weight mapping for each variant */
@@ -67,6 +75,8 @@ export const VARIANT_WEIGHTS: Record<TypographyVariant, number> = {
   [TypographyVariant.Mono]: 400,
   [TypographyVariant.Pixel]: 400,
   [TypographyVariant.Label]: 500,
+  [TypographyVariant.Minecraft]: 400,
+  [TypographyVariant.PressStart]: 400,
 }
 
 /** HTML element mapping for semantic rendering */
@@ -81,5 +91,7 @@ export const VARIANT_ELEMENTS: Record<TypographyVariant, keyof JSX.IntrinsicElem
   [TypographyVariant.Mono]: 'code',
   [TypographyVariant.Pixel]: 'span',
   [TypographyVariant.Label]: 'span',
+  [TypographyVariant.Minecraft]: 'span',
+  [TypographyVariant.PressStart]: 'span',
 }
 

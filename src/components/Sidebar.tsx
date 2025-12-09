@@ -12,7 +12,6 @@ interface SidebarItem {
 /** Pages shown in sidebar - add new pages here */
 const SIDEBAR_ITEMS: SidebarItem[] = [
   { path: ROUTES.HOME, label: 'Home', icon: 'home' },
-  { path: ROUTES.PROFILE, label: 'Profile', icon: 'user' },
   { path: ROUTES.LADDER, label: 'Ladder', icon: 'trophy' },
   { path: ROUTES.MAP, label: 'World Map', icon: 'map' },
 ]

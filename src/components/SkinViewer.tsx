@@ -3,6 +3,8 @@ import { Canvas } from '@react-three/fiber'
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
 import { TextureLoader, Texture, NearestFilter, SRGBColorSpace } from 'three'
 import { MinecraftCharacter } from './MinecraftCharacter'
+import { Icon } from './Icon'
+import { Tooltip } from './Tooltip'
 import type { SkinViewerProps, SkinViewerConfig } from '../types/skin'
 import { DEFAULT_CONFIG } from '../types/skin'
 import { decodeSkinHash } from '../utils/skinHash'
@@ -28,40 +30,26 @@ function ControlPanel({ config, onConfigChange, onFileUpload }: ControlPanelProp
   return (
     <div className="control-panel">
       <div className="control-group">
-        <label>
-          <input
-            type="checkbox"
-            checked={config.animate}
-            onChange={(e) => onConfigChange('animate', e.target.checked)}
-          />
-          Animate
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            checked={config.running}
-            onChange={(e) => onConfigChange('running', e.target.checked)}
-          />
-          Running
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            checked={config.autoRotate}
-            onChange={(e) => onConfigChange('autoRotate', e.target.checked)}
-          />
-          Auto Rotate
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            checked={config.showCape}
-            onChange={(e) => onConfigChange('showCape', e.target.checked)}
-          />
-          Show Cape
-        </label>
+        <Tooltip content="Animate" position="top">
+          <button
+            className={`icon-toggle ${config.animate ? 'active' : ''}`}
+            onClick={() => onConfigChange('animate', !config.animate)}
+            aria-label="Toggle animation"
+          >
+            <Icon name="animate" size={28} />
+          </button>
+        </Tooltip>
+        <Tooltip content="Rotate" position="top">
+          <button
+            className={`icon-toggle ${config.autoRotate ? 'active' : ''}`}
+            onClick={() => onConfigChange('autoRotate', !config.autoRotate)}
+            aria-label="Toggle rotation"
+          >
+            <Icon name="rotate" size={28} />
+          </button>
+        </Tooltip>
       </div>
-      <div className="control-group">
+      <div className="control-group upload-buttons">
         <button onClick={() => skinInputRef.current?.click()}>Upload Skin</button>
         <input
           ref={skinInputRef}
@@ -94,15 +82,16 @@ function SceneContent({
 }) {
   return (
     <>
-      {/* Camera positioned further back for smaller model appearance */}
-      <PerspectiveCamera makeDefault position={[0, 2, 8]} fov={35} />
+      {/* Camera positioned further back and higher */}
+      <PerspectiveCamera makeDefault position={[0, 1.5, 12]} fov={35} />
       <OrbitControls
         autoRotate={config.autoRotate}
         autoRotateSpeed={2}
         enablePan={false}
-        minDistance={4}
-        maxDistance={15}
-        target={[0, 1, 0]}
+        minDistance={6}
+        maxDistance={20}
+        target={[0, 0.8, 0]}
+        enableRotate={true}
       />
       <ambientLight intensity={0.6} />
       <directionalLight position={[5, 10, 5]} intensity={1} />

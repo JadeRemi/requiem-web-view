@@ -3,17 +3,19 @@ import { SkinViewer } from '../components/SkinViewer'
 export function ProfilePage() {
   return (
     <div className="page profile-page">
-      <SkinViewer
-        config={{
-          animate: true,
-          autoRotate: true,
-          running: false,
-          showCape: true,
-          freezeCameraY: false,
-        }}
-        width={window.innerWidth}
-        height={window.innerHeight}
-      />
+      <div className="viewer-card">
+        <SkinViewer
+          config={{
+            animate: true,
+            autoRotate: true,
+            running: false,
+            showCape: true,
+            freezeCameraY: true,
+          }}
+          width={400}
+          height={500}
+        />
+      </div>
     </div>
   )
 }
