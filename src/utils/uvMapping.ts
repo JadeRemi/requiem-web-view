@@ -136,106 +136,105 @@ export function uvmap(
 
 /**
  * Apply HEAD UV mapping (8x8x8 cube)
+ * Works for both 64x64 and 64x32 skins (head is in top half)
+ * Pixel positions are fixed, only texHeight affects UV calculation
  */
-export function applyHeadUVs(geometry: BufferGeometry, texSize = 64): void {
-  const scale = texSize / 64
-  uvmap(geometry, 0, 8 * scale, 8 * scale, 8 * scale, 8 * scale, texSize, texSize)      // Front
-  uvmap(geometry, 1, 24 * scale, 8 * scale, 8 * scale, 8 * scale, texSize, texSize)     // Back
-  uvmap(geometry, 2, 8 * scale, 0 * scale, 8 * scale, 8 * scale, texSize, texSize, 1)   // Top
-  uvmap(geometry, 3, 16 * scale, 0 * scale, 8 * scale, 8 * scale, texSize, texSize, 3)  // Bottom
-  uvmap(geometry, 4, 0 * scale, 8 * scale, 8 * scale, 8 * scale, texSize, texSize)      // Left
-  uvmap(geometry, 5, 16 * scale, 8 * scale, 8 * scale, 8 * scale, texSize, texSize)     // Right
+export function applyHeadUVs(geometry: BufferGeometry, texWidth = 64, texHeight = 64): void {
+  uvmap(geometry, 0, 8, 8, 8, 8, texWidth, texHeight)      // Front
+  uvmap(geometry, 1, 24, 8, 8, 8, texWidth, texHeight)     // Back
+  uvmap(geometry, 2, 8, 0, 8, 8, texWidth, texHeight, 1)   // Top
+  uvmap(geometry, 3, 16, 0, 8, 8, texWidth, texHeight, 3)  // Bottom
+  uvmap(geometry, 4, 0, 8, 8, 8, texWidth, texHeight)      // Left
+  uvmap(geometry, 5, 16, 8, 8, 8, texWidth, texHeight)     // Right
 }
 
 /**
  * Apply HELMET/HAT UV mapping (overlay layer)
+ * Works for both 64x64 and 64x32 skins (helmet overlay is in top half)
  */
-export function applyHelmetUVs(geometry: BufferGeometry, texSize = 64): void {
-  const scale = texSize / 64
-  uvmap(geometry, 0, 40 * scale, 8 * scale, 8 * scale, 8 * scale, texSize, texSize)     // Front
-  uvmap(geometry, 1, 56 * scale, 8 * scale, 8 * scale, 8 * scale, texSize, texSize)     // Back
-  uvmap(geometry, 2, 40 * scale, 0 * scale, 8 * scale, 8 * scale, texSize, texSize, 1)  // Top
-  uvmap(geometry, 3, 48 * scale, 0 * scale, 8 * scale, 8 * scale, texSize, texSize, 3)  // Bottom
-  uvmap(geometry, 4, 32 * scale, 8 * scale, 8 * scale, 8 * scale, texSize, texSize)     // Left
-  uvmap(geometry, 5, 48 * scale, 8 * scale, 8 * scale, 8 * scale, texSize, texSize)     // Right
+export function applyHelmetUVs(geometry: BufferGeometry, texWidth = 64, texHeight = 64): void {
+  uvmap(geometry, 0, 40, 8, 8, 8, texWidth, texHeight)     // Front
+  uvmap(geometry, 1, 56, 8, 8, 8, texWidth, texHeight)     // Back
+  uvmap(geometry, 2, 40, 0, 8, 8, texWidth, texHeight, 1)  // Top
+  uvmap(geometry, 3, 48, 0, 8, 8, texWidth, texHeight, 3)  // Bottom
+  uvmap(geometry, 4, 32, 8, 8, 8, texWidth, texHeight)     // Left
+  uvmap(geometry, 5, 48, 8, 8, 8, texWidth, texHeight)     // Right
 }
 
 /**
  * Apply BODY UV mapping (4x12x8)
+ * Works for both 64x64 and 64x32 skins (body is in top half)
  */
-export function applyBodyUVs(geometry: BufferGeometry, texSize = 64): void {
-  const scale = texSize / 64
-  uvmap(geometry, 0, 20 * scale, 20 * scale, 8 * scale, 12 * scale, texSize, texSize)    // Front
-  uvmap(geometry, 1, 32 * scale, 20 * scale, 8 * scale, 12 * scale, texSize, texSize)    // Back
-  uvmap(geometry, 2, 20 * scale, 16 * scale, 8 * scale, 4 * scale, texSize, texSize, 1)  // Top
-  uvmap(geometry, 3, 28 * scale, 16 * scale, 8 * scale, 4 * scale, texSize, texSize, 3)  // Bottom
-  uvmap(geometry, 4, 16 * scale, 20 * scale, 4 * scale, 12 * scale, texSize, texSize)    // Left
-  uvmap(geometry, 5, 28 * scale, 20 * scale, 4 * scale, 12 * scale, texSize, texSize)    // Right
+export function applyBodyUVs(geometry: BufferGeometry, texWidth = 64, texHeight = 64): void {
+  uvmap(geometry, 0, 20, 20, 8, 12, texWidth, texHeight)    // Front
+  uvmap(geometry, 1, 32, 20, 8, 12, texWidth, texHeight)    // Back
+  uvmap(geometry, 2, 20, 16, 8, 4, texWidth, texHeight, 1)  // Top
+  uvmap(geometry, 3, 28, 16, 8, 4, texWidth, texHeight, 3)  // Bottom
+  uvmap(geometry, 4, 16, 20, 4, 12, texWidth, texHeight)    // Left
+  uvmap(geometry, 5, 28, 20, 4, 12, texWidth, texHeight)    // Right
 }
 
 /**
  * Apply RIGHT ARM UV mapping (4x12x4)
+ * Works for both 64x64 and 64x32 skins (arms are in top half)
  */
-export function applyRightArmUVs(geometry: BufferGeometry, texSize = 64): void {
-  const scale = texSize / 64
-  uvmap(geometry, 0, 44 * scale, 20 * scale, 4 * scale, 12 * scale, texSize, texSize)    // Front
-  uvmap(geometry, 1, 52 * scale, 20 * scale, 4 * scale, 12 * scale, texSize, texSize)    // Back
-  uvmap(geometry, 2, 44 * scale, 16 * scale, 4 * scale, 4 * scale, texSize, texSize, 1)  // Top
-  uvmap(geometry, 3, 48 * scale, 20 * scale, 4 * scale, -4 * scale, texSize, texSize, 3) // Bottom
-  uvmap(geometry, 4, 40 * scale, 20 * scale, 4 * scale, 12 * scale, texSize, texSize)    // Left
-  uvmap(geometry, 5, 48 * scale, 20 * scale, 4 * scale, 12 * scale, texSize, texSize)    // Right
+export function applyRightArmUVs(geometry: BufferGeometry, texWidth = 64, texHeight = 64): void {
+  uvmap(geometry, 0, 44, 20, 4, 12, texWidth, texHeight)    // Front
+  uvmap(geometry, 1, 52, 20, 4, 12, texWidth, texHeight)    // Back
+  uvmap(geometry, 2, 44, 16, 4, 4, texWidth, texHeight, 1)  // Top
+  uvmap(geometry, 3, 48, 20, 4, -4, texWidth, texHeight, 3) // Bottom
+  uvmap(geometry, 4, 40, 20, 4, 12, texWidth, texHeight)    // Left
+  uvmap(geometry, 5, 48, 20, 4, 12, texWidth, texHeight)    // Right
 }
 
 /**
- * Apply LEFT ARM UV mapping (4x12x4) - mirrored
+ * Apply LEFT ARM UV mapping (4x12x4) - mirrored from right arm for legacy skins
  */
-export function applyLeftArmUVs(geometry: BufferGeometry, texSize = 64): void {
-  const scale = texSize / 64
-  uvmap(geometry, 0, 48 * scale, 20 * scale, -4 * scale, 12 * scale, texSize, texSize)   // Front (mirrored)
-  uvmap(geometry, 1, 56 * scale, 20 * scale, -4 * scale, 12 * scale, texSize, texSize)   // Back (mirrored)
-  uvmap(geometry, 2, 48 * scale, 16 * scale, -4 * scale, 4 * scale, texSize, texSize, 1) // Top
-  uvmap(geometry, 3, 52 * scale, 20 * scale, -4 * scale, -4 * scale, texSize, texSize, 3)// Bottom
-  uvmap(geometry, 4, 52 * scale, 20 * scale, -4 * scale, 12 * scale, texSize, texSize)   // Left (mirrored)
-  uvmap(geometry, 5, 44 * scale, 20 * scale, -4 * scale, 12 * scale, texSize, texSize)   // Right (mirrored)
+export function applyLeftArmUVs(geometry: BufferGeometry, texWidth = 64, texHeight = 64): void {
+  uvmap(geometry, 0, 48, 20, -4, 12, texWidth, texHeight)   // Front (mirrored)
+  uvmap(geometry, 1, 56, 20, -4, 12, texWidth, texHeight)   // Back (mirrored)
+  uvmap(geometry, 2, 48, 16, -4, 4, texWidth, texHeight, 1) // Top
+  uvmap(geometry, 3, 52, 20, -4, -4, texWidth, texHeight, 3)// Bottom
+  uvmap(geometry, 4, 52, 20, -4, 12, texWidth, texHeight)   // Left (mirrored)
+  uvmap(geometry, 5, 44, 20, -4, 12, texWidth, texHeight)   // Right (mirrored)
 }
 
 /**
  * Apply RIGHT LEG UV mapping (4x12x4)
+ * Works for both 64x64 and 64x32 skins (legs are in top half)
  */
-export function applyRightLegUVs(geometry: BufferGeometry, texSize = 64): void {
-  const scale = texSize / 64
-  uvmap(geometry, 0, 4 * scale, 20 * scale, 4 * scale, 12 * scale, texSize, texSize)     // Front
-  uvmap(geometry, 1, 12 * scale, 20 * scale, 4 * scale, 12 * scale, texSize, texSize)    // Back
-  uvmap(geometry, 2, 8 * scale, 16 * scale, -4 * scale, 4 * scale, texSize, texSize, 3)  // Top
-  uvmap(geometry, 3, 12 * scale, 16 * scale, -4 * scale, 4 * scale, texSize, texSize, 1) // Bottom
-  uvmap(geometry, 4, 0 * scale, 20 * scale, 4 * scale, 12 * scale, texSize, texSize)     // Left
-  uvmap(geometry, 5, 8 * scale, 20 * scale, 4 * scale, 12 * scale, texSize, texSize)     // Right
+export function applyRightLegUVs(geometry: BufferGeometry, texWidth = 64, texHeight = 64): void {
+  uvmap(geometry, 0, 4, 20, 4, 12, texWidth, texHeight)     // Front
+  uvmap(geometry, 1, 12, 20, 4, 12, texWidth, texHeight)    // Back
+  uvmap(geometry, 2, 8, 16, -4, 4, texWidth, texHeight, 3)  // Top
+  uvmap(geometry, 3, 12, 16, -4, 4, texWidth, texHeight, 1) // Bottom
+  uvmap(geometry, 4, 0, 20, 4, 12, texWidth, texHeight)     // Left
+  uvmap(geometry, 5, 8, 20, 4, 12, texWidth, texHeight)     // Right
 }
 
 /**
- * Apply LEFT LEG UV mapping (4x12x4) - mirrored
+ * Apply LEFT LEG UV mapping (4x12x4) - mirrored from right leg for legacy skins
  */
-export function applyLeftLegUVs(geometry: BufferGeometry, texSize = 64): void {
-  const scale = texSize / 64
-  uvmap(geometry, 0, 8 * scale, 20 * scale, -4 * scale, 12 * scale, texSize, texSize)    // Front (mirrored)
-  uvmap(geometry, 1, 16 * scale, 20 * scale, -4 * scale, 12 * scale, texSize, texSize)   // Back (mirrored)
-  uvmap(geometry, 2, 4 * scale, 16 * scale, 4 * scale, 4 * scale, texSize, texSize, 3)   // Top
-  uvmap(geometry, 3, 8 * scale, 16 * scale, 4 * scale, 4 * scale, texSize, texSize, 1)   // Bottom
-  uvmap(geometry, 4, 12 * scale, 20 * scale, -4 * scale, 12 * scale, texSize, texSize)   // Left (mirrored)
-  uvmap(geometry, 5, 4 * scale, 20 * scale, -4 * scale, 12 * scale, texSize, texSize)    // Right (mirrored)
+export function applyLeftLegUVs(geometry: BufferGeometry, texWidth = 64, texHeight = 64): void {
+  uvmap(geometry, 0, 8, 20, -4, 12, texWidth, texHeight)    // Front (mirrored)
+  uvmap(geometry, 1, 16, 20, -4, 12, texWidth, texHeight)   // Back (mirrored)
+  uvmap(geometry, 2, 4, 16, 4, 4, texWidth, texHeight, 3)   // Top
+  uvmap(geometry, 3, 8, 16, 4, 4, texWidth, texHeight, 1)   // Bottom
+  uvmap(geometry, 4, 12, 20, -4, 12, texWidth, texHeight)   // Left (mirrored)
+  uvmap(geometry, 5, 4, 20, -4, 12, texWidth, texHeight)    // Right (mirrored)
 }
 
 /**
  * Apply CAPE UV mapping (1x16x10)
+ * Cape texture is always 64x32
  */
-export function applyCapeUVs(geometry: BufferGeometry, texSize = 64): void {
-  const scale = texSize / 64
-  uvmap(geometry, 0, 1 * scale, 1 * scale, 10 * scale, 16 * scale, texSize, 32)    // Front
-  uvmap(geometry, 1, 12 * scale, 1 * scale, 10 * scale, 16 * scale, texSize, 32)   // Back
-  uvmap(geometry, 2, 1 * scale, 0 * scale, 10 * scale, 1 * scale, texSize, 32)     // Top
-  uvmap(geometry, 3, 11 * scale, 0 * scale, 10 * scale, 1 * scale, texSize, 32, 1) // Bottom
-  uvmap(geometry, 4, 0 * scale, 1 * scale, 1 * scale, 16 * scale, texSize, 32)     // Left
-  uvmap(geometry, 5, 11 * scale, 1 * scale, 1 * scale, 16 * scale, texSize, 32)    // Right
+export function applyCapeUVs(geometry: BufferGeometry, texWidth = 64, texHeight = 32): void {
+  uvmap(geometry, 0, 1, 1, 10, 16, texWidth, texHeight)    // Front
+  uvmap(geometry, 1, 12, 1, 10, 16, texWidth, texHeight)   // Back
+  uvmap(geometry, 2, 1, 0, 10, 1, texWidth, texHeight)     // Top
+  uvmap(geometry, 3, 11, 0, 10, 1, texWidth, texHeight, 1) // Bottom
+  uvmap(geometry, 4, 0, 1, 1, 16, texWidth, texHeight)     // Left
+  uvmap(geometry, 5, 11, 1, 1, 16, texWidth, texHeight)    // Right
 }
 
 // Legacy export aliases for compatibility

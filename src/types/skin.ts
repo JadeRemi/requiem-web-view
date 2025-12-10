@@ -24,6 +24,8 @@ export interface SkinViewerProps {
   width?: number
   /** Container height */
   height?: number
+  /** Compact control mode (smaller, bottom-left positioned) */
+  compactControls?: boolean
 }
 
 export interface MinecraftCharacterProps {

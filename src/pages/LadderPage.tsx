@@ -1,77 +1,16 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Table } from '../components/Table'
+import { FacePreview } from '../components/FacePreview'
+import { Tooltip } from '../components/Tooltip'
 import { Typography, TypographyVariant } from '../components/Typography'
 import { fetchLadder } from '../api/client'
 import { ROUTES } from '../config'
+import { usePlayerStore } from '../stores/playerStore'
+import { formatRelativeTime, formatFullDateTime, formatShortDate } from '../utils/dateFormat'
 import type { PlayerDTO, TableColumn, SortParams, ListRequest } from '../types/api'
 
 const PAGE_SIZE = 10
-
-/** Table columns definition */
-const LADDER_COLUMNS: TableColumn<PlayerDTO>[] = [
-  {
-    key: 'rank',
-    label: '#',
-    width: '60px',
-    align: 'center',
-    sortable: false,
-  },
-  {
-    key: 'username',
-    label: 'Player',
-    sortable: true,
-    render: (value) => (
-      <Link to={ROUTES.PROFILE} className="player-link">
-        {String(value)}
-      </Link>
-    ),
-  },
-  {
-    key: 'score',
-    label: 'Score',
-    width: '120px',
-    align: 'right',
-    sortable: true,
-    render: (value) => Number(value).toLocaleString(),
-  },
-  {
-    key: 'killRate',
-    label: 'Kill Rate',
-    width: '100px',
-    align: 'center',
-    sortable: true,
-    render: (value) => `${(Number(value) * 100).toFixed(1)}%`,
-  },
-  {
-    key: 'firstJoined',
-    label: 'Joined',
-    width: '120px',
-    sortable: true,
-    render: (value) => {
-      const date = new Date(String(value))
-      return date.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      })
-    },
-  },
-  {
-    key: 'lastActive',
-    label: 'Last Active',
-    width: '120px',
-    sortable: true,
-    render: (value) => {
-      const date = new Date(String(value))
-      return date.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      })
-    },
-  },
-]
 
 /**
  * Ladder Page
@@ -83,6 +22,89 @@ export function LadderPage() {
   const [hasMore, setHasMore] = useState(false)
   const [page, setPage] = useState(1)
   const [sort, setSort] = useState<SortParams>({ field: 'score', direction: 'desc' })
+  
+  const navigate = useNavigate()
+  const setSelectedPlayer = usePlayerStore((state) => state.setSelectedPlayer)
+
+  // Handle player click - set in store and navigate
+  const handlePlayerClick = (player: PlayerDTO) => {
+    setSelectedPlayer(player)
+    navigate(ROUTES.PROFILE)
+  }
+
+  /** Table columns definition */
+  const LADDER_COLUMNS: TableColumn<PlayerDTO>[] = [
+    {
+      key: 'rank',
+      label: '#',
+      width: '60px',
+      align: 'center',
+      sortable: false,
+    },
+    {
+      key: 'username',
+      label: 'Player',
+      sortable: true,
+      render: (value, row) => (
+        <button 
+          className="player-cell-button"
+          onClick={() => handlePlayerClick(row)}
+        >
+          <FacePreview skinHash={row.skinHash} size={20} />
+          <span className="player-name">{String(value)}</span>
+        </button>
+      ),
+    },
+    {
+      key: 'score',
+      label: 'Score',
+      width: '120px',
+      align: 'right',
+      sortable: true,
+      render: (value) => Number(value).toLocaleString(),
+    },
+    {
+      key: 'kills',
+      label: 'K/D',
+      width: '100px',
+      align: 'center',
+      sortable: true,
+      render: (_value, row) => {
+        const kills = row.kills.value
+        const deaths = row.deaths.value
+        const rate = deaths > 0 ? Math.floor((kills / deaths) * 100) / 100 : kills
+        const tooltipContent = (
+          <div className="kd-tooltip">
+            <div>Kills: {kills.toLocaleString()}</div>
+            <div>Deaths: {deaths.toLocaleString()}</div>
+          </div>
+        )
+        return (
+          <Tooltip content={tooltipContent} position="top">
+            <span className="kd-cell">{rate.toFixed(2)}</span>
+          </Tooltip>
+        )
+      },
+    },
+    {
+      key: 'lastActive',
+      label: 'Last Active',
+      width: '130px',
+      sortable: true,
+      render: (value) => (
+        <Tooltip content={formatFullDateTime(String(value))} position="top">
+          <span className="last-active-cell">{formatRelativeTime(String(value))}</span>
+        </Tooltip>
+      ),
+    },
+    {
+      key: 'firstJoined',
+      label: 'Joined',
+      width: '120px',
+      sortable: true,
+      render: (value) => formatShortDate(String(value)),
+    },
+  ]
 
   // Fetch data
   const loadData = useCallback(async (pageNum: number, sortParams: SortParams, append = false) => {

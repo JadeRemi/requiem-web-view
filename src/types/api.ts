@@ -49,16 +49,34 @@ export interface ListRequest {
   filters?: Record<string, string | number | boolean>
 }
 
+/** A stat value with its global rank */
+export interface RankedStat {
+  value: number
+  rank: number
+}
+
 /** Player data from ladder */
 export interface PlayerDTO {
   id: string
   username: string
   score: number
+  /** Overall ladder rank */
   rank: number
-  killRate: number
+  /** Player kills (PvP) */
+  kills: RankedStat
+  /** Enemy kills (monsters + players combined) */
+  enemyKills: RankedStat
+  deaths: RankedStat
+  /** Damage per second */
+  dps: RankedStat
   firstJoined: string
   lastActive: string
-  avatarUrl?: string
+  /** Base64 encoded skin hash */
+  skinHash: string
+  /** Profile-only stats */
+  achievements: RankedStat
+  gold: RankedStat
+  experience: RankedStat
 }
 
 /** Ladder response */

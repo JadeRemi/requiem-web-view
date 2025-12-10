@@ -94,3 +94,19 @@ export const ANIMATION = {
   /** Leg swing amplitude (running) */
   LEG_SWING_RUN: 1.4,
 } as const
+
+/** Skin loading queue configuration */
+export const SKIN_QUEUE = {
+  /** Delay between skin loads in milliseconds (rate limit protection) */
+  LOAD_DELAY_MS: 200,
+  /** Maximum concurrent skin loads */
+  MAX_CONCURRENT: 1,
+} as const
+
+/** Face preview dimensions (from skin texture) */
+export const FACE_TEXTURE = {
+  /** Face base layer position in 64x64 skin */
+  BASE: { x: 8, y: 8, size: 8 },
+  /** Face overlay/mask layer position */
+  OVERLAY: { x: 40, y: 8, size: 8 },
+} as const

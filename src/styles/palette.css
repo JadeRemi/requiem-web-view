@@ -59,6 +59,7 @@
 
   --color-text-primary: var(--grey-50);
   --color-text-secondary: var(--grey-350);
+  --color-text-tertiary: var(--grey-500);
   --color-text-muted: var(--grey-450);
   --color-text-disabled: var(--grey-550);
 

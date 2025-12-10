@@ -14,9 +14,10 @@ interface ControlPanelProps {
   config: SkinViewerConfig
   onConfigChange: (key: keyof SkinViewerConfig, value: boolean) => void
   onFileUpload: (file: File, type: 'skin' | 'cape') => void
+  compact?: boolean
 }
 
-function ControlPanel({ config, onConfigChange, onFileUpload }: ControlPanelProps) {
+function ControlPanel({ config, onConfigChange, onFileUpload, compact = false }: ControlPanelProps) {
   const skinInputRef = useRef<HTMLInputElement>(null)
   const capeInputRef = useRef<HTMLInputElement>(null)
 
@@ -27,46 +28,50 @@ function ControlPanel({ config, onConfigChange, onFileUpload }: ControlPanelProp
     }
   }
 
+  const iconSize = compact ? 14 : 28
+
   return (
-    <div className="control-panel">
+    <div className={`control-panel ${compact ? 'control-panel--compact' : ''}`}>
       <div className="control-group">
-        <Tooltip content="Animate" position="top">
+        <Tooltip content={`Animate: ${config.animate ? 'on' : 'off'}`} position="top">
           <button
             className={`icon-toggle ${config.animate ? 'active' : ''}`}
             onClick={() => onConfigChange('animate', !config.animate)}
             aria-label="Toggle animation"
           >
-            <Icon name="animate" size={28} />
+            <Icon name="animate" size={iconSize} />
           </button>
         </Tooltip>
-        <Tooltip content="Rotate" position="top">
+        <Tooltip content={`Rotate: ${config.autoRotate ? 'on' : 'off'}`} position="top">
           <button
             className={`icon-toggle ${config.autoRotate ? 'active' : ''}`}
             onClick={() => onConfigChange('autoRotate', !config.autoRotate)}
             aria-label="Toggle rotation"
           >
-            <Icon name="rotate" size={28} />
+            <Icon name="rotate" size={iconSize} />
           </button>
         </Tooltip>
       </div>
-      <div className="control-group upload-buttons">
-        <button onClick={() => skinInputRef.current?.click()}>Upload Skin</button>
-        <input
-          ref={skinInputRef}
-          type="file"
-          accept="image/png"
-          onChange={handleFileChange('skin')}
-          style={{ display: 'none' }}
-        />
-        <button onClick={() => capeInputRef.current?.click()}>Upload Cape</button>
-        <input
-          ref={capeInputRef}
-          type="file"
-          accept="image/png"
-          onChange={handleFileChange('cape')}
-          style={{ display: 'none' }}
-        />
-      </div>
+      {!compact && (
+        <div className="control-group upload-buttons">
+          <button onClick={() => skinInputRef.current?.click()}>Upload Skin</button>
+          <input
+            ref={skinInputRef}
+            type="file"
+            accept="image/png"
+            onChange={handleFileChange('skin')}
+            style={{ display: 'none' }}
+          />
+          <button onClick={() => capeInputRef.current?.click()}>Upload Cape</button>
+          <input
+            ref={capeInputRef}
+            type="file"
+            accept="image/png"
+            onChange={handleFileChange('cape')}
+            style={{ display: 'none' }}
+          />
+        </div>
+      )}
     </div>
   )
 }
@@ -131,6 +136,7 @@ export function SkinViewer({
   config: initialConfig,
   width = 400,
   height = 600,
+  compactControls = false,
 }: SkinViewerProps & { skinHash?: string }) {
   const [config, setConfig] = useState<SkinViewerConfig>({
     ...DEFAULT_CONFIG,
@@ -257,6 +263,7 @@ export function SkinViewer({
         config={config}
         onConfigChange={handleConfigChange}
         onFileUpload={handleFileUpload}
+        compact={compactControls}
       />
     </div>
   )

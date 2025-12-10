@@ -10,8 +10,8 @@ export function HomePage() {
         <Typography variant={TypographyVariant.Caption} color="var(--color-text-secondary)" style={{ marginBottom: 'var(--space-6)' }}>
           Analytics Portal
         </Typography>
-        <Link to={ROUTES.PROFILE} className="nav-link">
-          View Profile
+        <Link to={ROUTES.LADDER} className="nav-link">
+          View Leaderboard
         </Link>
       </div>
     </div>

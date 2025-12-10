@@ -8,6 +8,7 @@ import {
   Texture,
   DoubleSide,
   FrontSide,
+  Color,
 } from 'three'
 import type { MinecraftCharacterProps } from '../types/skin'
 import {
@@ -24,6 +25,9 @@ import {
 /** Scale: 1 unit = 1/8 of model height */
 const SCALE = 1 / 8
 
+/** Placeholder color matching --grey-900 background */
+const PLACEHOLDER_COLOR = new Color('#0d0d0e')
+
 interface BodyPartMeshProps {
   geometry: BoxGeometry
   texture: Texture | null
@@ -34,6 +38,8 @@ function BodyPartMesh({ geometry, texture, transparent = false }: BodyPartMeshPr
   const material = useMemo(() => {
     const mat = new MeshStandardMaterial({
       map: texture,
+      // Use placeholder color when no texture loaded
+      color: texture ? undefined : PLACEHOLDER_COLOR,
       transparent,
       alphaTest: transparent ? 0.1 : 0,
       side: transparent ? DoubleSide : FrontSide,
@@ -50,6 +56,8 @@ function BodyPartMesh({ geometry, texture, transparent = false }: BodyPartMeshPr
     if (texture && material.map) {
       material.map.needsUpdate = true
       material.needsUpdate = true
+      // Clear placeholder color once texture loads
+      material.color.set(0xffffff)
     }
   }, [texture, material])
 
@@ -79,46 +87,50 @@ export function MinecraftCharacter({
   const rightLegRef = useRef<Group>(null)
   const capeRef = useRef<Group>(null)
 
+  // Detect texture dimensions (64x64 modern or 64x32 legacy)
+  const texWidth = skinTexture?.image?.width ?? 64
+  const texHeight = skinTexture?.image?.height ?? 64
+
   const geometries = useMemo(() => {
     // Head (8x8x8)
     const headGeo = new BoxGeometry(8, 8, 8)
-    applyHeadUVs(headGeo, 64)
+    applyHeadUVs(headGeo, texWidth, texHeight)
 
     // Helmet (9x9x9)
     const helmetGeo = new BoxGeometry(9, 9, 9)
-    applyHelmetUVs(helmetGeo, 64)
+    applyHelmetUVs(helmetGeo, texWidth, texHeight)
 
     // Body (4 deep × 12 tall × 8 wide)
     const bodyGeo = new BoxGeometry(4, 12, 8)
-    applyBodyUVs(bodyGeo, 64)
+    applyBodyUVs(bodyGeo, texWidth, texHeight)
 
     // Right arm (4×12×4) - pivot at shoulder
     const rightArmGeo = new BoxGeometry(4, 12, 4)
     rightArmGeo.translate(0, -4, 0)
-    applyRightArmUVs(rightArmGeo, 64)
+    applyRightArmUVs(rightArmGeo, texWidth, texHeight)
 
     // Left arm (4×12×4) - pivot at shoulder
     const leftArmGeo = new BoxGeometry(4, 12, 4)
     leftArmGeo.translate(0, -4, 0)
-    applyLeftArmUVs(leftArmGeo, 64)
+    applyLeftArmUVs(leftArmGeo, texWidth, texHeight)
 
     // Right leg (4×12×4) - pivot at hip
     const rightLegGeo = new BoxGeometry(4, 12, 4)
     rightLegGeo.translate(0, -6, 0)
-    applyRightLegUVs(rightLegGeo, 64)
+    applyRightLegUVs(rightLegGeo, texWidth, texHeight)
 
     // Left leg (4×12×4) - pivot at hip
     const leftLegGeo = new BoxGeometry(4, 12, 4)
     leftLegGeo.translate(0, -6, 0)
-    applyLeftLegUVs(leftLegGeo, 64)
+    applyLeftLegUVs(leftLegGeo, texWidth, texHeight)
 
-    // Cape (1×16×10)
+    // Cape (1×16×10) - cape is always 64x32
     const capeGeo = new BoxGeometry(1, 16, 10)
     capeGeo.translate(0, -8, 0)
-    applyCapeUVs(capeGeo, 64)
+    applyCapeUVs(capeGeo, 64, 32)
 
     return { headGeo, helmetGeo, bodyGeo, rightArmGeo, leftArmGeo, rightLegGeo, leftLegGeo, capeGeo }
-  }, [])
+  }, [texWidth, texHeight])
 
   // Animation
   useFrame((state) => {
