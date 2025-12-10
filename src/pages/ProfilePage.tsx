@@ -4,7 +4,7 @@ import { SkinViewer } from '../components/SkinViewer'
 import { EquipmentViewer } from '../components/EquipmentViewer'
 import { Typography, TypographyVariant } from '../components/Typography'
 import { usePlayerStore } from '../stores/playerStore'
-import { ROUTES } from '../config'
+import { ROUTES, GAME_STATS } from '../config'
 import { useEffect } from 'react'
 import { formatShortDate, formatRelativeTime } from '../utils/dateFormat'
 import { EQUIPMENT_MODELS, type EquipmentModel } from '../mock/equipment'
@@ -20,6 +20,25 @@ function StatDisplay({ label, stat }: { label: string; stat: RankedStat }) {
       <div className="stat-value-row">
         <Typography variant={TypographyVariant.H2}>
           {stat.value.toLocaleString()}
+        </Typography>
+        <Typography variant={TypographyVariant.Caption} color="var(--color-text-tertiary)">
+          #{stat.rank}
+        </Typography>
+      </div>
+    </div>
+  )
+}
+
+/** Display achievements as x/y format */
+function AchievementsDisplay({ stat }: { stat: RankedStat }) {
+  return (
+    <div className="stat-item">
+      <Typography variant={TypographyVariant.Caption} color="var(--color-text-secondary)">
+        Achievements
+      </Typography>
+      <div className="stat-value-row">
+        <Typography variant={TypographyVariant.H2}>
+          {stat.value}/{GAME_STATS.TOTAL_ACHIEVEMENTS}
         </Typography>
         <Typography variant={TypographyVariant.Caption} color="var(--color-text-tertiary)">
           #{stat.rank}
@@ -90,7 +109,7 @@ export function ProfilePage() {
               <StatDisplay label="Enemy Kills" stat={selectedPlayer.enemyKills} />
               <StatDisplay label="Deaths" stat={selectedPlayer.deaths} />
               <StatDisplay label="DPS" stat={selectedPlayer.dps} />
-              <StatDisplay label="Achievements" stat={selectedPlayer.achievements} />
+              <AchievementsDisplay stat={selectedPlayer.achievements} />
               <StatDisplay label="Gold" stat={selectedPlayer.gold} />
               <StatDisplay label="Experience" stat={selectedPlayer.experience} />
             </div>

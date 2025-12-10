@@ -110,3 +110,9 @@ export const FACE_TEXTURE = {
   /** Face overlay/mask layer position */
   OVERLAY: { x: 40, y: 8, size: 8 },
 } as const
+
+/** Game stats configuration */
+export const GAME_STATS = {
+  /** Total number of achievements available in the game */
+  TOTAL_ACHIEVEMENTS: 100,
+} as const
