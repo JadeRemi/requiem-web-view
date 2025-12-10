@@ -12,13 +12,13 @@ import type {
   LadderResponse,
   PlayerDTO 
 } from '../types/api'
-import { MOCK_PLAYERS } from '../mock/ladder'
+import { MOCK_PLAYERS, findPlayerByUuid } from '../mock/ladder'
 
 /** Base URL for API - will be configured per environment */
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api'
 
 /** Simulated network delay for realistic UX testing */
-const MOCK_DELAY_MS = 300
+const MOCK_DELAY_MS = 800
 
 /** Helper to simulate async API call */
 async function mockDelay(): Promise<void> {
@@ -49,8 +49,16 @@ export async function fetchLadder(request: ListRequest): Promise<ApiResponse<Lad
   // Apply sorting
   if (sort) {
     players.sort((a, b) => {
-      const aVal = a[sort.field as keyof PlayerDTO]
-      const bVal = b[sort.field as keyof PlayerDTO]
+      let aVal = a[sort.field as keyof PlayerDTO]
+      let bVal = b[sort.field as keyof PlayerDTO]
+      
+      // Handle RankedStat objects (kills, deaths, etc.) - sort by value
+      if (aVal && typeof aVal === 'object' && 'value' in aVal) {
+        aVal = (aVal as { value: number }).value
+      }
+      if (bVal && typeof bVal === 'object' && 'value' in bVal) {
+        bVal = (bVal as { value: number }).value
+      }
       
       if (typeof aVal === 'number' && typeof bVal === 'number') {
         return sort.direction === 'asc' ? aVal - bVal : bVal - aVal
@@ -124,5 +132,29 @@ export async function apiFetch<T>(
       },
     }
   }
+}
+
+/**
+ * Fetch a single player by UUID
+ * @param uuid - Player UUID
+ * @returns Player data or error
+ */
+export async function fetchPlayer(uuid: string): Promise<ApiResponse<PlayerDTO>> {
+  await mockDelay()
+
+  const player = findPlayerByUuid(uuid)
+
+  if (!player) {
+    return {
+      success: false,
+      data: null as unknown as PlayerDTO,
+      error: {
+        code: 'NOT_FOUND',
+        message: `Player with UUID ${uuid} not found`,
+      },
+    }
+  }
+
+  return createSuccessResponse(player)
 }
 

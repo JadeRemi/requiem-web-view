@@ -137,11 +137,22 @@ export function SkinViewer({
   width = 400,
   height = 600,
   compactControls = false,
-}: SkinViewerProps & { skinHash?: string }) {
+  onConfigChange: externalConfigChange,
+}: SkinViewerProps & { 
+  skinHash?: string
+  onConfigChange?: (key: keyof SkinViewerConfig, value: boolean) => void 
+}) {
   const [config, setConfig] = useState<SkinViewerConfig>({
     ...DEFAULT_CONFIG,
     ...initialConfig,
   })
+  
+  // Sync external config changes
+  useEffect(() => {
+    if (initialConfig) {
+      setConfig((prev) => ({ ...prev, ...initialConfig }))
+    }
+  }, [initialConfig?.animate, initialConfig?.autoRotate])
 
   const [skinTexture, setSkinTexture] = useState<Texture | null>(null)
   const [capeTexture, setCapeTexture] = useState<Texture | null>(null)
@@ -220,7 +231,9 @@ export function SkinViewer({
 
   const handleConfigChange = useCallback((key: keyof SkinViewerConfig, value: boolean) => {
     setConfig((prev) => ({ ...prev, [key]: value }))
-  }, [])
+    // Notify external handler if provided
+    externalConfigChange?.(key, value)
+  }, [externalConfigChange])
 
   const handleFileUpload = useCallback((file: File, type: 'skin' | 'cape') => {
     const reader = new FileReader()

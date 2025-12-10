@@ -1,12 +1,11 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Table } from '../components/Table'
 import { FacePreview } from '../components/FacePreview'
 import { Tooltip } from '../components/Tooltip'
 import { Typography, TypographyVariant } from '../components/Typography'
 import { fetchLadder } from '../api/client'
 import { ROUTES } from '../config'
-import { usePlayerStore } from '../stores/playerStore'
 import { formatRelativeTime, formatFullDateTime, formatShortDate } from '../utils/dateFormat'
 import type { PlayerDTO, TableColumn, SortParams, ListRequest } from '../types/api'
 
@@ -22,15 +21,6 @@ export function LadderPage() {
   const [hasMore, setHasMore] = useState(false)
   const [page, setPage] = useState(1)
   const [sort, setSort] = useState<SortParams>({ field: 'score', direction: 'desc' })
-  
-  const navigate = useNavigate()
-  const setSelectedPlayer = usePlayerStore((state) => state.setSelectedPlayer)
-
-  // Handle player click - set in store and navigate
-  const handlePlayerClick = (player: PlayerDTO) => {
-    setSelectedPlayer(player)
-    navigate(ROUTES.PROFILE)
-  }
 
   /** Table columns definition */
   const LADDER_COLUMNS: TableColumn<PlayerDTO>[] = [
@@ -46,13 +36,13 @@ export function LadderPage() {
       label: 'Player',
       sortable: true,
       render: (value, row) => (
-        <button 
-          className="player-cell-button"
-          onClick={() => handlePlayerClick(row)}
+        <Link 
+          to={`${ROUTES.PROFILE}?uuid=${row.uuid}`}
+          className="player-cell-link"
         >
           <FacePreview skinHash={row.skinHash} size={20} />
           <span className="player-name">{String(value)}</span>
-        </button>
+        </Link>
       ),
     },
     {

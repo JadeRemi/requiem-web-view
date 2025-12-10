@@ -1,14 +1,16 @@
-import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useState, useEffect, useCallback } from 'react'
 import { SkinViewer } from '../components/SkinViewer'
 import { EquipmentViewer } from '../components/EquipmentViewer'
 import { Typography, TypographyVariant } from '../components/Typography'
-import { usePlayerStore } from '../stores/playerStore'
+import { Loader } from '../components/Loader'
+import { fetchPlayer } from '../api/client'
+import { useSettingsStore } from '../stores/settingsStore'
 import { ROUTES, GAME_STATS } from '../config'
-import { useEffect } from 'react'
 import { formatShortDate, formatRelativeTime } from '../utils/dateFormat'
 import { EQUIPMENT_MODELS, type EquipmentModel } from '../mock/equipment'
-import type { RankedStat } from '../types/api'
+import type { RankedStat, PlayerDTO } from '../types/api'
+import type { SkinViewerConfig } from '../types/skin'
 
 /** Display a ranked stat with value and rank */
 function StatDisplay({ label, stat }: { label: string; stat: RankedStat }) {
@@ -37,8 +39,11 @@ function AchievementsDisplay({ stat }: { stat: RankedStat }) {
         Achievements
       </Typography>
       <div className="stat-value-row">
-        <Typography variant={TypographyVariant.H2}>
-          {stat.value}/{GAME_STATS.TOTAL_ACHIEVEMENTS}
+        <Typography variant={TypographyVariant.H2} as="span">
+          {stat.value}
+        </Typography>
+        <Typography variant={TypographyVariant.H2} as="span" color="var(--color-text-tertiary)">
+          /{GAME_STATS.TOTAL_ACHIEVEMENTS}
         </Typography>
         <Typography variant={TypographyVariant.Caption} color="var(--color-text-tertiary)">
           #{stat.rank}
@@ -49,29 +54,93 @@ function AchievementsDisplay({ stat }: { stat: RankedStat }) {
 }
 
 export function ProfilePage() {
-  const selectedPlayer = usePlayerStore((state) => state.selectedPlayer)
+  const [searchParams] = useSearchParams()
   const navigate = useNavigate()
+  
+  const [player, setPlayer] = useState<PlayerDTO | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  
   const [selectedEquipment, setSelectedEquipment] = useState<EquipmentModel | null>(null)
-  const [equipmentRotate, setEquipmentRotate] = useState(true)
 
-  // Redirect to ladder if no player selected
-  useEffect(() => {
-    if (!selectedPlayer) {
-      navigate(ROUTES.LADDER)
+  // Persisted settings from store
+  const playerAnimate = useSettingsStore((s) => s.playerAnimate)
+  const playerRotate = useSettingsStore((s) => s.playerRotate)
+  const equipmentRotate = useSettingsStore((s) => s.equipmentRotate)
+  const setPlayerAnimate = useSettingsStore((s) => s.setPlayerAnimate)
+  const setPlayerRotate = useSettingsStore((s) => s.setPlayerRotate)
+  const setEquipmentRotate = useSettingsStore((s) => s.setEquipmentRotate)
+
+  const uuid = searchParams.get('uuid')
+  
+  // Handle skin viewer config changes
+  const handleSkinViewerConfigChange = useCallback((key: keyof SkinViewerConfig, value: boolean) => {
+    if (key === 'animate') {
+      setPlayerAnimate(value)
+    } else if (key === 'autoRotate') {
+      setPlayerRotate(value)
     }
-  }, [selectedPlayer, navigate])
+  }, [setPlayerAnimate, setPlayerRotate])
 
-  if (!selectedPlayer) {
-    return null
-  }
+  // Fetch player data when UUID changes
+  useEffect(() => {
+    if (!uuid) {
+      navigate(ROUTES.LADDER)
+      return
+    }
+
+    setLoading(true)
+    setError(null)
+
+    fetchPlayer(uuid)
+      .then((response) => {
+        if (response.success) {
+          setPlayer(response.data)
+        } else {
+          setError(response.error?.message ?? 'Failed to load player')
+        }
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }, [uuid, navigate])
 
   const handleEquipmentClick = (equipment: EquipmentModel) => {
     if (selectedEquipment?.id === equipment.id) {
       setSelectedEquipment(null)
     } else {
       setSelectedEquipment(equipment)
-      setEquipmentRotate(true) // Reset rotation when selecting new equipment
     }
+  }
+
+  // Show loader while fetching
+  if (loading) {
+    return (
+      <div className="page profile-page">
+        <div className="profile-loading">
+          <Loader />
+          <Typography variant={TypographyVariant.Caption} color="var(--color-text-secondary)">
+            Loading player...
+          </Typography>
+        </div>
+      </div>
+    )
+  }
+
+  // Show error if player not found
+  if (error || !player) {
+    return (
+      <div className="page profile-page">
+        <div className="profile-error">
+          <Typography variant={TypographyVariant.H2} color="var(--color-text-secondary)">
+            {error ?? 'Player not found'}
+          </Typography>
+          <button className="btn-primary" onClick={() => navigate(ROUTES.LADDER)}>
+            Back to Leaderboard
+          </button>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -81,14 +150,15 @@ export function ProfilePage() {
           {/* 3D Viewer Card */}
           <div className="profile-card viewer-card">
             <SkinViewer
-              skinHash={selectedPlayer.skinHash}
+              skinHash={player.skinHash}
               config={{
-                animate: true,
-                autoRotate: true,
+                animate: playerAnimate,
+                autoRotate: playerRotate,
                 running: false,
                 showCape: true,
                 freezeCameraY: true,
               }}
+              onConfigChange={handleSkinViewerConfigChange}
               width={400}
               height={500}
               compactControls
@@ -101,17 +171,17 @@ export function ProfilePage() {
               variant={TypographyVariant.H1} 
               style={{ marginBottom: 'var(--space-6)', textTransform: 'none' }}
             >
-              {selectedPlayer.username}
+              {player.username}
             </Typography>
 
             <div className="stats-grid">
-              <StatDisplay label="Player Kills" stat={selectedPlayer.kills} />
-              <StatDisplay label="Enemy Kills" stat={selectedPlayer.enemyKills} />
-              <StatDisplay label="Deaths" stat={selectedPlayer.deaths} />
-              <StatDisplay label="DPS" stat={selectedPlayer.dps} />
-              <AchievementsDisplay stat={selectedPlayer.achievements} />
-              <StatDisplay label="Gold" stat={selectedPlayer.gold} />
-              <StatDisplay label="Experience" stat={selectedPlayer.experience} />
+              <StatDisplay label="Player Kills" stat={player.kills} />
+              <StatDisplay label="Enemy Kills" stat={player.enemyKills} />
+              <StatDisplay label="Deaths" stat={player.deaths} />
+              <StatDisplay label="DPS" stat={player.dps} />
+              <AchievementsDisplay stat={player.achievements} />
+              <StatDisplay label="Gold" stat={player.gold} />
+              <StatDisplay label="Experience" stat={player.experience} />
             </div>
 
             <div className="stats-dates">
@@ -120,7 +190,7 @@ export function ProfilePage() {
                   Joined
                 </Typography>
                 <Typography variant={TypographyVariant.Body}>
-                  {formatShortDate(selectedPlayer.firstJoined)}
+                  {formatShortDate(player.firstJoined)}
                 </Typography>
               </div>
 
@@ -129,7 +199,7 @@ export function ProfilePage() {
                   Last Played
                 </Typography>
                 <Typography variant={TypographyVariant.Body}>
-                  {formatShortDate(selectedPlayer.lastActive)} ({formatRelativeTime(selectedPlayer.lastActive)})
+                  {formatShortDate(player.lastActive)} ({formatRelativeTime(player.lastActive)})
                 </Typography>
               </div>
             </div>

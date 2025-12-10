@@ -352,6 +352,21 @@ body {
   overflow-y: auto;
 }
 
+.profile-loading,
+.profile-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  height: 100%;
+  min-height: 400px;
+}
+
+.profile-error .btn-primary {
+  margin-top: var(--space-4);
+}
+
 .profile-content {
   display: flex;
   flex-direction: column;
@@ -546,7 +561,7 @@ body {
   text-decoration: underline;
 }
 
-.player-cell-button {
+.player-cell-link {
   display: flex;
   align-items: center;
   gap: var(--space-2);
@@ -559,14 +574,15 @@ body {
   color: var(--grey-100);
   cursor: pointer;
   text-align: left;
+  text-decoration: none;
   transition: color var(--transition-fast);
 }
 
-.player-cell-button:hover {
+.player-cell-link:hover {
   color: var(--grey-0);
 }
 
-.player-cell-button:hover .player-name {
+.player-cell-link:hover .player-name {
   text-decoration: underline;
 }
 
@@ -614,23 +630,29 @@ body {
   border-radius: var(--radius-lg);
   overflow: hidden;
   background: var(--grey-900);
+  display: flex;
+  flex-direction: column;
 }
 
-.table-wrapper {
-  max-height: 500px;
+.table-header-wrapper {
+  flex-shrink: 0;
+  background: var(--grey-850);
+}
+
+.table-body-wrapper {
+  max-height: 400px;
   overflow-y: auto;
+  flex: 1;
 }
 
 .data-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   table-layout: fixed;
 }
 
 .table-header {
-  position: sticky;
-  top: 0;
-  z-index: 10;
   background: var(--grey-850);
 }
 
@@ -643,6 +665,7 @@ body {
   color: var(--grey-400);
   border-bottom: 1px solid var(--grey-800);
   white-space: nowrap;
+  background: var(--grey-850);
 }
 
 .table-th.sortable {
@@ -705,6 +728,25 @@ body {
   text-align: center;
   color: var(--grey-500);
   font-style: italic;
+}
+
+.table-bottom {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-4) 0;
+}
+
+.table-bottom-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.table-bottom-line {
+  width: 100%;
+  height: 1px;
+  background: var(--color-border-default);
+  margin: var(--space-2) 0;
 }
 
 .table-load-more {

@@ -98,7 +98,7 @@ export const ANIMATION = {
 /** Skin loading queue configuration */
 export const SKIN_QUEUE = {
   /** Delay between skin loads in milliseconds (rate limit protection) */
-  LOAD_DELAY_MS: 200,
+  LOAD_DELAY_MS: 500,
   /** Maximum concurrent skin loads */
   MAX_CONCURRENT: 1,
 } as const
@@ -115,4 +115,10 @@ export const FACE_TEXTURE = {
 export const GAME_STATS = {
   /** Total number of achievements available in the game */
   TOTAL_ACHIEVEMENTS: 100,
+} as const
+
+/** External URLs */
+export const EXTERNAL_URLS = {
+  /** BlueMap world map URL */
+  BLUEMAP: 'https://bluecolored.de/bluemap/#hermitcraft9:-1771:0:1512:1500:0:0:0:0:perspective',
 } as const

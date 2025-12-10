@@ -58,6 +58,8 @@ export interface RankedStat {
 /** Player data from ladder */
 export interface PlayerDTO {
   id: string
+  /** Unique player identifier (for URLs and API lookups) */
+  uuid: string
   username: string
   score: number
   /** Overall ladder rank */

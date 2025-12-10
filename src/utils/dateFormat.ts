@@ -36,7 +36,7 @@ export function formatRelativeTime(timestamp: string | Date): string {
   for (const { unit, ms } of TIME_UNITS) {
     const value = Math.floor(diffMs / ms)
     if (value >= 1) {
-      const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' })
+      const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'always' })
       return rtf.format(-value, unit)
     }
   }

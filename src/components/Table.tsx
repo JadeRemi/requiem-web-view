@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import type { TableColumn, SortParams, SortDirection } from '../types/api'
 import { Icon } from './Icon'
 import { Loader } from './Loader'
@@ -45,6 +45,12 @@ export function Table<T extends object>({
   const [sort, setSort] = useState<SortParams | undefined>(currentSort)
   const observerRef = useRef<IntersectionObserver | null>(null)
   const loadMoreRef = useRef<HTMLDivElement>(null)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+
+  // Sync internal sort state with parent's currentSort prop
+  useEffect(() => {
+    setSort(currentSort)
+  }, [currentSort])
 
   // Handle column sort click
   const handleSort = (column: TableColumn<T>) => {
@@ -58,26 +64,32 @@ export function Table<T extends object>({
     onSort?.(newSort)
   }
 
-  // Infinite scroll observer
-  const handleObserver = useCallback(
-    (entries: IntersectionObserverEntry[]) => {
-      const target = entries[0]
-      if (target && target.isIntersecting && hasMore && !loading && onLoadMore) {
-        onLoadMore()
-      }
-    },
-    [hasMore, loading, onLoadMore]
-  )
-
+  // Set up intersection observer for infinite scroll
   useEffect(() => {
     const element = loadMoreRef.current
-    if (!element) return
+    const container = scrollContainerRef.current
+    
+    // Clean up previous observer
+    if (observerRef.current) {
+      observerRef.current.disconnect()
+    }
+    
+    // Only observe if we have both element and container, and there's more to load
+    if (!element || !container || !hasMore || loading) return
 
-    observerRef.current = new IntersectionObserver(handleObserver, {
-      root: null,
-      rootMargin: '100px',
-      threshold: 0,
-    })
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        const target = entries[0]
+        if (target && target.isIntersecting && onLoadMore) {
+          onLoadMore()
+        }
+      },
+      {
+        root: container,
+        rootMargin: '50px',
+        threshold: 0,
+      }
+    )
 
     observerRef.current.observe(element)
 
@@ -86,7 +98,7 @@ export function Table<T extends object>({
         observerRef.current.disconnect()
       }
     }
-  }, [handleObserver])
+  }, [hasMore, loading, onLoadMore])
 
   // Render sort indicator
   const renderSortIcon = (column: TableColumn<T>) => {
@@ -148,7 +160,9 @@ export function Table<T extends object>({
           <Loader size={48} color="var(--grey-300)" />
         </div>
       )}
-      <div className="table-wrapper">
+      
+      {/* Fixed Header - outside scroll area */}
+      <div className="table-header-wrapper">
         <table className="data-table">
           <thead className="table-header">
             <tr>
@@ -170,6 +184,12 @@ export function Table<T extends object>({
               ))}
             </tr>
           </thead>
+        </table>
+      </div>
+
+      {/* Scrollable Body */}
+      <div className="table-body-wrapper" ref={scrollContainerRef}>
+        <table className="data-table">
           <tbody className={`table-body ${showSkeleton ? 'table-body-skeleton' : ''}`}>
             {showSkeleton ? (
               renderSkeletonRows()
@@ -186,7 +206,10 @@ export function Table<T extends object>({
                     <td
                       key={column.key}
                       className="table-td"
-                      style={{ textAlign: column.align ?? 'left' }}
+                      style={{ 
+                        width: column.width,
+                        textAlign: column.align ?? 'left' 
+                      }}
                     >
                       {column.render
                         ? column.render(row[column.key], row)
@@ -198,11 +221,23 @@ export function Table<T extends object>({
             )}
           </tbody>
         </table>
-      </div>
 
-      {/* Infinite scroll trigger */}
-      <div ref={loadMoreRef} className="table-load-more" />
+        {/* Bottom section: loader when loading more, line when complete */}
+        {data.length > 0 && (
+          <div className="table-bottom">
+            {loading ? (
+              <div className="table-bottom-loader">
+                <Loader size={32} color="var(--grey-400)" />
+              </div>
+            ) : !hasMore ? (
+              <div className="table-bottom-line" />
+            ) : null}
+          </div>
+        )}
+
+        {/* Infinite scroll sentinel - must be inside scroll container */}
+        {hasMore && !loading && <div ref={loadMoreRef} className="table-load-more" />}
+      </div>
     </div>
   )
 }
-
