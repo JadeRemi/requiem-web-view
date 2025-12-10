@@ -1,94 +1,118 @@
-import { useRef, useState, useCallback, useEffect } from 'react'
+import { useState, useCallback } from 'react'
 import { Typography, TypographyVariant } from '../components/Typography'
 import { EnemyViewer } from '../components/EnemyViewer'
 import { ENEMY_MODELS, EnemyModel } from '../mock/enemies'
 import { useSettingsStore } from '../stores/settingsStore'
 import { Icon } from '../components/Icon'
 
-interface VirtualCard {
-  virtualIndex: number
-  enemy: EnemyModel
-}
-
 interface EnemyCardProps {
   enemy: EnemyModel
   autoRotate: boolean
   onToggleRotate: () => void
+  isExpanding?: boolean
+  isCollapsing?: boolean
 }
 
-function EnemyCard({ enemy, autoRotate, onToggleRotate }: EnemyCardProps) {
+function EnemyCard({ enemy, autoRotate, onToggleRotate, isExpanding, isCollapsing }: EnemyCardProps) {
+  let className = 'carousel-item'
+  if (isExpanding) className += ' expanding'
+  if (isCollapsing) className += ' collapsing'
+  
   return (
-    <div className="enemy-card">
-      <div className="enemy-card-title">
-        <Typography 
-          variant={TypographyVariant.H3} 
-          style={{ textTransform: 'none' }}
-        >
-          {enemy.name}
-        </Typography>
+    <div className={className}>
+      <div className="enemy-card">
+        <div className="enemy-card-title">
+          <Typography 
+            variant={TypographyVariant.H3} 
+            style={{ textTransform: 'none' }}
+          >
+            {enemy.name}
+          </Typography>
+        </div>
+        <EnemyViewer 
+          model={enemy} 
+          autoRotate={autoRotate}
+          onToggleRotate={onToggleRotate}
+        />
       </div>
-      <EnemyViewer 
-        model={enemy} 
-        autoRotate={autoRotate}
-        onToggleRotate={onToggleRotate}
-      />
     </div>
   )
 }
 
-// How many cards to show in the carousel at once
-const VISIBLE_COUNT = 5
-
-// Get enemy at any virtual index (cycles through the array)
-function getEnemyAtIndex(virtualIndex: number): EnemyModel {
+// Get enemy at cyclic index
+function getEnemy(index: number): EnemyModel {
   const len = ENEMY_MODELS.length
-  const normalized = ((virtualIndex % len) + len) % len
+  const normalized = ((index % len) + len) % len
   return ENEMY_MODELS[normalized]!
 }
 
-// Generate cards for a range of virtual indices
-function generateCards(startIndex: number, count: number): VirtualCard[] {
-  const cards: VirtualCard[] = []
-  for (let i = 0; i < count; i++) {
-    const virtualIndex = startIndex + i
-    cards.push({
-      virtualIndex,
-      enemy: getEnemyAtIndex(virtualIndex),
-    })
-  }
-  return cards
+interface CardState {
+  index: number
+  enemy: EnemyModel
+  isExpanding?: boolean
+  isCollapsing?: boolean
 }
 
 export function WikiPage() {
-  const carouselRef = useRef<HTMLDivElement>(null)
-  // The virtual index of the leftmost visible card
   const [windowStart, setWindowStart] = useState(0)
-  const [cards, setCards] = useState<VirtualCard[]>(() => generateCards(0, VISIBLE_COUNT))
+  const [cards, setCards] = useState<CardState[]>(() => {
+    const initial: CardState[] = []
+    for (let i = 0; i < 5; i++) {
+      initial.push({ index: i, enemy: getEnemy(i) })
+    }
+    return initial
+  })
+  const [isAnimating, setIsAnimating] = useState(false)
   
   const enemyRotate = useSettingsStore((state) => state.enemyRotate)
   const setEnemyRotate = useSettingsStore((state) => state.setEnemyRotate)
 
-  // Keep carousel scroll position at the start (cards shift, scroll doesn't)
-  useEffect(() => {
-    const carousel = carouselRef.current
-    if (carousel) {
-      carousel.scrollLeft = 0
-    }
-  }, [cards])
-
   const scroll = useCallback((direction: 'left' | 'right') => {
+    if (isAnimating) return
+    setIsAnimating(true)
+    
     if (direction === 'right') {
-      // Move window right: remove leftmost card, add new one on right
-      const newStart = windowStart + 1
-      setWindowStart(newStart)
-      setCards(generateCards(newStart, VISIBLE_COUNT))
+      // Add new card on right (expanding), mark left for collapse
+      const newIndex = windowStart + 5
+      const newCards = [
+        { ...cards[0]!, isCollapsing: true },
+        ...cards.slice(1),
+        { index: newIndex, enemy: getEnemy(newIndex), isExpanding: true }
+      ]
+      setCards(newCards)
+      
+      setTimeout(() => {
+        // Remove collapsed, finalize expanded
+        const finalCards: CardState[] = []
+        for (let i = 0; i < 5; i++) {
+          finalCards.push({ index: windowStart + 1 + i, enemy: getEnemy(windowStart + 1 + i) })
+        }
+        setCards(finalCards)
+        setWindowStart(windowStart + 1)
+        setIsAnimating(false)
+      }, 300)
     } else {
-      // Move window left: remove rightmost card, add new one on left
-      const newStart = windowStart - 1
-      setWindowStart(newStart)
-      setCards(generateCards(newStart, VISIBLE_COUNT))
+      // Add new card on left (expanding), mark right for collapse
+      const newIndex = windowStart - 1
+      const newCards = [
+        { index: newIndex, enemy: getEnemy(newIndex), isExpanding: true },
+        ...cards.slice(0, -1),
+        { ...cards[cards.length - 1]!, isCollapsing: true }
+      ]
+      setCards(newCards)
+      
+      setTimeout(() => {
+        // Remove collapsed, finalize expanded
+        const finalCards: CardState[] = []
+        for (let i = 0; i < 5; i++) {
+          finalCards.push({ index: windowStart - 1 + i, enemy: getEnemy(windowStart - 1 + i) })
+        }
+        setCards(finalCards)
+        setWindowStart(windowStart - 1)
+        setIsAnimating(false)
+      }, 300)
     }
-  }, [windowStart])
+  }, [isAnimating, windowStart, cards])
 
   const handleToggleRotate = useCallback(() => {
     setEnemyRotate(!enemyRotate)
@@ -104,26 +128,29 @@ export function WikiPage() {
         <button 
           className="carousel-arrow carousel-arrow-left"
           onClick={() => scroll('left')}
+          disabled={isAnimating}
           aria-label="Scroll left"
         >
           <Icon name="chevron-left" size={24} />
         </button>
 
-        <div className="enemy-carousel" ref={carouselRef}>
+        <div className="enemy-carousel">
           {cards.map((card) => (
-            <div key={card.virtualIndex}>
-              <EnemyCard
-                enemy={card.enemy}
-                autoRotate={enemyRotate}
-                onToggleRotate={handleToggleRotate}
-              />
-            </div>
+            <EnemyCard
+              key={card.index}
+              enemy={card.enemy}
+              autoRotate={enemyRotate}
+              onToggleRotate={handleToggleRotate}
+              isExpanding={card.isExpanding ?? false}
+              isCollapsing={card.isCollapsing ?? false}
+            />
           ))}
         </div>
 
         <button 
           className="carousel-arrow carousel-arrow-right"
           onClick={() => scroll('right')}
+          disabled={isAnimating}
           aria-label="Scroll right"
         >
           <Icon name="chevron-right" size={24} />
