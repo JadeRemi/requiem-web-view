@@ -140,13 +140,8 @@ export function LadderPage() {
   return (
     <div className="page ladder-page">
       <div className="ladder-content">
-        <Typography variant={TypographyVariant.H1}>Leaderboard</Typography>
-        <Typography 
-          variant={TypographyVariant.Caption} 
-          color="var(--color-text-secondary)"
-          style={{ marginBottom: 'var(--space-6)' }}
-        >
-          Top players ranked by score
+        <Typography variant={TypographyVariant.H1} style={{ marginBottom: 'var(--space-6)' }}>
+          Leaderboard
         </Typography>
 
         <Table<PlayerDTO>

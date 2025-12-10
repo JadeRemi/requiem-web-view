@@ -31,6 +31,7 @@ export const ROUTES = {
   PROFILE: '/profile',
   LADDER: '/ladder',
   MAP: '/map',
+  WIKI: '/wiki',
 } as const
 
 /** Skin viewer default settings */
