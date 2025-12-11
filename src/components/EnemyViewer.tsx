@@ -1,6 +1,6 @@
 import { Suspense, memo } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls, PerspectiveCamera, useGLTF, Bounds, useBounds } from '@react-three/drei'
+import { OrbitControls, PerspectiveCamera, useGLTF, Bounds } from '@react-three/drei'
 import { Icon } from './Icon'
 import { Tooltip } from './Tooltip'
 import type { EnemyModel } from '../mock/enemies'
@@ -11,20 +11,20 @@ interface ModelProps {
 
 function Model({ modelPath }: ModelProps) {
   const { scene } = useGLTF(modelPath)
-  const bounds = useBounds()
-  
-  // Fit to bounds when model loads
-  bounds.refresh(scene).fit()
-  
+  // Just return the cloned scene - Bounds handles the fitting
   return <primitive object={scene.clone(true)} />
 }
 
 interface SceneContentProps {
   modelPath: string
   autoRotate: boolean
+  offsetY: number
 }
 
-function SceneContent({ modelPath, autoRotate }: SceneContentProps) {
+function SceneContent({ modelPath, autoRotate, offsetY }: SceneContentProps) {
+  // Apply offsetY to the target - higher target = model appears lower
+  const targetY = 0.8 + (offsetY ?? 0)
+  
   return (
     <>
       {/* Camera behind model so enemies face toward camera */}
@@ -36,7 +36,7 @@ function SceneContent({ modelPath, autoRotate }: SceneContentProps) {
         enableRotate={true}
         autoRotate={autoRotate}
         autoRotateSpeed={4}
-        target={[0, 0.8, 0]}
+        target={[0, targetY, 0]}
       />
       <ambientLight intensity={0.7} />
       <directionalLight position={[5, 10, -5]} intensity={1} />
@@ -62,7 +62,11 @@ const EnemyViewerInner = memo(function EnemyViewerInner({
   return (
     <Canvas frameloop="always">
       <Suspense fallback={null}>
-        <SceneContent modelPath={model.path} autoRotate={autoRotate} />
+        <SceneContent 
+          modelPath={model.path} 
+          autoRotate={autoRotate} 
+          offsetY={model.offsetY ?? 0}
+        />
       </Suspense>
     </Canvas>
   )

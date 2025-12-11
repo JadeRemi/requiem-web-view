@@ -48,7 +48,7 @@ export const ENEMY_MODELS: EnemyModel[] = [
     name: 'Red Golem',
     path: '/models/enemies/redstone.glb',
     scale: 1.0,
-    offsetY: -3,
+    offsetY: 3,
   },
   {
     id: 'spider',
