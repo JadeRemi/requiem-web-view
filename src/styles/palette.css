@@ -5,7 +5,7 @@
  */
 
 /* Google Fonts Import */
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Pixelify+Sans:wght@400;500;600;700&family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Pixelify+Sans:wght@400;500;600;700&family=Press+Start+2P&family=Rajdhani:wght@300;400;500;600;700&family=VT323&display=swap');
 
 /* Ethnocentric Font */
 @font-face {
@@ -29,6 +29,19 @@
 :root {
   /* Grey Scale - White to Black */
   --grey-0: #ffffff;
+
+  /* Magenta Highlight Scale */
+  --magenta-50: #fef0ff;
+  --magenta-100: #fce0ff;
+  --magenta-200: #fab8ff;
+  --magenta-300: #f87fff;
+  --magenta-400: #f540ff;
+  --magenta-500: #e600e6;
+  --magenta-600: #cc00cc;
+  --magenta-700: #a300a3;
+  --magenta-800: #800080;
+  --magenta-900: #5c005c;
+  --magenta-950: #380038;
   --grey-50: #fafafa;
   --grey-100: #f4f4f5;
   --grey-150: #ececed;
@@ -110,6 +123,8 @@
   --font-nirmala: 'Nirmala UI', 'Segoe UI', sans-serif; /* System font */
   --font-minecraft: 'Minecraft', cursive; /* Official Minecraft font */
   --font-press-start: 'Press Start 2P', cursive; /* Retro pixel font */
+  --font-rajdhani: 'Rajdhani', sans-serif; /* Modern geometric sans */
+  --font-vt323: 'VT323', monospace; /* Retro terminal font */
   --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 

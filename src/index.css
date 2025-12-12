@@ -390,6 +390,29 @@ body {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  /* Clip scrollbar to border-radius */
+  overflow-x: hidden;
+}
+
+/* Hide scrollbar but keep functionality */
+.stats-card::-webkit-scrollbar {
+  width: 6px;
+}
+
+.stats-card::-webkit-scrollbar-track {
+  background: transparent;
+  margin: var(--radius-lg);
+}
+
+.stats-card::-webkit-scrollbar-thumb {
+  background: var(--grey-600);
+  border-radius: var(--radius-full);
+}
+
+/* Ensure card content stays above hexagon overlay */
+.stats-card > *:not(.hexagon-overlay) {
+  position: relative;
+  z-index: 2;
 }
 
 .stats-grid {
@@ -409,6 +432,12 @@ body {
   display: flex;
   align-items: baseline;
   gap: var(--space-2);
+}
+
+/* Achievement value - no gap between number and total */
+.achievement-value {
+  display: flex;
+  align-items: baseline;
 }
 
 .stats-dates {

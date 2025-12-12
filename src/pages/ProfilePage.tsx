@@ -4,6 +4,7 @@ import { SkinViewer } from '../components/SkinViewer'
 import { EquipmentViewer } from '../components/EquipmentViewer'
 import { Typography, TypographyVariant } from '../components/Typography'
 import { Loader } from '../components/Loader'
+import { HexagonOverlay } from '../components/HexagonOverlay'
 import { fetchPlayer } from '../api/client'
 import { useSettingsStore } from '../stores/settingsStore'
 import { ROUTES, GAME_STATS } from '../config'
@@ -39,12 +40,14 @@ function AchievementsDisplay({ stat }: { stat: RankedStat }) {
         Achievements
       </Typography>
       <div className="stat-value-row">
-        <Typography variant={TypographyVariant.H2} as="span">
-          {stat.value}
-        </Typography>
-        <Typography variant={TypographyVariant.H2} as="span" color="var(--color-text-tertiary)">
-          /{GAME_STATS.TOTAL_ACHIEVEMENTS}
-        </Typography>
+        <span className="achievement-value">
+          <Typography variant={TypographyVariant.H2} as="span">
+            {stat.value}
+          </Typography>
+          <Typography variant={TypographyVariant.H2} as="span" color="var(--color-text-tertiary)">
+            /{GAME_STATS.TOTAL_ACHIEVEMENTS}
+          </Typography>
+        </span>
         <Typography variant={TypographyVariant.Caption} color="var(--color-text-tertiary)">
           #{stat.rank}
         </Typography>
@@ -166,7 +169,8 @@ export function ProfilePage() {
           </div>
 
           {/* Stats Card */}
-          <div className="profile-card stats-card">
+          <div className="profile-card stats-card" style={{ position: 'relative' }}>
+            <HexagonOverlay />
             <Typography 
               variant={TypographyVariant.H1} 
               style={{ marginBottom: 'var(--space-6)', textTransform: 'none' }}
