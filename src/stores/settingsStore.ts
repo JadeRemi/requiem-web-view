@@ -7,6 +7,8 @@ interface ViewerSettings {
   playerRotate: boolean
   /** Equipment model auto-rotation enabled */
   equipmentRotate: boolean
+  /** Enemy model auto-rotation enabled */
+  enemyRotate: boolean
 }
 
 interface SettingsState extends ViewerSettings {
@@ -16,6 +18,8 @@ interface SettingsState extends ViewerSettings {
   setPlayerRotate: (value: boolean) => void
   /** Toggle equipment rotation */
   setEquipmentRotate: (value: boolean) => void
+  /** Toggle enemy rotation */
+  setEnemyRotate: (value: boolean) => void
 }
 
 /**
@@ -28,9 +32,10 @@ export const useSettingsStore = create<SettingsState>((set) => ({
   playerAnimate: true,
   playerRotate: true,
   equipmentRotate: true,
+  enemyRotate: true,
 
   setPlayerAnimate: (value) => set({ playerAnimate: value }),
   setPlayerRotate: (value) => set({ playerRotate: value }),
   setEquipmentRotate: (value) => set({ equipmentRotate: value }),
+  setEnemyRotate: (value) => set({ enemyRotate: value }),
 }))
-

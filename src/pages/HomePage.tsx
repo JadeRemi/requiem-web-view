@@ -7,10 +7,7 @@ export function HomePage() {
     <div className="page home-page">
       <div className="home-content">
         <Typography variant={TypographyVariant.H1}>Requiem</Typography>
-        <Typography variant={TypographyVariant.Caption} color="var(--color-text-secondary)" style={{ marginBottom: 'var(--space-6)' }}>
-          Analytics Portal
-        </Typography>
-        <Link to={ROUTES.LADDER} className="nav-link">
+        <Link to={ROUTES.LADDER} className="nav-link" style={{ marginTop: 'var(--space-6)' }}>
           View Leaderboard
         </Link>
       </div>

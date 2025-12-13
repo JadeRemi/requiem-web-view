@@ -14,6 +14,7 @@ const SIDEBAR_ITEMS: SidebarItem[] = [
   { path: ROUTES.HOME, label: 'Home', icon: 'home' },
   { path: ROUTES.LADDER, label: 'Ladder', icon: 'trophy' },
   { path: ROUTES.MAP, label: 'World Map', icon: 'map' },
+  { path: ROUTES.WIKI, label: 'Wiki', icon: 'book' },
 ]
 
 /**
@@ -46,10 +47,6 @@ export function Sidebar() {
 
       {/* Sidebar panel */}
       <aside className={`sidebar ${isOpen ? 'sidebar-open' : ''}`}>
-        <div className="sidebar-header">
-          <span className="sidebar-title">Navigation</span>
-        </div>
-
         <nav className="sidebar-nav">
           {SIDEBAR_ITEMS.map((item) => (
             <NavLink

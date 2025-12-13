@@ -6,7 +6,7 @@
 export interface EquipmentModel {
   id: string
   name: string
-  /** Path relative to src/models/ */
+  /** Path relative to public/ */
   path: string
   /** Scale multiplier for the model */
   scale: number
@@ -18,14 +18,16 @@ export interface EquipmentModel {
   rotationZ: number
   /** Y-axis position offset (negative = lower) */
   offsetY?: number
+  /** Whether this item has warped/corrupted visual effect */
+  warped?: boolean
 }
 
 export const EQUIPMENT_MODELS = [
   {
     id: 'axe',
     name: 'Axe',
-    path: '/models/axe.glb',
-    scale: 1.25, // 2x smaller (was 2.5)
+    path: '/models/items/axe.glb',
+    scale: 1.25,
     rotationX: 0.3,
     rotationY: 0,
     rotationZ: 0.2,
@@ -33,7 +35,7 @@ export const EQUIPMENT_MODELS = [
   // {
   //   id: 'bore',
   //   name: 'Bore',
-  //   path: '/models/bore.glb',
+  //   path: '/models/items/bore.glb',
   //   scale: 2.0,
   //   rotationX: 0.2,
   //   rotationY: 0,
@@ -42,27 +44,28 @@ export const EQUIPMENT_MODELS = [
   {
     id: 'bow',
     name: 'Bow',
-    path: '/models/bow.glb',
-    scale: 1.9, // 1.2x smaller (was 2.5)
+    path: '/models/items/bow.glb',
+    scale: 1.9,
     rotationX: 0,
     rotationY: 0,
     rotationZ: 0.3,
-    offsetY: -0.4, // Display lower
+    offsetY: -0.4,
   },
   {
     id: 'mace',
     name: 'Mace',
-    path: '/models/mace.glb',
-    scale: 1.4, // 2x smaller (was 2.5)
+    path: '/models/items/mace.glb',
+    scale: 1.4,
     rotationX: 0.3,
     rotationY: 0,
     rotationZ: 0.15,
+    warped: true,
   },
   {
     id: 'staff',
     name: 'Staff',
-    path: '/models/staff.glb',
-    scale: 1.0, // 2x smaller (was 2.0)
+    path: '/models/items/staff.glb',
+    scale: 1.0,
     rotationX: 0.1,
     rotationY: 0,
     rotationZ: 0.4,
@@ -70,11 +73,10 @@ export const EQUIPMENT_MODELS = [
   // {
   //   id: 'figurine',
   //   name: 'Figurine',
-  //   path: '/models/figurine.glb',
-  //   scale: 0.5, // 3x smaller (was 1.5)
+  //   path: '/models/items/figurine.glb',
+  //   scale: 0.5,
   //   rotationX: 0,
   //   rotationY: 0,
   //   rotationZ: 0,
   // },
 ] as const satisfies readonly EquipmentModel[]
-

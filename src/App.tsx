@@ -3,6 +3,7 @@ import { HomePage } from './pages/HomePage'
 import { ProfilePage } from './pages/ProfilePage'
 import { LadderPage } from './pages/LadderPage'
 import { MapPage } from './pages/MapPage'
+import { WikiPage } from './pages/WikiPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import ErrorBoundary from './components/ErrorBoundary'
 import { ToastProvider } from './components/Toast'
@@ -22,6 +23,7 @@ function App() {
               <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
               <Route path={ROUTES.LADDER} element={<LadderPage />} />
               <Route path={ROUTES.MAP} element={<MapPage />} />
+              <Route path={ROUTES.WIKI} element={<WikiPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </main>

@@ -119,24 +119,10 @@ body {
   transform: translateX(0);
 }
 
-.sidebar-header {
-  padding: var(--space-6) var(--space-5);
-  padding-top: calc(var(--space-6) + 52px);
-  border-bottom: 1px solid var(--grey-800);
-}
-
-.sidebar-title {
-  font-family: var(--font-orbitron);
-  font-size: var(--text-xs);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--grey-500);
-}
-
 .sidebar-nav {
   flex: 1;
   padding: var(--space-4) var(--space-3);
+  padding-top: calc(var(--space-4) + 52px);
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
@@ -400,10 +386,43 @@ body {
 }
 
 .stats-card {
-  padding: var(--space-6);
+  padding: 0;
+  position: relative;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+}
+
+/* Scrollable content wrapper */
+.stats-card-content {
+  flex: 1;
+  padding: var(--space-6);
   overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  z-index: 2;
+}
+
+/* Hide scrollbar but keep functionality */
+.stats-card-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.stats-card-content::-webkit-scrollbar-track {
+  background: transparent;
+  margin: var(--radius-lg);
+}
+
+.stats-card-content::-webkit-scrollbar-thumb {
+  background: var(--grey-600);
+  border-radius: var(--radius-full);
+}
+
+/* Hexagon overlay stays fixed within card boundaries */
+.stats-card > .hexagon-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
 }
 
 .stats-grid {
@@ -423,6 +442,12 @@ body {
   display: flex;
   align-items: baseline;
   gap: var(--space-2);
+}
+
+/* Achievement value - no gap between number and total */
+.achievement-value {
+  display: flex;
+  align-items: baseline;
 }
 
 .stats-dates {
@@ -500,6 +525,14 @@ body {
   display: flex;
   flex-direction: column;
   position: relative;
+  overflow: hidden;
+}
+
+/* Hexagon overlay for warped items */
+.equipment-card > .hexagon-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
 }
 
 .equipment-viewer {
@@ -529,6 +562,148 @@ body {
 .control-panel--compact .icon-toggle {
   width: 24px;
   height: 24px;
+}
+
+/* ===========================================
+   Enemy Viewer
+   =========================================== */
+
+.enemy-viewer {
+  width: 100%;
+  height: 100%;
+  background: var(--color-bg-primary);
+  position: relative;
+}
+
+.enemy-controls {
+  position: absolute;
+  bottom: var(--space-4);
+  left: var(--space-4);
+  z-index: 2;
+}
+
+/* ===========================================
+   Wiki Page
+   =========================================== */
+
+.wiki-page {
+  padding: var(--space-8);
+  padding-top: calc(var(--space-8) + 60px); /* Account for sidebar burger */
+  min-height: 100vh;
+}
+
+.wiki-header {
+  margin-bottom: var(--space-8);
+}
+
+.wiki-header h1 {
+  margin-bottom: var(--space-2);
+}
+
+.carousel-container {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  position: relative;
+}
+
+.carousel-arrow {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--grey-800);
+  border: 1px solid var(--grey-700);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.carousel-arrow:hover {
+  background: var(--grey-700);
+  border-color: var(--grey-600);
+}
+
+.enemy-carousel {
+  display: flex;
+  overflow: hidden;
+  padding: var(--space-4) 0;
+  gap: var(--space-6);
+}
+
+.carousel-item {
+  flex-shrink: 0;
+  width: 320px;
+  overflow: hidden;
+  transition: width 0.3s ease-out, margin 0.3s ease-out;
+}
+
+.carousel-item.expanding {
+  width: 0;
+  margin-right: calc(-1 * var(--space-6));
+  animation: expand-card 0.3s ease-out forwards;
+}
+
+.carousel-item.collapsing {
+  animation: collapse-card 0.3s ease-out forwards;
+}
+
+@keyframes expand-card {
+  from {
+    width: 0;
+    margin-right: calc(-1 * var(--space-6));
+  }
+  to {
+    width: 320px;
+    margin-right: 0;
+  }
+}
+
+@keyframes collapse-card {
+  from {
+    width: 320px;
+    margin-left: 0;
+  }
+  to {
+    width: 0;
+    margin-left: calc(-1 * var(--space-6));
+  }
+}
+
+.enemy-card {
+  flex-shrink: 0;
+  width: 320px;
+  height: 400px;
+  background: var(--grey-900);
+  border: 1px solid var(--grey-800);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.enemy-card-title {
+  position: absolute;
+  top: var(--space-4);
+  left: 0;
+  right: 0;
+  text-align: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.enemy-card .enemy-viewer {
+  flex: 1;
+}
+
+.enemy-card-placeholder {
+  flex: 1;
+  background: var(--color-bg-primary);
 }
 
 /* ===========================================
@@ -603,6 +778,165 @@ body {
   height: 100%;
   border: none;
   background: var(--grey-950);
+}
+
+/* ===========================================
+   Chat Widget
+   =========================================== */
+/* Invisible overlay to capture clicks outside chat */
+.chat-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  cursor: pointer;
+}
+
+.chat-widget {
+  position: fixed;
+  bottom: var(--space-4);
+  left: var(--space-4);
+  z-index: 1101;
+  width: 320px;
+  background: rgba(13, 13, 14, 0.9);
+  border: 1px solid var(--grey-800);
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-widget:hover {
+  border-color: var(--grey-700);
+}
+
+.chat-widget.chat-expanded {
+  cursor: pointer;
+  border-color: var(--grey-600);
+}
+
+.chat-widget.chat-empty:not(.chat-expanded) .chat-messages {
+  display: none;
+}
+
+.chat-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-3);
+  border-top: 1px solid var(--grey-800);
+  background: rgba(24, 24, 27, 0.8);
+}
+
+.chat-title {
+  font-family: var(--font-orbitron);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--grey-400);
+}
+
+.chat-messages {
+  display: flex;
+  flex-direction: column-reverse;
+  padding: var(--space-2) var(--space-3);
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: max-height var(--transition-normal);
+}
+
+.chat-messages::-webkit-scrollbar {
+  width: 4px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+  background: var(--grey-700);
+  border-radius: var(--radius-full);
+}
+
+.chat-message {
+  font-family: var(--font-nirmala);
+  font-size: var(--text-sm);
+  line-height: 1.4;
+  color: var(--grey-300);
+  margin-bottom: var(--space-1);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  /* Smooth transition over 2 seconds to blend the 1-second update intervals */
+  transition: opacity 2s linear;
+}
+
+.chat-message:first-child {
+  margin-bottom: 0;
+}
+
+.chat-status {
+  font-weight: 600;
+  margin-right: var(--space-1);
+}
+
+.chat-status-explorer {
+  color: #4ade80;
+}
+
+.chat-status-trader {
+  color: #fbbf24;
+}
+
+.chat-status-master {
+  color: #60a5fa;
+}
+
+.chat-status-killer {
+  color: #f87171;
+}
+
+.chat-status-thief {
+  color: #a78bfa;
+}
+
+.chat-status-ascended {
+  color: #f0abfc;
+}
+
+.chat-nickname {
+  font-weight: 600;
+  color: var(--grey-200);
+}
+
+a.chat-nickname-link {
+  text-decoration: none;
+  color: var(--grey-200);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+a.chat-nickname-link:hover {
+  text-decoration: underline;
+  color: var(--grey-100);
+}
+
+.chat-separator {
+  color: var(--grey-500);
+}
+
+.chat-text {
+  color: var(--grey-400);
+}
+
+.chat-empty-state {
+  font-size: var(--text-xs);
+  color: var(--grey-600);
+  font-style: italic;
+  text-align: center;
+  padding: var(--space-2) 0;
 }
 
 /* ===========================================
