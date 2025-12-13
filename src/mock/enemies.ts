@@ -23,9 +23,9 @@ export const ENEMY_MODELS: EnemyModel[] = [
     offsetY: 0,
   },
   {
-    id: 'fawn',
+    id: 'faun',
     name: 'Faun',
-    path: '/models/enemies/fawn.glb',
+    path: '/models/enemies/faun.glb',
     scale: 1.0,
     offsetY: 0,
   },

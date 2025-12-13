@@ -169,64 +169,65 @@ export function ProfilePage() {
           </div>
 
           {/* Stats Card */}
-          <div className="profile-card stats-card" style={{ position: 'relative' }}>
-            <HexagonOverlay />
-            <Typography 
-              variant={TypographyVariant.H1} 
-              style={{ marginBottom: 'var(--space-6)', textTransform: 'none' }}
-            >
-              {player.username}
-            </Typography>
-
-            <div className="stats-grid">
-              <StatDisplay label="Player Kills" stat={player.kills} />
-              <StatDisplay label="Enemy Kills" stat={player.enemyKills} />
-              <StatDisplay label="Deaths" stat={player.deaths} />
-              <StatDisplay label="DPS" stat={player.dps} />
-              <AchievementsDisplay stat={player.achievements} />
-              <StatDisplay label="Gold" stat={player.gold} />
-              <StatDisplay label="Experience" stat={player.experience} />
-            </div>
-
-            <div className="stats-dates">
-              <div className="date-item">
-                <Typography variant={TypographyVariant.Caption} color="var(--color-text-secondary)">
-                  Joined
-                </Typography>
-                <Typography variant={TypographyVariant.Body}>
-                  {formatShortDate(player.firstJoined)}
-                </Typography>
-              </div>
-
-              <div className="date-item">
-                <Typography variant={TypographyVariant.Caption} color="var(--color-text-secondary)">
-                  Last Played
-                </Typography>
-                <Typography variant={TypographyVariant.Body}>
-                  {formatShortDate(player.lastActive)} ({formatRelativeTime(player.lastActive)})
-                </Typography>
-              </div>
-            </div>
-
-            {/* Equipment Buttons */}
-            <div className="equipment-buttons">
+          <div className="profile-card stats-card">
+            <div className="stats-card-content">
               <Typography 
-                variant={TypographyVariant.Caption} 
-                color="var(--color-text-secondary)"
-                style={{ marginBottom: 'var(--space-2)' }}
+                variant={TypographyVariant.H1} 
+                style={{ marginBottom: 'var(--space-6)', textTransform: 'none' }}
               >
-                Equipment
+                {player.username}
               </Typography>
-              <div className="equipment-grid">
-                {EQUIPMENT_MODELS.map((equipment, index) => (
-                  <button
-                    key={equipment.id}
-                    className={`equipment-btn ${selectedEquipment?.id === equipment.id ? 'active' : ''}`}
-                    onClick={() => handleEquipmentClick(equipment)}
-                  >
-                    {index + 1}
-                  </button>
-                ))}
+
+              <div className="stats-grid">
+                <StatDisplay label="Player Kills" stat={player.kills} />
+                <StatDisplay label="Enemy Kills" stat={player.enemyKills} />
+                <StatDisplay label="Deaths" stat={player.deaths} />
+                <StatDisplay label="DPS" stat={player.dps} />
+                <AchievementsDisplay stat={player.achievements} />
+                <StatDisplay label="Gold" stat={player.gold} />
+                <StatDisplay label="Experience" stat={player.experience} />
+              </div>
+
+              <div className="stats-dates">
+                <div className="date-item">
+                  <Typography variant={TypographyVariant.Caption} color="var(--color-text-secondary)">
+                    Joined
+                  </Typography>
+                  <Typography variant={TypographyVariant.Body}>
+                    {formatShortDate(player.firstJoined)}
+                  </Typography>
+                </div>
+
+                <div className="date-item">
+                  <Typography variant={TypographyVariant.Caption} color="var(--color-text-secondary)">
+                    Last Played
+                  </Typography>
+                  <Typography variant={TypographyVariant.Body}>
+                    {formatShortDate(player.lastActive)} ({formatRelativeTime(player.lastActive)})
+                  </Typography>
+                </div>
+              </div>
+
+              {/* Equipment Buttons */}
+              <div className="equipment-buttons">
+                <Typography 
+                  variant={TypographyVariant.Caption} 
+                  color="var(--color-text-secondary)"
+                  style={{ marginBottom: 'var(--space-2)' }}
+                >
+                  Equipment
+                </Typography>
+                <div className="equipment-grid">
+                  {EQUIPMENT_MODELS.map((equipment, index) => (
+                    <button
+                      key={equipment.id}
+                      className={`equipment-btn ${selectedEquipment?.id === equipment.id ? 'active' : ''}`}
+                      onClick={() => handleEquipmentClick(equipment)}
+                    >
+                      {index + 1}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -234,6 +235,18 @@ export function ProfilePage() {
           {/* Equipment Preview Card */}
           {selectedEquipment && (
             <div className="profile-card equipment-card">
+              {selectedEquipment.warped && (
+                <HexagonOverlay 
+                  coverageRadius={200}
+                  innerCarveRadius={120}
+                  padding={{ top: 12, bottom: 12, left: 0, right: 0 }}
+                  noise={{ scale: 50 }}
+                  holeDensity={0.45}
+                  color="#ff00ff"
+                  colorDark="#1a0010"
+                  opacity={0.25}
+                />
+              )}
               <EquipmentViewer 
                 model={selectedEquipment} 
                 autoRotate={equipmentRotate}

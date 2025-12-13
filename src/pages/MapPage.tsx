@@ -1,4 +1,5 @@
 import { EXTERNAL_URLS } from '../config'
+import { ChatWidget } from '../components/ChatWidget'
 
 export function MapPage() {
   return (
@@ -9,7 +10,7 @@ export function MapPage() {
         className="map-iframe"
         allowFullScreen
       />
+      <ChatWidget />
     </div>
   )
 }
-

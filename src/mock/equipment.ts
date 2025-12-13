@@ -18,6 +18,8 @@ export interface EquipmentModel {
   rotationZ: number
   /** Y-axis position offset (negative = lower) */
   offsetY?: number
+  /** Whether this item has warped/corrupted visual effect */
+  warped?: boolean
 }
 
 export const EQUIPMENT_MODELS = [
@@ -57,6 +59,7 @@ export const EQUIPMENT_MODELS = [
     rotationX: 0.3,
     rotationY: 0,
     rotationZ: 0.15,
+    warped: true,
   },
   {
     id: 'staff',
