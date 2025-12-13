@@ -1,9 +1,15 @@
-import { Suspense, memo } from 'react'
+import { Suspense, useMemo } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, PerspectiveCamera, useGLTF, Bounds } from '@react-three/drei'
 import { Icon } from './Icon'
 import { Tooltip } from './Tooltip'
 import type { EnemyModel } from '../mock/enemies'
+
+/** Base Y offset for camera target to position models lower in card */
+const BASE_TARGET_Y = 0.3
+
+/** Camera distance from model */
+const CAMERA_DISTANCE = 4
 
 interface ModelProps {
   modelPath: string
@@ -11,8 +17,12 @@ interface ModelProps {
 
 function Model({ modelPath }: ModelProps) {
   const { scene } = useGLTF(modelPath)
-  // Just return the cloned scene - Bounds handles the fitting
-  return <primitive object={scene.clone(true)} />
+  
+  const clonedScene = useMemo(() => {
+    return scene.clone(true)
+  }, [scene])
+  
+  return <primitive object={clonedScene} />
 }
 
 interface SceneContentProps {
@@ -22,13 +32,11 @@ interface SceneContentProps {
 }
 
 function SceneContent({ modelPath, autoRotate, offsetY }: SceneContentProps) {
-  // Apply offsetY to the target - higher target = model appears lower
-  const targetY = 0.8 + (offsetY ?? 0)
+  const targetY = BASE_TARGET_Y + (offsetY ?? 0)
   
   return (
     <>
-      {/* Camera behind model so enemies face toward camera */}
-      <PerspectiveCamera makeDefault position={[0, 0, -5]} fov={50} />
+      <PerspectiveCamera makeDefault position={[0, targetY, -CAMERA_DISTANCE]} fov={50} />
       <OrbitControls
         enablePan={false}
         minDistance={2}
@@ -41,9 +49,14 @@ function SceneContent({ modelPath, autoRotate, offsetY }: SceneContentProps) {
       <ambientLight intensity={0.7} />
       <directionalLight position={[5, 10, -5]} intensity={1} />
       <directionalLight position={[-5, 5, 5]} intensity={0.5} />
-      <Bounds fit clip observe margin={1.5}>
-        <Model modelPath={modelPath} />
-      </Bounds>
+      
+      {/* Bounds handles auto-scaling and zoom animation */}
+      {/* Position the group to move the model's center to targetY */}
+      <group position={[0, targetY, 0]}>
+        <Bounds fit clip margin={1.2}>
+          <Model modelPath={modelPath} />
+        </Bounds>
+      </group>
     </>
   )
 }
@@ -54,24 +67,6 @@ interface EnemyViewerProps {
   onToggleRotate?: () => void
 }
 
-// Memoize to prevent re-renders during carousel animation
-const EnemyViewerInner = memo(function EnemyViewerInner({ 
-  model, 
-  autoRotate = true,
-}: { model: EnemyModel; autoRotate: boolean }) {
-  return (
-    <Canvas frameloop="always">
-      <Suspense fallback={null}>
-        <SceneContent 
-          modelPath={model.path} 
-          autoRotate={autoRotate} 
-          offsetY={model.offsetY ?? 0}
-        />
-      </Suspense>
-    </Canvas>
-  )
-})
-
 export function EnemyViewer({ 
   model, 
   autoRotate = true,
@@ -79,7 +74,15 @@ export function EnemyViewer({
 }: EnemyViewerProps) {
   return (
     <div className="enemy-viewer">
-      <EnemyViewerInner model={model} autoRotate={autoRotate} />
+      <Canvas key={model.id} frameloop="always">
+        <Suspense fallback={null}>
+          <SceneContent 
+            modelPath={model.path} 
+            autoRotate={autoRotate} 
+            offsetY={model.offsetY ?? 0}
+          />
+        </Suspense>
+      </Canvas>
       {onToggleRotate && (
         <div className="enemy-controls">
           <Tooltip content={`Rotate: ${autoRotate ? 'on' : 'off'}`} position="top">
