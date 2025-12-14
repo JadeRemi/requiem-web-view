@@ -6,11 +6,14 @@ import { Icon } from './Icon'
 import { Tooltip } from './Tooltip'
 import type { EnemyModel } from '../mock/enemies'
 
-/** Base Y offset for camera target */
-const BASE_TARGET_Y = 0.3
+/** Fixed camera target Y position */
+const CAMERA_TARGET_Y = 0.8
 
 /** Camera distance from model */
 const CAMERA_DISTANCE = 4
+
+/** Default Y offset to lower models (feet at bottom of view) */
+const DEFAULT_MODEL_Y = -0.5
 
 interface ModelProps {
   modelPath: string
@@ -46,17 +49,18 @@ interface SceneContentProps {
 }
 
 function SceneContent({ modelPath, autoRotate, offsetY, configScale }: SceneContentProps) {
-  const targetY = BASE_TARGET_Y + (offsetY ?? 0)
   const [isLoaded, setIsLoaded] = useState(false)
+
+  // Model Y position: default offset + config offset (negative = lower)
+  const modelY = DEFAULT_MODEL_Y + (offsetY ?? 0)
 
   const handleModelLoaded = () => {
     setIsLoaded(true)
-    console.log('Model loaded and rotated 180°')
   }
 
   return (
     <>
-      <PerspectiveCamera makeDefault position={[0, targetY, -CAMERA_DISTANCE]} fov={50} />
+      <PerspectiveCamera makeDefault position={[0, CAMERA_TARGET_Y, -CAMERA_DISTANCE]} fov={50} />
       <OrbitControls
         enablePan={false}
         minDistance={2}
@@ -64,13 +68,13 @@ function SceneContent({ modelPath, autoRotate, offsetY, configScale }: SceneCont
         enableRotate={true}
         autoRotate={autoRotate}
         autoRotateSpeed={4}
-        target={[0, targetY, 0]}
+        target={[0, CAMERA_TARGET_Y, 0]}
       />
       <ambientLight intensity={0.7} />
       <directionalLight position={[5, 10, 5]} intensity={1} />
       <directionalLight position={[-5, 5, -5]} intensity={0.5} />
 
-      <group position={[0, targetY, 0]} visible={isLoaded}>
+      <group position={[0, modelY, 0]} visible={isLoaded}>
         <Model modelPath={modelPath} configScale={configScale} onLoaded={handleModelLoaded} />
       </group>
     </>
