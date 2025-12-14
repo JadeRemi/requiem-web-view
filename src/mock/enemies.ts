@@ -40,14 +40,14 @@ export const ENEMY_MODELS: EnemyModel[] = [
     id: 'rat',
     name: 'Rat',
     path: '/models/enemies/rat.glb',
-    scale: 1.0,
+    scale: 1.4,
     offsetY: 0,
   },
   {
     id: 'redstone',
     name: 'Red Golem',
     path: '/models/enemies/redstone.glb',
-    scale: 1.0,
+    scale: 0.5,
     offsetY: 3,
   },
   {
