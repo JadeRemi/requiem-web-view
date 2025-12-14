@@ -15,6 +15,7 @@ const SIDEBAR_ITEMS: SidebarItem[] = [
   { path: ROUTES.LADDER, label: 'Ladder', icon: 'trophy' },
   { path: ROUTES.MAP, label: 'World Map', icon: 'map' },
   { path: ROUTES.WIKI, label: 'Wiki', icon: 'book' },
+  { path: ROUTES.ABOUT, label: 'About', icon: 'info' },
 ]
 
 /**

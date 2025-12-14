@@ -1450,3 +1450,216 @@ a.chat-nickname-link:hover {
 .icon-toggle.active:hover {
   color: var(--grey-50);
 }
+
+/* ===========================================
+   Gradient Text Utility
+   =========================================== */
+.gradient-text {
+  background: linear-gradient(135deg, var(--magenta-400) 0%, var(--magenta-600) 50%, var(--magenta-400) 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: background-position 0.3s ease;
+}
+
+.gradient-text:hover,
+.gradient-text-hover:hover .gradient-text {
+  background-position: 100% 100%;
+  background: linear-gradient(135deg, var(--magenta-300) 0%, var(--magenta-500) 50%, var(--magenta-300) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* ===========================================
+   About Page
+   =========================================== */
+.about-page {
+  padding: var(--space-8);
+  padding-top: calc(var(--space-8) + 60px);
+  padding-bottom: var(--space-16);
+  height: 100%;
+  overflow-y: auto;
+}
+
+.about-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.about-header {
+  margin-bottom: var(--space-6);
+  text-align: center;
+}
+
+.ip-box-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-6);
+}
+
+.ip-box {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-5);
+  background: var(--grey-850);
+  border: 1px solid var(--grey-700);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(248, 127, 255, 0.1);
+}
+
+.ip-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(248, 127, 255, 0.12) 50%,
+    transparent 100%
+  );
+  transition: left 1.2s ease;
+}
+
+.ip-box:hover::before {
+  left: 150%;
+}
+
+.ip-box:hover {
+  background: var(--grey-800);
+  border-color: var(--grey-600);
+  box-shadow: 0 6px 30px rgba(248, 127, 255, 0.2);
+}
+
+.ip-text {
+  font-family: var(--font-orbitron);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  background: linear-gradient(135deg, var(--magenta-400) 0%, var(--magenta-600) 50%, var(--magenta-400) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all var(--transition-normal);
+}
+
+.ip-box:hover .ip-text {
+  background: linear-gradient(135deg, var(--magenta-300) 0%, var(--magenta-500) 50%, var(--magenta-300) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.ip-copy-icon {
+  color: var(--magenta-500);
+  transition: color var(--transition-fast);
+}
+
+.ip-box:hover .ip-copy-icon {
+  color: var(--magenta-300);
+}
+
+.ip-copy-icon.copied {
+  color: var(--magenta-200);
+}
+
+.about-description {
+  margin-bottom: var(--space-8);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.screenshot-cards {
+  display: flex;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.screenshot-card {
+  width: 540px;
+  height: 360px;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--grey-900);
+  flex-shrink: 0;
+  border: 1px solid var(--grey-700);
+  transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.screenshot-card:hover {
+  border-color: var(--grey-600);
+  box-shadow: var(--shadow-lg);
+}
+
+.screenshot-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(0.7) sepia(0.25) contrast(0.9);
+  transition: filter 0.4s ease, transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: scale(1.08);
+}
+
+.screenshot-card:hover .screenshot-image {
+  filter: saturate(0.8) sepia(0.15) contrast(0.95);
+  transform: scale(1);
+}
+
+/* ===========================================
+   Image Card Component
+   Reusable card with image and description
+   =========================================== */
+.image-card-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.image-card {
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--grey-900);
+  border: 1px solid var(--grey-700);
+  transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.image-card:hover {
+  border-color: var(--grey-600);
+  box-shadow: var(--shadow-lg);
+}
+
+.image-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(0.7) sepia(0.25) contrast(0.9);
+  transition: filter 0.4s ease, transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: scale(1.08);
+  display: block;
+}
+
+.image-card:hover .image-card-image {
+  filter: saturate(0.8) sepia(0.15) contrast(0.95);
+  transform: scale(1);
+}
+
+.image-card-description {
+  font-family: var(--font-orbitron);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+}

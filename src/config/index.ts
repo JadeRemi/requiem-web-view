@@ -32,6 +32,7 @@ export const ROUTES = {
   LADDER: '/ladder',
   MAP: '/map',
   WIKI: '/wiki',
+  ABOUT: '/about',
 } as const
 
 /** Skin viewer default settings */
