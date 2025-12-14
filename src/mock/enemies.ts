@@ -27,7 +27,7 @@ export const ENEMY_MODELS: EnemyModel[] = [
     name: 'Faun',
     path: '/models/enemies/faun.glb',
     scale: 1.0,
-    offsetY: 0,
+    offsetY: 1,
   },
   {
     id: 'muskrat',
@@ -62,7 +62,7 @@ export const ENEMY_MODELS: EnemyModel[] = [
     name: 'Warden',
     path: '/models/enemies/warden.glb',
     scale: 1.0,
-    offsetY: 0,
+    offsetY: 1.5,
   },
   {
     id: 'wasp',
@@ -76,6 +76,6 @@ export const ENEMY_MODELS: EnemyModel[] = [
     name: 'Zombie',
     path: '/models/enemies/zombie.glb',
     scale: 1.0,
-    offsetY: 0,
+    offsetY: 1,
   },
 ]
