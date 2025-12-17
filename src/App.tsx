@@ -5,32 +5,39 @@ import { LadderPage } from './pages/LadderPage'
 import { MapPage } from './pages/MapPage'
 import { WikiPage } from './pages/WikiPage'
 import { AboutPage } from './pages/AboutPage'
+import { LoginPage } from './pages/LoginPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import ErrorBoundary from './components/ErrorBoundary'
 import { ToastProvider } from './components/Toast'
+import { AuthProvider } from './contexts/AuthContext'
 import { Sidebar } from './components/Sidebar'
+import { Header } from './components/Header'
 import { ROUTES } from './config'
 
 function App() {
   return (
     <ErrorBoundary>
-      <ToastProvider>
-        {/* basename comes from Vite's base config - '/' in dev, '/requiem-web-view/' in prod */}
-        <BrowserRouter basename={import.meta.env.BASE_URL}>
-          <Sidebar />
-          <main className="main-content">
-            <Routes>
-              <Route path={ROUTES.HOME} element={<HomePage />} />
-              <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
-              <Route path={ROUTES.LADDER} element={<LadderPage />} />
-              <Route path={ROUTES.MAP} element={<MapPage />} />
-              <Route path={ROUTES.WIKI} element={<WikiPage />} />
-              <Route path={ROUTES.ABOUT} element={<AboutPage />} />
-              <Route path="*" element={<NotFoundPage />} />
-            </Routes>
-          </main>
-        </BrowserRouter>
-      </ToastProvider>
+      <AuthProvider>
+        <ToastProvider>
+          {/* basename comes from Vite's base config - '/' in dev, '/requiem-web-view/' in prod */}
+          <BrowserRouter basename={import.meta.env.BASE_URL}>
+            <Sidebar />
+            <Header />
+            <main className="main-content">
+              <Routes>
+                <Route path={ROUTES.HOME} element={<HomePage />} />
+                <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
+                <Route path={ROUTES.LADDER} element={<LadderPage />} />
+                <Route path={ROUTES.MAP} element={<MapPage />} />
+                <Route path={ROUTES.WIKI} element={<WikiPage />} />
+                <Route path={ROUTES.ABOUT} element={<AboutPage />} />
+                <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            </main>
+          </BrowserRouter>
+        </ToastProvider>
+      </AuthProvider>
     </ErrorBoundary>
   )
 }

@@ -33,6 +33,7 @@ export const ROUTES = {
   MAP: '/map',
   WIKI: '/wiki',
   ABOUT: '/about',
+  LOGIN: '/login',
 } as const
 
 /** Skin viewer default settings */

@@ -15,6 +15,8 @@ interface TableProps<T extends object> {
   emptyMessage?: string
   /** Number of skeleton rows to show when loading with no data */
   skeletonRows?: number
+  /** Function to get additional class name for a row */
+  rowClassName?: (row: T) => string | undefined
 }
 
 /**
@@ -41,6 +43,7 @@ export function Table<T extends object>({
   currentSort,
   emptyMessage = 'No data available',
   skeletonRows = 10,
+  rowClassName,
 }: TableProps<T>) {
   const [sort, setSort] = useState<SortParams | undefined>(currentSort)
   const observerRef = useRef<IntersectionObserver | null>(null)
@@ -200,24 +203,27 @@ export function Table<T extends object>({
                 </td>
               </tr>
             ) : (
-              data.map((row) => (
-                <tr key={String(row[keyField])} className="table-row">
-                  {columns.map((column) => (
-                    <td
-                      key={column.key}
-                      className="table-td"
-                      style={{ 
-                        width: column.width,
-                        textAlign: column.align ?? 'left' 
-                      }}
-                    >
-                      {column.render
-                        ? column.render(row[column.key], row)
-                        : String(row[column.key] ?? '')}
-                    </td>
-                  ))}
-                </tr>
-              ))
+              data.map((row) => {
+                const extraClass = rowClassName?.(row) ?? ''
+                return (
+                  <tr key={String(row[keyField])} className={`table-row ${extraClass}`}>
+                    {columns.map((column) => (
+                      <td
+                        key={column.key}
+                        className="table-td"
+                        style={{
+                          width: column.width,
+                          textAlign: column.align ?? 'left'
+                        }}
+                      >
+                        {column.render
+                          ? column.render(row[column.key], row)
+                          : String(row[column.key] ?? '')}
+                      </td>
+                    ))}
+                  </tr>
+                )
+              })
             )}
           </tbody>
         </table>

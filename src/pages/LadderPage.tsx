@@ -5,6 +5,7 @@ import { FacePreview } from '../components/FacePreview'
 import { Tooltip } from '../components/Tooltip'
 import { Typography, TypographyVariant } from '../components/Typography'
 import { fetchLadder } from '../api/client'
+import { useAuth, AuthUser } from '../contexts/AuthContext'
 import { ROUTES } from '../config'
 import { formatRelativeTime, formatFullDateTime, formatShortDate } from '../utils/dateFormat'
 import type { PlayerDTO, TableColumn, SortParams, ListRequest } from '../types/api'
@@ -12,10 +13,19 @@ import type { PlayerDTO, TableColumn, SortParams, ListRequest } from '../types/a
 const PAGE_SIZE = 10
 
 /**
+ * Check if a player UUID matches the currently logged in game user
+ */
+function isCurrentGameUser(playerUuid: string, user: AuthUser | null): boolean {
+  if (!user || user.type !== 'game') return false
+  return user.gameUuid === playerUuid
+}
+
+/**
  * Ladder Page
  * Displays player rankings with sortable columns and infinite scroll
  */
 export function LadderPage() {
+  const { user } = useAuth()
   const [players, setPlayers] = useState<PlayerDTO[]>([])
   const [loading, setLoading] = useState(true)
   const [hasMore, setHasMore] = useState(false)
@@ -155,6 +165,7 @@ export function LadderPage() {
           currentSort={sort}
           emptyMessage="No players found"
           skeletonRows={10}
+          rowClassName={(row) => isCurrentGameUser(row.uuid, user) ? 'table-row-current-user' : undefined}
         />
       </div>
     </div>
