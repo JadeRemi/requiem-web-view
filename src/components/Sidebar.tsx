@@ -13,8 +13,10 @@ interface SidebarItem {
 const SIDEBAR_ITEMS: SidebarItem[] = [
   { path: ROUTES.HOME, label: 'Home', icon: 'home' },
   { path: ROUTES.LADDER, label: 'Ladder', icon: 'trophy' },
+  { path: ROUTES.GUILDS, label: 'Guilds', icon: 'users' },
   { path: ROUTES.MAP, label: 'World Map', icon: 'map' },
   { path: ROUTES.WIKI, label: 'Wiki', icon: 'book' },
+  { path: ROUTES.CHANGELOG, label: 'Changelog', icon: 'scroll' },
   { path: ROUTES.ABOUT, label: 'About', icon: 'info' },
 ]
 

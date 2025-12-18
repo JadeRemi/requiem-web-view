@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { Typography, TypographyVariant } from '../components/Typography'
+import { usePageTitle } from '../hooks/usePageTitle'
 import { ROUTES } from '../config'
 
 const REDIRECT_DELAY_SECONDS = 5
@@ -10,6 +11,7 @@ const REDIRECT_DELAY_SECONDS = 5
  * Auto-redirects to home after countdown
  */
 export function NotFoundPage() {
+  usePageTitle('Page Not Found')
   const navigate = useNavigate()
   const [countdown, setCountdown] = useState(REDIRECT_DELAY_SECONDS)
 

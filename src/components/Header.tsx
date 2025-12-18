@@ -55,7 +55,9 @@ export function Header() {
         <div className="header-user-info">
           {user.type === 'game' && (
             <Link to={`${ROUTES.PROFILE}?uuid=${user.gameUuid}`} className="header-user-link">
-              <FacePreview skinHash={getSkinHash()} size={18} className="header-user-face" />
+              {getSkinHash() && (
+                <FacePreview skinHash={getSkinHash()!} size={18} className="header-user-face" />
+              )}
               <span className="header-user-name">{getDisplayName()}</span>
             </Link>
           )}

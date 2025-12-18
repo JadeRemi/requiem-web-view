@@ -3,6 +3,7 @@ import { Typography, TypographyVariant } from '../components/Typography'
 import { EnemyViewer } from '../components/EnemyViewer'
 import { ENEMY_MODELS, EnemyModel } from '../mock/enemies'
 import { useSettingsStore } from '../stores/settingsStore'
+import { usePageTitle } from '../hooks/usePageTitle'
 import { Icon } from '../components/Icon'
 
 interface EnemyCardProps {
@@ -54,6 +55,7 @@ interface CardState {
 }
 
 export function WikiPage() {
+  usePageTitle()
   const [windowStart, setWindowStart] = useState(0)
   const [cards, setCards] = useState<CardState[]>(() => {
     const initial: CardState[] = []

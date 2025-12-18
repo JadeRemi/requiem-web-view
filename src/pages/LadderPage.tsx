@@ -6,6 +6,7 @@ import { Tooltip } from '../components/Tooltip'
 import { Typography, TypographyVariant } from '../components/Typography'
 import { fetchLadder } from '../api/client'
 import { useAuth, AuthUser } from '../contexts/AuthContext'
+import { usePageTitle } from '../hooks/usePageTitle'
 import { ROUTES } from '../config'
 import { formatRelativeTime, formatFullDateTime, formatShortDate } from '../utils/dateFormat'
 import type { PlayerDTO, TableColumn, SortParams, ListRequest } from '../types/api'
@@ -25,6 +26,7 @@ function isCurrentGameUser(playerUuid: string, user: AuthUser | null): boolean {
  * Displays player rankings with sortable columns and infinite scroll
  */
 export function LadderPage() {
+  usePageTitle()
   const { user } = useAuth()
   const [players, setPlayers] = useState<PlayerDTO[]>([])
   const [loading, setLoading] = useState(true)

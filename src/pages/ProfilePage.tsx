@@ -1,4 +1,4 @@
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { useState, useEffect, useCallback } from 'react'
 import { SkinViewer } from '../components/SkinViewer'
 import { EquipmentViewer } from '../components/EquipmentViewer'
@@ -7,9 +7,11 @@ import { Loader } from '../components/Loader'
 import { HexagonOverlay } from '../components/HexagonOverlay'
 import { fetchPlayer } from '../api/client'
 import { useSettingsStore } from '../stores/settingsStore'
+import { usePageTitle } from '../hooks/usePageTitle'
 import { ROUTES, GAME_STATS } from '../config'
 import { formatShortDate, formatRelativeTime } from '../utils/dateFormat'
 import { EQUIPMENT_MODELS, type EquipmentModel } from '../mock/equipment'
+import { findPlayerGuild, findPlayerGuildMembership, getGuildRoleLabel } from '../mock/guilds'
 import type { RankedStat, PlayerDTO } from '../types/api'
 import type { SkinViewerConfig } from '../types/skin'
 
@@ -57,9 +59,10 @@ function AchievementsDisplay({ stat }: { stat: RankedStat }) {
 }
 
 export function ProfilePage() {
+  usePageTitle()
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
-  
+
   const [player, setPlayer] = useState<PlayerDTO | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -171,12 +174,26 @@ export function ProfilePage() {
           {/* Stats Card */}
           <div className="profile-card stats-card">
             <div className="stats-card-content">
-              <Typography 
-                variant={TypographyVariant.H1} 
-                style={{ marginBottom: 'var(--space-6)', textTransform: 'none' }}
-              >
-                {player.username}
-              </Typography>
+              <div className="profile-header">
+                <Typography
+                  variant={TypographyVariant.H1}
+                  style={{ textTransform: 'none' }}
+                >
+                  {player.username}
+                </Typography>
+                {(() => {
+                  const guild = findPlayerGuild(player.uuid)
+                  const membership = findPlayerGuildMembership(player.uuid)
+                  if (!guild || !membership) return null
+                  return (
+                    <Link to={ROUTES.GUILDS} className="profile-guild-link">
+                      <span className="profile-guild-tag">[{guild.tag}]</span>
+                      <span className="profile-guild-name">{guild.name}</span>
+                      <span className="profile-guild-role">({getGuildRoleLabel(membership.role)})</span>
+                    </Link>
+                  )
+                })()}
+              </div>
 
               <div className="stats-grid">
                 <StatDisplay label="Player Kills" stat={player.kills} />

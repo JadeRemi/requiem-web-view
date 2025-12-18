@@ -4,6 +4,8 @@ import { ProfilePage } from './pages/ProfilePage'
 import { LadderPage } from './pages/LadderPage'
 import { MapPage } from './pages/MapPage'
 import { WikiPage } from './pages/WikiPage'
+import { GuildsPage } from './pages/GuildsPage'
+import { ChangelogPage } from './pages/ChangelogPage'
 import { AboutPage } from './pages/AboutPage'
 import { LoginPage } from './pages/LoginPage'
 import { NotFoundPage } from './pages/NotFoundPage'
@@ -30,6 +32,8 @@ function App() {
                 <Route path={ROUTES.LADDER} element={<LadderPage />} />
                 <Route path={ROUTES.MAP} element={<MapPage />} />
                 <Route path={ROUTES.WIKI} element={<WikiPage />} />
+                <Route path={ROUTES.GUILDS} element={<GuildsPage />} />
+                <Route path={ROUTES.CHANGELOG} element={<ChangelogPage />} />
                 <Route path={ROUTES.ABOUT} element={<AboutPage />} />
                 <Route path={ROUTES.LOGIN} element={<LoginPage />} />
                 <Route path="*" element={<NotFoundPage />} />

@@ -32,9 +32,27 @@ export const ROUTES = {
   LADDER: '/ladder',
   MAP: '/map',
   WIKI: '/wiki',
+  GUILDS: '/guilds',
+  CHANGELOG: '/changelog',
   ABOUT: '/about',
   LOGIN: '/login',
 } as const
+
+/** Site name for page titles */
+export const SITE_NAME = 'Requiem'
+
+/** Page titles for browser tab */
+export const PAGE_TITLES: Record<string, string> = {
+  [ROUTES.HOME]: 'Home',
+  [ROUTES.PROFILE]: 'Player Profile',
+  [ROUTES.LADDER]: 'Leaderboard',
+  [ROUTES.MAP]: 'World Map',
+  [ROUTES.WIKI]: 'Wiki',
+  [ROUTES.GUILDS]: 'Guilds',
+  [ROUTES.CHANGELOG]: 'Changelog',
+  [ROUTES.ABOUT]: 'About',
+  [ROUTES.LOGIN]: 'Login',
+}
 
 /** Skin viewer default settings */
 export const SKIN_VIEWER_DEFAULTS = {
@@ -122,6 +140,35 @@ export const GAME_STATS = {
 
 /** External URLs */
 export const EXTERNAL_URLS = {
-  /** BlueMap world map URL */
-  BLUEMAP: 'https://bluecolored.de/bluemap/#hermitcraft9:-1771:0:1512:1500:0:0:0:0:perspective',
+  /** BlueMap world map URLs for different cycles */
+  BLUEMAP_NETHER: 'https://bluecolored.de/bluemap/#nether_seethrough',
+  BLUEMAP_CURRENT: 'https://bluecolored.de/bluemap/#hermitcraft10',
+  BLUEMAP_PREVIOUS: 'https://bluecolored.de/bluemap/#hermitcraft9',
+} as const
+
+/** Social sharing configuration */
+export const SHARE_CONFIG = {
+  /** Website URL to share */
+  WEBSITE_URL: 'https://requiem.com',
+  /** Default share text */
+  SHARE_TEXT: 'Check out Requiem — a custom RPG Minecraft server with unique gameplay mechanics, custom enemies, and an immersive experience!',
+  /** Discord invite link */
+  DISCORD_INVITE: 'https://discord.com/invite/J5XRqYX',
+} as const
+
+/** OpenGraph meta configuration */
+export const OG_CONFIG = {
+  TITLE: 'Requiem — Custom RPG Minecraft Server',
+  DESCRIPTION: 'A custom RPG server featuring unique gameplay mechanics, custom enemies, and an immersive experience. Join the adventure!',
+  IMAGE: '/preview.png',
+  SITE_NAME: 'Requiem',
+  TYPE: 'website',
+} as const
+
+/** Map rotation configuration */
+export const MAP_ROTATION = {
+  /** Cycle duration in days */
+  CYCLE_DAYS: 7,
+  /** First cycle start date (Monday of the first week) */
+  FIRST_CYCLE_START: '2019-03-04T00:00:00Z',
 } as const

@@ -55,6 +55,16 @@
   --gold-800: #92400e;
   --gold-900: #78350f;
   --gold-950: #451a03;
+
+  /* Brand Colors - Social Platforms */
+  --color-discord: #5865F2;
+  --color-vk: #0077FF;
+  --color-telegram: #0088CC;
+  --color-whatsapp: #25D366;
+  --color-viber: #7360F2;
+  --color-facebook: #1877F2;
+  --color-linkedin: #0A66C2;
+  --color-youtube: #FF0000;
   --grey-50: #fafafa;
   --grey-100: #f4f4f5;
   --grey-150: #ececed;
@@ -159,4 +169,8 @@
 
   /* Hexagon Overlay */
   --hexagon-overlay-opacity: 1;
+
+  /* Card Aspect Ratios */
+  --card-aspect-ratio: 0.715; /* Standard tabletop card ratio (width/height) */
+  --card-aspect-ratio-percent: 139.86%; /* 1 / 0.715 * 100 for padding-bottom trick */
 }

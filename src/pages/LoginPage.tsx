@@ -4,6 +4,7 @@ import { Typography, TypographyVariant } from '../components/Typography'
 import { Icon } from '../components/Icon'
 import { useAuth } from '../contexts/AuthContext'
 import { useToast } from '../components/Toast'
+import { usePageTitle } from '../hooks/usePageTitle'
 import { ROUTES } from '../config'
 import { MOCK_PLAYERS } from '../mock/ladder'
 
@@ -18,11 +19,11 @@ function generateCode(length: number = 8): string {
 }
 
 export function LoginPage() {
+  usePageTitle()
   const navigate = useNavigate()
   const { isLoggedIn, loginWithDiscord, loginWithGame } = useAuth()
   const toast = useToast()
   const [code, setCode] = useState('')
-  const [copied, setCopied] = useState(false)
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -37,9 +38,7 @@ export function LoginPage() {
   const handleCopyCode = async () => {
     try {
       await navigator.clipboard.writeText(`/web ${code}`)
-      setCopied(true)
       toast.success('Command copied to clipboard')
-      setTimeout(() => setCopied(false), 2000)
     } catch {
       toast.error('Failed to copy command')
     }
@@ -77,12 +76,10 @@ export function LoginPage() {
             <Typography variant={TypographyVariant.BodySmall} color="var(--color-text-secondary)">
               Run this command in-game to link your account:
             </Typography>
-            <div className="code-box">
+            <button className="code-box" onClick={handleCopyCode}>
               <code className="code-text">/web {code}</code>
-              <button className="code-copy-btn" onClick={handleCopyCode}>
-                <Icon name="copy" size={16} className={copied ? 'copied' : ''} />
-              </button>
-            </div>
+              <Icon name="copy" size={16} className="code-copy-icon" />
+            </button>
             <button className="server-login-btn" onClick={handleServerLogin}>
               Continue
             </button>
