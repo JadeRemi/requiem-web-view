@@ -359,6 +359,9 @@
   padding: var(--space-3) var(--space-4);
   font-size: var(--text-sm);
   color: var(--grey-200);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .table-empty {
@@ -856,6 +859,77 @@
 
 .header-user-link:hover .header-user-name {
   text-decoration: underline;
+}
+
+/* ===========================================
+   Blinker (Online Status Indicator)
+   =========================================== */
+.blinker {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.blinker-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  position: relative;
+  z-index: 2;
+}
+
+.blinker-pulse {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  animation: blinker-pulse 2.4s ease-out infinite;
+  opacity: 0;
+  transform: scale(0);
+}
+
+.blinker-pulse-1 {
+  animation-delay: 0ms;
+}
+
+.blinker-pulse-2 {
+  animation-delay: 1200ms;
+}
+
+@keyframes blinker-pulse {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  10% {
+    transform: scale(0.3);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(0.6);
+    opacity: 0.35;
+  }
+  70% {
+    transform: scale(0.9);
+    opacity: 0.15;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+
+/* Green color variant */
+.blinker-green .blinker-dot {
+  background: var(--green-500);
+  box-shadow: 0 0 4px var(--green-400), 0 0 8px var(--green-500);
+}
+
+.blinker-green .blinker-pulse {
+  background: var(--green-400);
 }
 
 /* ===========================================

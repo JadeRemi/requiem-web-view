@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Typography, TypographyVariant } from '../components/Typography'
 import { FacePreview } from '../components/FacePreview'
+import { Blinker } from '../components/Blinker'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { ROUTES } from '../config'
 import {
@@ -13,6 +14,7 @@ import {
   type GuildMemberDTO,
 } from '../mock/guilds'
 import { findPlayerByUuid } from '../mock/ladder'
+import { isPlayerOnline } from '../mock/online-players'
 
 interface GuildCardProps {
   guild: GuildDTO
@@ -80,7 +82,10 @@ function GuildCard({ guild, members }: GuildCardProps) {
               >
                 <FacePreview skinHash={player.skinHash} size={24} className="guild-member-face" />
                 <div className="guild-member-info">
-                  <span className="guild-member-name">{player.username}</span>
+                  <span className="guild-member-name">
+                    {player.username}
+                    {isPlayerOnline(player.uuid) && <Blinker />}
+                  </span>
                   <span className="guild-member-role">{getGuildRoleLabel(member.role)}</span>
                 </div>
               </Link>

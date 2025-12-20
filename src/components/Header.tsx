@@ -1,9 +1,11 @@
 import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { Icon } from './Icon'
 import { FacePreview } from './FacePreview'
+import { Blinker } from './Blinker'
 import { useAuth } from '../contexts/AuthContext'
 import { ROUTES } from '../config'
 import { findPlayerByUuid } from '../mock/ladder'
+import { isPlayerOnline } from '../mock/online-players'
 
 /**
  * Header Component
@@ -59,6 +61,7 @@ export function Header() {
                 <FacePreview skinHash={getSkinHash()!} size={18} className="header-user-face" />
               )}
               <span className="header-user-name">{getDisplayName()}</span>
+              {isPlayerOnline(user.gameUuid) && <Blinker />}
             </Link>
           )}
           {user.type === 'discord' && (

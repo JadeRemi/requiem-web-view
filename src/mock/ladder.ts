@@ -1,6 +1,18 @@
 import type { PlayerDTO } from '../types/api'
 
 /**
+ * MOCK PLAYERS DATA
+ *
+ * WARNING: This file contains long base64 skin hashes. Skip analyzing them.
+ *
+ * For player UUIDs reference, use src/mock/ladders/enemy-kills.ts instead -
+ * it has the same 40 UUIDs in a shorter format.
+ *
+ * UUIDs follow pattern: xxxxxxxx-xxxx-4xxx-xxxx-xxxxxxxxxxxx
+ * All 40 mock players have unique UUIDs that are consistent across all mock files.
+ */
+
+/**
  * Skin hashes for mock players
  * 40 unique hashes (40 in use)
  */

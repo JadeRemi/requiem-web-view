@@ -3,6 +3,9 @@ import type { LadderEntry } from '../../types/ladder'
 /**
  * Enemy Kills Ladder
  * Sorted by total PvE kills (descending)
+ *
+ * NOTE: This file serves as the UUID reference for all 40 mock players.
+ * When creating new ladder mocks, copy UUIDs from here.
  */
 export const ENEMY_KILLS_LADDER: LadderEntry[] = [
   { uuid: 'f6a7b8c9-d0e1-4f2a-3b4c-5d6e7f8a9b0c', value: 15234 },

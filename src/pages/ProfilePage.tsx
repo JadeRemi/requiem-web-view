@@ -5,6 +5,7 @@ import { EquipmentViewer } from '../components/EquipmentViewer'
 import { Typography, TypographyVariant } from '../components/Typography'
 import { Loader } from '../components/Loader'
 import { HexagonOverlay } from '../components/HexagonOverlay'
+import { Blinker } from '../components/Blinker'
 import { fetchPlayer } from '../api/client'
 import { useSettingsStore } from '../stores/settingsStore'
 import { usePageTitle } from '../hooks/usePageTitle'
@@ -14,6 +15,7 @@ import { EQUIPMENT_MODELS, type EquipmentModel } from '../mock/equipment'
 import { findPlayerGuild, findPlayerGuildMembership, getGuildRoleLabel } from '../mock/guilds'
 import { getRandomClassForPlayer } from '../mock/classes'
 import { getUnlockedAchievementsWithData } from '../mock/achievements'
+import { isPlayerOnline } from '../mock/online-players'
 import type { RankedStat, PlayerDTO } from '../types/api'
 import type { SkinViewerConfig } from '../types/skin'
 import { formatShortDate as formatTooltipDate } from '../utils/dateFormat'
@@ -224,12 +226,15 @@ export function ProfilePage() {
           <div className="profile-card stats-card">
             <div className="stats-card-content">
               <div className="profile-header">
-                <Typography
-                  variant={TypographyVariant.H1}
-                  style={{ textTransform: 'none' }}
-                >
-                  {player.username}
-                </Typography>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                  <Typography
+                    variant={TypographyVariant.H1}
+                    style={{ textTransform: 'none' }}
+                  >
+                    {player.username}
+                  </Typography>
+                  {isPlayerOnline(player.uuid) && <Blinker />}
+                </div>
                 {(() => {
                   const guild = findPlayerGuild(player.uuid)
                   const membership = findPlayerGuildMembership(player.uuid)
