@@ -1,9 +1,13 @@
 import { useState, useEffect, useMemo } from 'react'
-import { EXTERNAL_URLS, MAP_ROTATION } from '../config'
+import { EXTERNAL_URLS, MAP_ROTATION, CYCLE_RULES } from '../config'
 import { ChatWidget } from '../components/ChatWidget'
 import { Icon } from '../components/Icon'
 import { Typography, TypographyVariant } from '../components/Typography'
 import { usePageTitle } from '../hooks/usePageTitle'
+
+/** Unicode symbols for rules display */
+const CHECK = '✓'
+const CROSS = '✗'
 
 interface MapCycle {
   id: string
@@ -121,6 +125,18 @@ function getRotationDisclaimer(cycleId: string): string {
   }
 }
 
+/** Get cycle rules formatted string */
+function getCycleRulesDisplay(cycleId: string): string {
+  const rules = CYCLE_RULES[cycleId as keyof typeof CYCLE_RULES]
+  if (!rules) return ''
+
+  const pvp = rules.pvp ? CHECK : CROSS
+  const destruction = rules.destruction ? CHECK : CROSS
+  const preserve = rules.preserveInventory ? CHECK : CROSS
+
+  return `PvP: ${pvp}  Destruction: ${destruction}  Preserve inventory: ${preserve}`
+}
+
 export function MapPage() {
   usePageTitle()
   const [currentIndex, setCurrentIndex] = useState(1) // Start at current cycle
@@ -171,23 +187,23 @@ export function MapPage() {
 
         <div className="map-container">
           <div className="map-header">
-            <div className="map-cycle-title">
+            <div className="map-header-line">
               <Typography variant={TypographyVariant.H3} className="map-cycle-label">
                 {currentCycle.label}
               </Typography>
               <Typography variant={TypographyVariant.H3} color="var(--color-text-tertiary)" className="map-cycle-number">
                 #{currentCycle.cycleNumber}
               </Typography>
-            </div>
-            <Typography variant={TypographyVariant.BodySmall} color="var(--color-text-secondary)" className="map-date-range">
-              {dateRange}
-            </Typography>
-            <div className="map-rotation-info">
-              <Typography variant={TypographyVariant.Caption} color="var(--color-text-tertiary)" className="map-rotation">
-                Rotation in {rotationText}
+              <Typography variant={TypographyVariant.BodySmall} color="var(--color-text-secondary)" className="map-date-range">
+                {dateRange}
               </Typography>
-              <Typography variant={TypographyVariant.Caption} color="var(--color-text-tertiary)" className="map-disclaimer">
-                {getRotationDisclaimer(currentCycle.id)}
+            </div>
+            <div className="map-header-line">
+              <Typography variant={TypographyVariant.Caption} color="var(--color-text-tertiary)" className="map-rotation">
+                Rotation in {rotationText} · {getRotationDisclaimer(currentCycle.id)}
+              </Typography>
+              <Typography variant={TypographyVariant.Caption} color="var(--color-text-tertiary)" className="map-rules">
+                {getCycleRulesDisplay(currentCycle.id)}
               </Typography>
             </div>
           </div>

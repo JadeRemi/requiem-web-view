@@ -172,3 +172,22 @@ export const MAP_ROTATION = {
   /** First cycle start date (Monday of the first week) */
   FIRST_CYCLE_START: '2019-03-04T00:00:00Z',
 } as const
+
+/** Cycle rules configuration */
+export const CYCLE_RULES = {
+  next: {
+    pvp: false,
+    destruction: false,
+    preserveInventory: true,
+  },
+  current: {
+    pvp: true,
+    destruction: false,
+    preserveInventory: false,
+  },
+  previous: {
+    pvp: true,
+    destruction: true,
+    preserveInventory: false,
+  },
+} as const

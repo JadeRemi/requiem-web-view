@@ -1,7 +1,10 @@
 import { useState, useCallback } from 'react'
 import { Typography, TypographyVariant } from '../components/Typography'
 import { EnemyViewer } from '../components/EnemyViewer'
+import { EquipmentViewer } from '../components/EquipmentViewer'
 import { ENEMY_MODELS, EnemyModel } from '../mock/enemies'
+import { EQUIPMENT_MODELS, EquipmentModel } from '../mock/equipment'
+import { PLAYER_CLASSES, PlayerClass } from '../mock/classes'
 import { useSettingsStore } from '../stores/settingsStore'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { Icon } from '../components/Icon'
@@ -18,23 +21,71 @@ function EnemyCard({ enemy, autoRotate, onToggleRotate, isExpanding, isCollapsin
   let className = 'carousel-item'
   if (isExpanding) className += ' expanding'
   if (isCollapsing) className += ' collapsing'
-  
+
   return (
     <div className={className}>
       <div className="enemy-card">
         <div className="enemy-card-title">
-          <Typography 
-            variant={TypographyVariant.H3} 
+          <Typography
+            variant={TypographyVariant.H3}
             style={{ textTransform: 'none' }}
           >
             {enemy.name}
           </Typography>
         </div>
-        <EnemyViewer 
-          model={enemy} 
+        <EnemyViewer
+          model={enemy}
           autoRotate={autoRotate}
           onToggleRotate={onToggleRotate}
         />
+      </div>
+    </div>
+  )
+}
+
+interface ItemCardProps {
+  item: EquipmentModel
+}
+
+function ItemCard({ item }: ItemCardProps) {
+  return (
+    <div className="wiki-item-card">
+      <div className="wiki-item-viewer">
+        <EquipmentViewer model={item} autoRotate={false} />
+      </div>
+      <div className="wiki-item-info">
+        <Typography variant={TypographyVariant.H4}>{item.name}</Typography>
+      </div>
+    </div>
+  )
+}
+
+interface ClassCardProps {
+  playerClass: PlayerClass
+}
+
+function ClassCard({ playerClass }: ClassCardProps) {
+  // Create a temporary equipment model for the figurine
+  const figurineModel: EquipmentModel = {
+    id: playerClass.id,
+    name: playerClass.name,
+    path: playerClass.modelPath,
+    scale: playerClass.scale,
+    rotationX: 0,
+    rotationY: 0,
+    rotationZ: 0,
+  }
+
+  return (
+    <div className="wiki-class-card">
+      <div className="wiki-class-viewer">
+        <EquipmentViewer model={figurineModel} autoRotate={false} />
+      </div>
+      <div className="wiki-class-info">
+        <Typography variant={TypographyVariant.H4}>{playerClass.name}</Typography>
+        <Typography variant={TypographyVariant.Body} color="var(--color-text-secondary)">
+          {playerClass.description}
+        </Typography>
       </div>
     </div>
   )
@@ -65,14 +116,14 @@ export function WikiPage() {
     return initial
   })
   const [isAnimating, setIsAnimating] = useState(false)
-  
+
   const enemyRotate = useSettingsStore((state) => state.enemyRotate)
   const setEnemyRotate = useSettingsStore((state) => state.setEnemyRotate)
 
   const scroll = useCallback((direction: 'left' | 'right') => {
     if (isAnimating) return
     setIsAnimating(true)
-    
+
     if (direction === 'right') {
       // Add new card on right (expanding), mark left for collapse
       const newIndex = windowStart + 5
@@ -82,7 +133,7 @@ export function WikiPage() {
         { index: newIndex, enemy: getEnemy(newIndex), isExpanding: true }
       ]
       setCards(newCards)
-      
+
       setTimeout(() => {
         // Remove collapsed, finalize expanded
         const finalCards: CardState[] = []
@@ -102,7 +153,7 @@ export function WikiPage() {
         { ...cards[cards.length - 1]!, isCollapsing: true }
       ]
       setCards(newCards)
-      
+
       setTimeout(() => {
         // Remove collapsed, finalize expanded
         const finalCards: CardState[] = []
@@ -126,37 +177,61 @@ export function WikiPage() {
         <Typography variant={TypographyVariant.H1}>Wiki</Typography>
       </div>
 
-      <div className="carousel-container">
-        <button 
-          className="carousel-arrow carousel-arrow-left"
-          onClick={() => scroll('left')}
-          disabled={isAnimating}
-          aria-label="Scroll left"
-        >
-          <Icon name="chevron-left" size={24} />
-        </button>
+      {/* Enemies Section */}
+      <div className="wiki-section">
+        <Typography variant={TypographyVariant.H2}>Enemies</Typography>
+        <div className="carousel-container">
+          <button
+            className="carousel-arrow carousel-arrow-left"
+            onClick={() => scroll('left')}
+            disabled={isAnimating}
+            aria-label="Scroll left"
+          >
+            <Icon name="chevron-left" size={24} />
+          </button>
 
-        <div className="enemy-carousel">
-          {cards.map((card) => (
-            <EnemyCard
-              key={card.index}
-              enemy={card.enemy}
-              autoRotate={enemyRotate}
-              onToggleRotate={handleToggleRotate}
-              isExpanding={card.isExpanding ?? false}
-              isCollapsing={card.isCollapsing ?? false}
-            />
+          <div className="enemy-carousel">
+            {cards.map((card) => (
+              <EnemyCard
+                key={card.index}
+                enemy={card.enemy}
+                autoRotate={enemyRotate}
+                onToggleRotate={handleToggleRotate}
+                isExpanding={card.isExpanding ?? false}
+                isCollapsing={card.isCollapsing ?? false}
+              />
+            ))}
+          </div>
+
+          <button
+            className="carousel-arrow carousel-arrow-right"
+            onClick={() => scroll('right')}
+            disabled={isAnimating}
+            aria-label="Scroll right"
+          >
+            <Icon name="chevron-right" size={24} />
+          </button>
+        </div>
+      </div>
+
+      {/* Items Section */}
+      <div className="wiki-section">
+        <Typography variant={TypographyVariant.H2}>Items</Typography>
+        <div className="wiki-items-grid">
+          {EQUIPMENT_MODELS.map((item) => (
+            <ItemCard key={item.id} item={item} />
           ))}
         </div>
+      </div>
 
-        <button 
-          className="carousel-arrow carousel-arrow-right"
-          onClick={() => scroll('right')}
-          disabled={isAnimating}
-          aria-label="Scroll right"
-        >
-          <Icon name="chevron-right" size={24} />
-        </button>
+      {/* Classes Section */}
+      <div className="wiki-section">
+        <Typography variant={TypographyVariant.H2}>Classes</Typography>
+        <div className="wiki-classes-grid">
+          {PLAYER_CLASSES.map((playerClass) => (
+            <ClassCard key={playerClass.id} playerClass={playerClass} />
+          ))}
+        </div>
       </div>
     </div>
   )

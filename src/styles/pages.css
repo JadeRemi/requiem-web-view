@@ -395,7 +395,9 @@
 .wiki-page {
   padding: var(--space-8);
   padding-top: calc(var(--space-8) + 60px); /* Account for sidebar burger */
-  min-height: 100vh;
+  padding-bottom: var(--space-16);
+  height: 100%;
+  overflow-y: auto;
 }
 
 .wiki-header {
@@ -512,6 +514,71 @@
   background: var(--color-bg-primary);
 }
 
+/* Wiki Sections */
+.wiki-section {
+  margin-bottom: var(--space-10);
+}
+
+.wiki-section h2 {
+  margin-bottom: var(--space-4);
+}
+
+/* Wiki Items Grid */
+.wiki-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-4);
+}
+
+.wiki-item-card {
+  background: var(--grey-900);
+  border: 1px solid var(--grey-800);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.wiki-item-viewer {
+  height: 200px;
+  background: var(--color-bg-primary);
+}
+
+.wiki-item-info {
+  padding: var(--space-3);
+  text-align: center;
+  border-top: 1px solid var(--grey-800);
+}
+
+/* Wiki Classes Grid */
+.wiki-classes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-4);
+}
+
+.wiki-class-card {
+  background: var(--grey-900);
+  border: 1px solid var(--grey-800);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.wiki-class-viewer {
+  height: 200px;
+  background: var(--color-bg-primary);
+}
+
+.wiki-class-info {
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  border-top: 1px solid var(--grey-800);
+}
+
 /* ===========================================
    Ladder Page
    =========================================== */
@@ -608,15 +675,17 @@
   flex-direction: column;
   align-items: center;
   gap: var(--space-1);
-  padding: var(--space-4) var(--space-6);
+  padding: var(--space-3) var(--space-6);
   background: var(--grey-850);
   border-bottom: 1px solid var(--grey-700);
 }
 
-.map-cycle-title {
+.map-header-line {
   display: flex;
   align-items: baseline;
-  gap: var(--space-2);
+  justify-content: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
 }
 
 .map-cycle-label {
@@ -631,14 +700,11 @@
   text-align: center;
 }
 
-.map-rotation-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-1);
+.map-rotation {
+  text-align: center;
 }
 
-.map-rotation {
+.map-rules {
   text-align: center;
 }
 
