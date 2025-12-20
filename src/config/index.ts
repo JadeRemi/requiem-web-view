@@ -222,14 +222,15 @@ export const CURRENCY = {
     offsetX: 0,
     offsetY: 0,
   },
+  /** Coin GIF display settings */
+  COIN_GIF: {
+    scale: 0.7,
+    opacity: 0.45,
+  },
 } as const
 
 /** Store configuration */
 export const STORE = {
-  /** Available purchase options */
+  /** Available purchase options (coin amounts) */
   PURCHASE_OPTIONS: [30, 100, 300] as const,
-  /** Store items/privileges */
-  ITEMS: [
-    { id: 'premium', name: 'Premium', price: 100 },
-  ] as const,
 } as const

@@ -22,6 +22,7 @@ export function Header() {
   const { user, isLoggedIn, logout } = useAuth()
 
   const isOnLoginPage = location.pathname === ROUTES.LOGIN
+  const isOnStorePage = location.pathname === ROUTES.STORE
 
   // Hide login button when on login page and not logged in
   if (isOnLoginPage && !isLoggedIn) {
@@ -56,11 +57,13 @@ export function Header() {
     <header className="app-header">
       {isLoggedIn && user && (
         <>
-          <div className="header-currency">
-            <span className="header-currency-amount">{CURRENCY.MOCK_BALANCE}</span>
-            <span className="header-currency-x">×</span>
-            <CoinViewer size={24} />
-          </div>
+          {isOnStorePage && (
+            <div className="header-currency">
+              <span className="header-currency-amount">{CURRENCY.MOCK_BALANCE}</span>
+              <span className="header-currency-x">×</span>
+              <CoinViewer size={24} />
+            </div>
+          )}
           <div className="header-user-info">
             {user.type === 'game' && (
               <Link to={`${ROUTES.PROFILE}?uuid=${user.gameUuid}`} className="header-user-link">
