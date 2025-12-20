@@ -66,13 +66,13 @@
 }
 
 .wiki-toc-link:hover {
-  color: var(--orange-400);
+  color: var(--grey-100);
   text-decoration: underline;
   text-underline-offset: 4px;
 }
 
 .wiki-toc-link:hover::before {
-  color: var(--orange-400);
+  color: var(--grey-400);
 }
 
 .carousel-container {

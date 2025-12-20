@@ -24,6 +24,9 @@ This document contains project preferences and guidelines for AI assistants work
 - **Never provide "getting started" instructions** at the end of responses
 - **Install all dependencies with `yarn add --exact`** - no ^ or ~ version prefixes
 - **Use yarn, not npm** - all commands should use yarn
+- **NEVER add unrequested changes** - Only implement exactly what is asked. Do not add "improvements", extra features, or style changes that were not requested.
+- **Ask before making assumptions** - If requirements are unclear, ask for clarification rather than making assumptions.
+- **Preserve existing styles when refactoring** - When splitting or reorganizing CSS files, do not modify any style values. Only reorganize the structure.
 
 ## Development Preferences
 
@@ -198,6 +201,13 @@ The project uses CSS custom properties defined in `src/styles/palette.css`:
 - **Interactive colors**: `--color-interactive-*` (using light greys)
 - **Spacing**: `--space-1` through `--space-16`
 - **Shadows**: `--shadow-sm`, `--shadow-md`, `--shadow-lg`, `--shadow-xl`
+
+### Color Rules
+
+- **No orange/yellow colors for interactive elements** - Never use orange or yellow colors for hover effects, link colors, active states, or badges/highlights
+- **Hover interactions should use underline** - For links and clickable text, use `text-decoration: underline` on hover, not color changes. Match the ladder page pattern.
+- Use grey scale (grey-100 to grey-500) for hover states
+- Use magenta for accent colors when needed
 
 ### Fonts
 

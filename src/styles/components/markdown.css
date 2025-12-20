@@ -48,7 +48,7 @@
   content: '›';
   position: absolute;
   left: 0;
-  color: var(--orange-500);
+  color: var(--grey-500);
   font-weight: 900;
   font-size: var(--text-lg);
   line-height: 1.1;

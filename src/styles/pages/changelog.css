@@ -183,7 +183,7 @@
   font-weight: 700;
   text-transform: uppercase;
   padding: 2px var(--space-1);
-  background: var(--orange-500);
+  background: var(--magenta-600);
   color: var(--grey-100);
   border-radius: var(--radius-sm);
 }

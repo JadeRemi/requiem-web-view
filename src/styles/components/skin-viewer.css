@@ -107,7 +107,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--color-overlay-white);
   border: 2px dashed var(--grey-400);
   font-size: var(--text-lg);
   color: var(--grey-300);

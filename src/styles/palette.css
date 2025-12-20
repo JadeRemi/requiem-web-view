@@ -135,6 +135,25 @@
   --color-interactive-active: var(--grey-300);
   --color-interactive-muted: var(--grey-500);
 
+  /* Highlight colors with alpha (for table rows, selections) */
+  --color-highlight-gold: rgba(251, 191, 36, 0.12);
+  --color-highlight-gold-hover: rgba(251, 191, 36, 0.18);
+
+  /* Overlay colors with alpha */
+  --color-overlay-dark: rgba(0, 0, 0, 0.5);
+  --color-overlay-grey-900: rgba(13, 13, 14, 0.9);
+  --color-overlay-grey-900-light: rgba(13, 13, 14, 0.5);
+  --color-overlay-grey-800: rgba(24, 24, 27, 0.8);
+  --color-overlay-white: rgba(255, 255, 255, 0.1);
+
+  /* Chat status colors */
+  --color-chat-explorer: var(--green-400);
+  --color-chat-trader: var(--gold-400);
+  --color-chat-master: #60a5fa;
+  --color-chat-killer: #f87171;
+  --color-chat-thief: #a78bfa;
+  --color-chat-ascended: #f0abfc;
+
   /* Shadows */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);

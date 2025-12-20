@@ -96,11 +96,11 @@
 }
 
 .table-row-current-user {
-  background: rgba(251, 191, 36, 0.12);
+  background: var(--color-highlight-gold);
 }
 
 .table-row-current-user:hover {
-  background: rgba(251, 191, 36, 0.18);
+  background: var(--color-highlight-gold-hover);
 }
 
 .table-td {
@@ -162,7 +162,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(13, 13, 14, 0.5);
+  background: var(--color-overlay-grey-900-light);
   backdrop-filter: blur(2px);
   z-index: 10;
   border-radius: var(--radius-lg);

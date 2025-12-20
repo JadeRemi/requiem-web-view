@@ -64,7 +64,7 @@
   text-align: center;
   font-family: var(--font-inter);
   font-size: var(--text-sm);
-  color: var(--orange-400);
+  color: var(--grey-300);
   text-decoration: none;
   border-top: 1px solid var(--grey-700);
   transition: background var(--transition-fast), color var(--transition-fast);
@@ -72,7 +72,7 @@
 
 .home-latest-patch-link:hover {
   background: var(--grey-800);
-  color: var(--orange-300);
+  color: var(--grey-100);
   text-decoration: underline;
 }
 
@@ -87,12 +87,12 @@
 }
 
 .home-online-header .online-count {
-  color: var(--green-400);
+  color: var(--grey-100);
   font-weight: 600;
 }
 
 .server-status-online {
-  color: var(--green-400);
+  color: var(--grey-100);
   font-weight: 600;
 }
 
@@ -121,12 +121,16 @@
   align-items: center;
   gap: var(--space-2);
   text-decoration: none;
-  color: var(--color-text-primary);
+  color: var(--grey-100);
   transition: color var(--transition-fast);
 }
 
 .online-player-link:hover {
-  color: var(--orange-400);
+  color: var(--grey-0);
+}
+
+.online-player-link:hover .online-player-name {
+  text-decoration: underline;
 }
 
 .online-player-name {
