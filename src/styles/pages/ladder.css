@@ -1,0 +1,105 @@
+/**
+ * Ladder Page Styles
+ */
+
+.ladder-page {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--space-8);
+  padding-top: calc(var(--space-8) + 60px);
+  overflow-y: auto;
+}
+
+.ladder-content {
+  width: 100%;
+  max-width: 900px;
+}
+
+/* Ladder content typography handled by Typography component */
+
+.player-link {
+  color: var(--grey-100);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.player-link:hover {
+  color: var(--grey-0);
+  text-decoration: underline;
+}
+
+.player-cell-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  outline: none;
+  font: inherit;
+  color: var(--grey-100);
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.player-cell-link:hover {
+  color: var(--grey-0);
+}
+
+.player-cell-link:hover .player-name {
+  text-decoration: underline;
+}
+
+.player-name {
+  font-weight: 600;
+  font-size: var(--text-base);
+}
+
+/* Ladder Tabs */
+.ladder-tabs {
+  display: flex;
+  width: 100%;
+  margin-bottom: var(--space-4);
+  background: var(--grey-850);
+  border: 1px solid var(--grey-700);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.ladder-tab {
+  flex: 1;
+  padding: var(--space-3) var(--space-4);
+  background: transparent;
+  border: none;
+  color: var(--grey-400);
+  font-family: var(--font-orbitron);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border-right: 1px solid var(--grey-700);
+}
+
+.ladder-tab:last-child {
+  border-right: none;
+}
+
+.ladder-tab:hover {
+  background: var(--grey-800);
+  color: var(--grey-200);
+}
+
+.ladder-tab.active {
+  background: var(--grey-750);
+  color: var(--grey-100);
+}
+
+.ladder-table-container {
+  width: 100%;
+}

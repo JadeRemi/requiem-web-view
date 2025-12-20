@@ -1,0 +1,57 @@
+/**
+ * Utility Component Styles
+ * Icon Toggle Button, Gradient Text
+ */
+
+/* Icon Toggle Button */
+.icon-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+  color: var(--grey-500);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.icon-toggle:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.icon-toggle:hover {
+  color: var(--grey-300);
+}
+
+.icon-toggle.active {
+  color: var(--grey-300);
+}
+
+.icon-toggle.active:hover {
+  color: var(--grey-50);
+}
+
+/* Gradient Text Utility */
+.gradient-text {
+  background: linear-gradient(135deg, var(--magenta-400) 0%, var(--magenta-600) 50%, var(--magenta-400) 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: background-position 0.3s ease;
+}
+
+.gradient-text:hover,
+.gradient-text-hover:hover .gradient-text {
+  background-position: 100% 100%;
+  background: linear-gradient(135deg, var(--magenta-300) 0%, var(--magenta-500) 50%, var(--magenta-300) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}

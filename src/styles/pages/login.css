@@ -1,0 +1,140 @@
+/**
+ * Login Page Styles
+ */
+
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--space-8);
+}
+
+.login-content {
+  width: 100%;
+  max-width: 420px;
+}
+
+.login-methods {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.login-method {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  background: var(--grey-850);
+  border: 1px solid var(--grey-700);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-normal);
+}
+
+.login-method.discord {
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  cursor: pointer;
+  background: var(--grey-800);
+  border-color: var(--grey-700);
+}
+
+.login-method.discord:hover {
+  background: var(--grey-700);
+  border-color: var(--grey-600);
+  box-shadow: var(--shadow-lg);
+}
+
+.login-method.discord {
+  color: var(--grey-0);
+}
+
+.login-method.discord .login-method-text {
+  font-family: var(--font-orbitron);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--grey-0);
+  letter-spacing: 0.03em;
+}
+
+.login-method.server {
+  cursor: default;
+}
+
+.code-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--grey-900);
+  border: 1px solid var(--grey-700);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  width: 100%;
+}
+
+.code-box:hover {
+  background: var(--grey-850);
+  border-color: var(--grey-600);
+}
+
+.code-text {
+  font-family: var(--font-minecraft);
+  font-size: var(--text-2xl);
+  font-weight: 400;
+  color: var(--grey-100);
+  letter-spacing: 0.05em;
+}
+
+.code-copy-icon {
+  color: var(--grey-400);
+  transition: color var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.code-box:hover .code-copy-icon {
+  color: var(--grey-200);
+}
+
+.server-login-btn {
+  padding: var(--space-3) var(--space-4);
+  background: var(--grey-800);
+  border: 1px solid var(--grey-700);
+  border-radius: var(--radius-md);
+  color: var(--grey-200);
+  font-family: var(--font-orbitron);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.server-login-btn:hover {
+  background: var(--grey-700);
+  color: var(--grey-0);
+  border-color: var(--grey-600);
+}
+
+.login-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  color: var(--color-text-tertiary);
+  font-family: var(--font-orbitron);
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.login-divider::before,
+.login-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--grey-700);
+}

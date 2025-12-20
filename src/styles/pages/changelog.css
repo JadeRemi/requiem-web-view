@@ -1,0 +1,193 @@
+/**
+ * Changelog Page Styles
+ */
+
+.changelog-page {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-8);
+  padding-top: calc(var(--space-8) + 60px); /* Account for sidebar burger */
+  padding-bottom: var(--space-16);
+  overflow-y: auto;
+}
+
+.changelog-content {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.changelog-content::after {
+  content: '';
+  display: block;
+  height: var(--space-16);
+  flex-shrink: 0;
+}
+
+.changelog-header {
+  text-align: center;
+  margin-bottom: var(--space-2);
+}
+
+/* Since Last Visit Block - Animated Gradient Border */
+@keyframes gradient-border-rotate {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.since-last-visit {
+  position: relative;
+  background: var(--grey-850);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+}
+
+.since-last-visit::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: calc(var(--radius-md) + 2px);
+  background: linear-gradient(
+    90deg,
+    rgba(250, 184, 255, 0.3),
+    rgba(248, 127, 255, 0.4),
+    rgba(204, 0, 204, 0.3),
+    rgba(248, 127, 255, 0.4),
+    rgba(250, 184, 255, 0.3)
+  );
+  background-size: 300% 100%;
+  animation: gradient-border-rotate 4s ease infinite;
+  z-index: -1;
+}
+
+.since-last-visit-empty {
+  text-align: center;
+}
+
+.since-last-visit-empty::before {
+  background: var(--grey-700);
+  animation: none;
+}
+
+.since-last-visit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: var(--space-2);
+}
+
+.since-last-visit-count {
+  color: var(--grey-100);
+  font-weight: 600;
+}
+
+.since-last-visit-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.since-last-visit-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  background: var(--grey-800);
+  border: 1px solid var(--grey-600);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  color: inherit;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.since-last-visit-item:hover {
+  background: var(--magenta-950);
+  border-color: var(--magenta-600);
+}
+
+.since-last-visit-item:visited,
+.since-last-visit-item:active {
+  color: inherit;
+}
+
+.since-last-visit-version {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--grey-100);
+  font-weight: 600;
+}
+
+.since-last-visit-title {
+  font-family: var(--font-inter);
+  font-size: var(--text-xs);
+  color: var(--grey-300);
+}
+
+/* Patch List */
+.patch-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* Patch Card */
+.patch-card {
+  background: var(--grey-850);
+  border: 1px solid var(--grey-700);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.patch-card-new {
+  border-color: var(--grey-700);
+}
+
+.patch-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  background: var(--grey-800);
+  border-bottom: 1px solid var(--grey-700);
+}
+
+.patch-card-new .patch-card-header {
+  background: linear-gradient(135deg, var(--grey-800) 0%, rgba(128, 0, 128, 0.1) 100%);
+  border-bottom-color: var(--grey-700);
+}
+
+.patch-card-version {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.patch-card-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.patch-new-badge {
+  font-family: var(--font-inter);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px var(--space-1);
+  background: var(--orange-500);
+  color: var(--grey-100);
+  border-radius: var(--radius-sm);
+}
+
+.patch-card-content {
+  padding: var(--space-2) var(--space-3);
+}

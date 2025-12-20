@@ -1,0 +1,134 @@
+/**
+ * Skin Viewer Component Styles
+ */
+
+.skin-viewer {
+  position: relative;
+  background: radial-gradient(
+    ellipse at center,
+    var(--grey-850) 0%,
+    var(--grey-950) 100%
+  );
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.skin-viewer canvas {
+  display: block;
+}
+
+.skin-viewer-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-primary);
+  color: var(--color-text-secondary);
+  font-family: var(--font-orbitron);
+  font-size: var(--text-sm);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.control-panel {
+  position: absolute;
+  bottom: var(--space-6);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6);
+  background: transparent;
+}
+
+.control-group {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  justify-content: center;
+}
+
+.control-panel label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.control-panel label:hover {
+  color: var(--color-text-primary);
+}
+
+.control-panel input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--grey-300);
+  cursor: pointer;
+}
+
+.control-panel button:not(.icon-toggle) {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  font-family: inherit;
+  font-weight: 500;
+  color: var(--grey-900);
+  background: var(--grey-200);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-sm);
+}
+
+.control-panel button:not(.icon-toggle):hover {
+  background: var(--grey-0);
+  box-shadow: var(--shadow-md);
+}
+
+.control-panel button:not(.icon-toggle):active {
+  background: var(--grey-300);
+}
+
+/* Hide upload buttons for now */
+.control-panel .upload-buttons {
+  display: none;
+}
+
+/* Drag and drop visual feedback */
+.skin-viewer.drag-over::after {
+  content: 'Drop skin file here';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px dashed var(--grey-400);
+  font-size: var(--text-lg);
+  color: var(--grey-300);
+  pointer-events: none;
+}
+
+/* Compact control panel for profile viewer */
+.control-panel--compact {
+  position: absolute;
+  bottom: var(--space-3);
+  left: var(--space-3);
+  transform: none;
+  padding: var(--space-2);
+  gap: var(--space-2);
+}
+
+.control-panel--compact .control-group {
+  gap: var(--space-2);
+}
+
+.control-panel--compact .icon-toggle {
+  width: 24px;
+  height: 24px;
+}

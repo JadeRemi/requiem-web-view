@@ -56,7 +56,7 @@
   --green-900: #064e3b;
   --green-950: #022c22;
 
-  /* Orange Gold Highlight Scale */
+  /* Gold Highlight Scale */
   --gold-50: #fffbeb;
   --gold-100: #fef3c7;
   --gold-200: #fde68a;
@@ -68,6 +68,19 @@
   --gold-800: #92400e;
   --gold-900: #78350f;
   --gold-950: #451a03;
+
+  /* Orange Highlight Scale */
+  --orange-50: #fff7ed;
+  --orange-100: #ffedd5;
+  --orange-200: #fed7aa;
+  --orange-300: #fdba74;
+  --orange-400: #fb923c;
+  --orange-500: #f97316;
+  --orange-600: #ea580c;
+  --orange-700: #c2410c;
+  --orange-800: #9a3412;
+  --orange-900: #7c2d12;
+  --orange-950: #431407;
 
   /* Brand Colors - Social Platforms */
   --color-discord: #5865F2;

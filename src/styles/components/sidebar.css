@@ -1,0 +1,114 @@
+/**
+ * Sidebar Component Styles
+ */
+
+.sidebar-toggle-row {
+  position: fixed;
+  top: var(--space-4);
+  left: var(--space-4);
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.sidebar-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: var(--grey-800);
+  border: 1px solid var(--grey-700);
+  border-radius: var(--radius-md);
+  color: var(--grey-200);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.sidebar-toggle:hover {
+  background: var(--grey-700);
+  color: var(--grey-0);
+}
+
+.sidebar-wiki-back {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  height: 44px;
+  padding: 0 var(--space-3);
+  background: var(--grey-800);
+  border: 1px solid var(--grey-700);
+  border-radius: var(--radius-md);
+  color: var(--grey-300);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.sidebar-wiki-back:hover {
+  background: var(--grey-700);
+  color: var(--grey-100);
+}
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: 260px;
+  height: 100%;
+  background: var(--grey-900);
+  border-right: 1px solid var(--grey-800);
+  transform: translateX(-100%);
+  transition: transform var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-open {
+  transform: translateX(0);
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: var(--space-4) var(--space-3);
+  padding-top: calc(var(--space-4) + 52px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  overflow-y: auto;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  color: var(--grey-400);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.sidebar-link:hover {
+  background: var(--grey-850);
+  color: var(--grey-100);
+}
+
+.sidebar-link-active {
+  background: var(--grey-800);
+  color: var(--grey-0);
+}
+
+.sidebar-link-label {
+  font-size: var(--text-sm);
+  font-weight: 500;
+}

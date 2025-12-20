@@ -1,0 +1,16 @@
+/**
+ * Page Styles Index
+ * Imports all page style modules
+ */
+
+@import './common.css';
+@import './home.css';
+@import './profile.css';
+@import './wiki.css';
+@import './ladder.css';
+@import './map.css';
+@import './about.css';
+@import './login.css';
+@import './guilds.css';
+@import './changelog.css';
+@import './not-found.css';

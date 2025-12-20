@@ -1,0 +1,71 @@
+/**
+ * Blinker (Online Status Indicator) Component Styles
+ */
+
+.blinker {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.blinker-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  position: relative;
+  z-index: 2;
+}
+
+.blinker-pulse {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  animation: blinker-pulse 2.4s ease-out infinite;
+  opacity: 0;
+  transform: scale(0);
+}
+
+.blinker-pulse-1 {
+  animation-delay: 0ms;
+}
+
+.blinker-pulse-2 {
+  animation-delay: 1200ms;
+}
+
+@keyframes blinker-pulse {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  10% {
+    transform: scale(0.3);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(0.6);
+    opacity: 0.35;
+  }
+  70% {
+    transform: scale(0.9);
+    opacity: 0.15;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+
+/* Green color variant */
+.blinker-green .blinker-dot {
+  background: var(--green-500);
+  box-shadow: 0 0 4px var(--green-400), 0 0 8px var(--green-500);
+}
+
+.blinker-green .blinker-pulse {
+  background: var(--green-400);
+}

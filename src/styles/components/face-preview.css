@@ -1,0 +1,37 @@
+/**
+ * Face Preview Component Styles
+ */
+
+.face-preview {
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--grey-800);
+}
+
+.face-preview-loading {
+  width: 100%;
+  height: 100%;
+  background: var(--grey-750);
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+.face-preview-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.face-preview-placeholder {
+  width: 100%;
+  height: 100%;
+  background: var(--grey-700);
+}
+
+/* Player cell with face preview */
+.player-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}

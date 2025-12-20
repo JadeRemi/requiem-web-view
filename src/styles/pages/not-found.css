@@ -1,0 +1,16 @@
+/**
+ * 404 Not Found Page Styles
+ */
+
+.not-found-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.not-found-content {
+  text-align: center;
+  padding: var(--space-8);
+}
+
+/* 404 page typography handled by Typography component */

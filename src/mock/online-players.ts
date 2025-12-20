@@ -1,10 +1,37 @@
 /**
  * Online Players Mock
- * List of player UUIDs currently online
+ * List of player UUIDs currently online with their class info
  *
- * This file only contains UUIDs - if a UUID is present here, that player is considered online.
  * UUIDs reference players from mock/ladder.ts and mock/ladders/enemy-kills.ts
  */
+
+import { findPlayerByUuid } from './ladder'
+import { getRandomClassForPlayer, type PlayerClass } from './classes'
+
+export interface OnlinePlayer {
+  uuid: string
+  username: string
+  skinHash: string
+  playerClass: PlayerClass
+  level: number
+}
+
+/** Min and max player levels */
+const MIN_LEVEL = 1
+const MAX_LEVEL = 10
+
+/**
+ * Generate a consistent level for a player based on UUID
+ */
+function getPlayerLevel(uuid: string): number {
+  let hash = 0
+  for (let i = 0; i < uuid.length; i++) {
+    const char = uuid.charCodeAt(i)
+    hash = ((hash << 5) - hash) + char
+    hash = hash & hash
+  }
+  return MIN_LEVEL + (Math.abs(hash) % (MAX_LEVEL - MIN_LEVEL + 1))
+}
 
 /**
  * Set of currently online player UUIDs
@@ -28,4 +55,46 @@ export const ONLINE_PLAYER_UUIDS: Set<string> = new Set([
  */
 export function isPlayerOnline(uuid: string): boolean {
   return ONLINE_PLAYER_UUIDS.has(uuid)
+}
+
+/**
+ * Get all online players with their full info
+ * @returns Array of online players with username, skin, and class
+ */
+export function getOnlinePlayers(): OnlinePlayer[] {
+  const players: OnlinePlayer[] = []
+
+  for (const uuid of ONLINE_PLAYER_UUIDS) {
+    const player = findPlayerByUuid(uuid)
+    if (player) {
+      players.push({
+        uuid: player.uuid,
+        username: player.username,
+        skinHash: player.skinHash,
+        playerClass: getRandomClassForPlayer(uuid),
+        level: getPlayerLevel(uuid),
+      })
+    }
+  }
+
+  return players
+}
+
+/**
+ * Get the count of currently online players
+ */
+export function getOnlineCount(): number {
+  return ONLINE_PLAYER_UUIDS.size
+}
+
+/**
+ * Mock server online status
+ */
+export const SERVER_ONLINE = true
+
+/**
+ * Check if the server is online
+ */
+export function isServerOnline(): boolean {
+  return SERVER_ONLINE
 }
