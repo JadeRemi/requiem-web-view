@@ -517,10 +517,51 @@
 /* Wiki Sections */
 .wiki-section {
   margin-bottom: var(--space-10);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
 }
 
-.wiki-section h2 {
-  margin-bottom: var(--space-4);
+/* Wiki section link (clickable headers) */
+.wiki-section-link {
+  text-decoration: none;
+  color: inherit;
+  width: fit-content;
+}
+
+.wiki-section-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* Wiki back link */
+.wiki-back-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  text-decoration: none;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2);
+}
+
+.wiki-back-link:hover {
+  color: var(--color-text-primary);
+}
+
+/* Wiki view all link */
+.wiki-view-all-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  text-decoration: none;
+  color: var(--color-text-secondary);
+  width: fit-content;
+}
+
+.wiki-view-all-link:hover {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 /* Wiki Items Grid */
@@ -571,10 +612,23 @@
   width: 120px;
   height: 120px;
   flex-shrink: 0;
-  margin: var(--space-3);
+  margin: var(--space-4);
   background: var(--color-bg-primary);
   border-radius: var(--radius-md);
   overflow: hidden;
+}
+
+/* Small class viewer for main wiki preview */
+.wiki-class-viewer-small {
+  width: 80px;
+  height: 80px;
+  margin: var(--space-3);
+}
+
+/* Large class viewer for full classes page */
+.wiki-class-viewer-large {
+  width: 140px;
+  height: 140px;
 }
 
 .class-viewer {
@@ -586,9 +640,19 @@
   padding: var(--space-4);
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   gap: var(--space-2);
   flex: 1;
+}
+
+/* Small class card for main wiki preview */
+.wiki-class-card-small {
+  padding: var(--space-1);
+}
+
+.wiki-class-card-small .wiki-class-info {
+  padding: var(--space-3);
+  gap: var(--space-1);
 }
 
 /* ===========================================

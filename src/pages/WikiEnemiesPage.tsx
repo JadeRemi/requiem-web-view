@@ -2,15 +2,11 @@ import { useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { Typography, TypographyVariant } from '../components/Typography'
 import { EnemyViewer } from '../components/EnemyViewer'
-import { EquipmentViewer } from '../components/EquipmentViewer'
-import { ClassViewer } from '../components/ClassViewer'
 import { ENEMY_MODELS, EnemyModel } from '../mock/enemies'
-import { EQUIPMENT_MODELS, EquipmentModel } from '../mock/equipment'
-import { getPreviewClasses, PlayerClass } from '../mock/classes'
 import { useSettingsStore } from '../stores/settingsStore'
 import { usePageTitle } from '../hooks/usePageTitle'
-import { Icon } from '../components/Icon'
 import { ROUTES } from '../config'
+import { Icon } from '../components/Icon'
 
 interface EnemyCardProps {
   enemy: EnemyModel
@@ -46,43 +42,6 @@ function EnemyCard({ enemy, autoRotate, onToggleRotate, isExpanding, isCollapsin
   )
 }
 
-interface ItemCardProps {
-  item: EquipmentModel
-}
-
-function ItemCard({ item }: ItemCardProps) {
-  return (
-    <div className="wiki-item-card">
-      <div className="wiki-item-viewer">
-        <EquipmentViewer model={item} autoRotate={false} />
-      </div>
-      <div className="wiki-item-info">
-        <Typography variant={TypographyVariant.H4}>{item.name}</Typography>
-      </div>
-    </div>
-  )
-}
-
-interface ClassCardProps {
-  playerClass: PlayerClass
-}
-
-function ClassCard({ playerClass }: ClassCardProps) {
-  return (
-    <div className="wiki-class-card wiki-class-card-small">
-      <div className="wiki-class-viewer wiki-class-viewer-small">
-        <ClassViewer playerClass={playerClass} />
-      </div>
-      <div className="wiki-class-info">
-        <Typography variant={TypographyVariant.H4}>{playerClass.name}</Typography>
-        <Typography variant={TypographyVariant.BodySmall} color="var(--color-text-secondary)">
-          {playerClass.description}
-        </Typography>
-      </div>
-    </div>
-  )
-}
-
 // Get enemy at cyclic index
 function getEnemy(index: number): EnemyModel {
   const len = ENEMY_MODELS.length
@@ -97,7 +56,7 @@ interface CardState {
   isCollapsing?: boolean
 }
 
-export function WikiPage() {
+export function WikiEnemiesPage() {
   usePageTitle()
   const [windowStart, setWindowStart] = useState(0)
   const [cards, setCards] = useState<CardState[]>(() => {
@@ -117,7 +76,6 @@ export function WikiPage() {
     setIsAnimating(true)
 
     if (direction === 'right') {
-      // Add new card on right (expanding), mark left for collapse
       const newIndex = windowStart + 5
       const newCards = [
         { ...cards[0]!, isCollapsing: true },
@@ -127,7 +85,6 @@ export function WikiPage() {
       setCards(newCards)
 
       setTimeout(() => {
-        // Remove collapsed, finalize expanded
         const finalCards: CardState[] = []
         for (let i = 0; i < 5; i++) {
           finalCards.push({ index: windowStart + 1 + i, enemy: getEnemy(windowStart + 1 + i) })
@@ -137,7 +94,6 @@ export function WikiPage() {
         setIsAnimating(false)
       }, 300)
     } else {
-      // Add new card on left (expanding), mark right for collapse
       const newIndex = windowStart - 1
       const newCards = [
         { index: newIndex, enemy: getEnemy(newIndex), isExpanding: true },
@@ -147,7 +103,6 @@ export function WikiPage() {
       setCards(newCards)
 
       setTimeout(() => {
-        // Remove collapsed, finalize expanded
         const finalCards: CardState[] = []
         for (let i = 0; i < 5; i++) {
           finalCards.push({ index: windowStart - 1 + i, enemy: getEnemy(windowStart - 1 + i) })
@@ -166,14 +121,14 @@ export function WikiPage() {
   return (
     <div className="wiki-page">
       <div className="wiki-header">
-        <Typography variant={TypographyVariant.H1}>Wiki</Typography>
+        <Link to={ROUTES.WIKI} className="wiki-back-link">
+          <Icon name="chevron-left" size={20} />
+          <Typography variant={TypographyVariant.Body}>Wiki</Typography>
+        </Link>
+        <Typography variant={TypographyVariant.H1}>Enemies</Typography>
       </div>
 
-      {/* Enemies Section */}
       <div className="wiki-section">
-        <Link to={ROUTES.WIKI_ENEMIES} className="wiki-section-link">
-          <Typography variant={TypographyVariant.H2}>Enemies</Typography>
-        </Link>
         <div className="carousel-container">
           <button
             className="carousel-arrow carousel-arrow-left"
@@ -206,34 +161,6 @@ export function WikiPage() {
             <Icon name="chevron-right" size={24} />
           </button>
         </div>
-      </div>
-
-      {/* Items Section */}
-      <div className="wiki-section">
-        <Link to={ROUTES.WIKI_ITEMS} className="wiki-section-link">
-          <Typography variant={TypographyVariant.H2}>Items</Typography>
-        </Link>
-        <div className="wiki-items-grid">
-          {EQUIPMENT_MODELS.map((item) => (
-            <ItemCard key={item.id} item={item} />
-          ))}
-        </div>
-      </div>
-
-      {/* Classes Section */}
-      <div className="wiki-section">
-        <Link to={ROUTES.WIKI_CLASSES} className="wiki-section-link">
-          <Typography variant={TypographyVariant.H2}>Classes</Typography>
-        </Link>
-        <div className="wiki-classes-grid">
-          {getPreviewClasses().map((playerClass) => (
-            <ClassCard key={playerClass.id} playerClass={playerClass} />
-          ))}
-        </div>
-        <Link to={ROUTES.WIKI_CLASSES} className="wiki-view-all-link">
-          <Typography variant={TypographyVariant.Body}>View all classes</Typography>
-          <Icon name="chevron-right" size={16} />
-        </Link>
       </div>
     </div>
   )

@@ -4,6 +4,9 @@ import { ProfilePage } from './pages/ProfilePage'
 import { LadderPage } from './pages/LadderPage'
 import { MapPage } from './pages/MapPage'
 import { WikiPage } from './pages/WikiPage'
+import { WikiClassesPage } from './pages/WikiClassesPage'
+import { WikiItemsPage } from './pages/WikiItemsPage'
+import { WikiEnemiesPage } from './pages/WikiEnemiesPage'
 import { GuildsPage } from './pages/GuildsPage'
 import { ChangelogPage } from './pages/ChangelogPage'
 import { AboutPage } from './pages/AboutPage'
@@ -32,6 +35,9 @@ function App() {
                 <Route path={ROUTES.LADDER} element={<LadderPage />} />
                 <Route path={ROUTES.MAP} element={<MapPage />} />
                 <Route path={ROUTES.WIKI} element={<WikiPage />} />
+                <Route path={ROUTES.WIKI_CLASSES} element={<WikiClassesPage />} />
+                <Route path={ROUTES.WIKI_ITEMS} element={<WikiItemsPage />} />
+                <Route path={ROUTES.WIKI_ENEMIES} element={<WikiEnemiesPage />} />
                 <Route path={ROUTES.GUILDS} element={<GuildsPage />} />
                 <Route path={ROUTES.CHANGELOG} element={<ChangelogPage />} />
                 <Route path={ROUTES.ABOUT} element={<AboutPage />} />
