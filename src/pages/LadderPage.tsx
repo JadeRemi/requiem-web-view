@@ -152,8 +152,15 @@ export function LadderPage() {
   return (
     <div className="page ladder-page">
       <div className="ladder-content">
-        <Typography variant={TypographyVariant.H1} style={{ marginBottom: 'var(--space-6)' }}>
+        <Typography variant={TypographyVariant.H1} style={{ marginBottom: 'var(--space-2)' }}>
           Leaderboard
+        </Typography>
+        <Typography
+          variant={TypographyVariant.Caption}
+          color="var(--color-text-tertiary)"
+          style={{ marginBottom: 'var(--space-6)' }}
+        >
+          Statistics update once per day
         </Typography>
 
         <Table<PlayerDTO>

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { Typography, TypographyVariant } from '../components/Typography'
 import { EnemyViewer } from '../components/EnemyViewer'
@@ -7,6 +7,8 @@ import { ClassViewer } from '../components/ClassViewer'
 import { ENEMY_MODELS, EnemyModel } from '../mock/enemies'
 import { EQUIPMENT_MODELS, EquipmentModel } from '../mock/equipment'
 import { getPreviewClasses, PlayerClass } from '../mock/classes'
+import { GAME_ATTRIBUTES } from '../mock/attributes'
+import { ACHIEVEMENTS } from '../mock/achievements'
 import { useSettingsStore } from '../stores/settingsStore'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { Icon } from '../components/Icon'
@@ -112,6 +114,18 @@ export function WikiPage() {
   const enemyRotate = useSettingsStore((state) => state.enemyRotate)
   const setEnemyRotate = useSettingsStore((state) => state.setEnemyRotate)
 
+  // Random attributes for preview (changes on each render)
+  const previewAttributes = useMemo(() => {
+    const shuffled = [...GAME_ATTRIBUTES].sort(() => Math.random() - 0.5)
+    return shuffled.slice(0, 5)
+  }, [])
+
+  // Random achievements for preview
+  const previewAchievements = useMemo(() => {
+    const shuffled = [...ACHIEVEMENTS].sort(() => Math.random() - 0.5)
+    return shuffled.slice(0, 5)
+  }, [])
+
   const scroll = useCallback((direction: 'left' | 'right') => {
     if (isAnimating) return
     setIsAnimating(true)
@@ -163,14 +177,39 @@ export function WikiPage() {
     setEnemyRotate(!enemyRotate)
   }, [enemyRotate, setEnemyRotate])
 
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
   return (
     <div className="wiki-page">
-      <div className="wiki-header">
-        <Typography variant={TypographyVariant.H1}>Wiki</Typography>
+      {/* Summary / Table of Contents */}
+      <div className="wiki-summary">
+        <Typography variant={TypographyVariant.H3}>Summary</Typography>
+        <nav className="wiki-toc">
+          <button className="wiki-toc-link" onClick={() => scrollToSection('enemies')}>
+            Enemies
+          </button>
+          <button className="wiki-toc-link" onClick={() => scrollToSection('items')}>
+            Items
+          </button>
+          <button className="wiki-toc-link" onClick={() => scrollToSection('classes')}>
+            Classes
+          </button>
+          <button className="wiki-toc-link" onClick={() => scrollToSection('attributes')}>
+            Attributes
+          </button>
+          <button className="wiki-toc-link" onClick={() => scrollToSection('achievements')}>
+            Achievements
+          </button>
+        </nav>
       </div>
 
       {/* Enemies Section */}
-      <div className="wiki-section">
+      <div id="enemies" className="wiki-section">
         <Link to={ROUTES.WIKI_ENEMIES} className="wiki-section-link">
           <Typography variant={TypographyVariant.H2}>Enemies</Typography>
         </Link>
@@ -209,7 +248,7 @@ export function WikiPage() {
       </div>
 
       {/* Items Section */}
-      <div className="wiki-section">
+      <div id="items" className="wiki-section">
         <Link to={ROUTES.WIKI_ITEMS} className="wiki-section-link">
           <Typography variant={TypographyVariant.H2}>Items</Typography>
         </Link>
@@ -221,7 +260,7 @@ export function WikiPage() {
       </div>
 
       {/* Classes Section */}
-      <div className="wiki-section">
+      <div id="classes" className="wiki-section">
         <Link to={ROUTES.WIKI_CLASSES} className="wiki-section-link">
           <Typography variant={TypographyVariant.H2}>Classes</Typography>
         </Link>
@@ -232,6 +271,52 @@ export function WikiPage() {
         </div>
         <Link to={ROUTES.WIKI_CLASSES} className="wiki-view-all-link">
           <Typography variant={TypographyVariant.Body}>View all classes</Typography>
+          <Icon name="chevron-right" size={16} />
+        </Link>
+      </div>
+
+      {/* Attributes Section */}
+      <div id="attributes" className="wiki-section">
+        <Link to={ROUTES.WIKI_ATTRIBUTES} className="wiki-section-link">
+          <Typography variant={TypographyVariant.H2}>Attributes</Typography>
+        </Link>
+        <div className="wiki-attributes-preview">
+          <table className="attributes-preview-table">
+            <tbody>
+              {previewAttributes.map((attr) => (
+                <tr key={attr.id}>
+                  <td className="attribute-name">{attr.name}</td>
+                  <td className="attribute-description">{attr.description}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <Link to={ROUTES.WIKI_ATTRIBUTES} className="wiki-view-all-link">
+          <Typography variant={TypographyVariant.Body}>View all attributes</Typography>
+          <Icon name="chevron-right" size={16} />
+        </Link>
+      </div>
+
+      {/* Achievements Section */}
+      <div id="achievements" className="wiki-section">
+        <Link to={ROUTES.WIKI_ACHIEVEMENTS} className="wiki-section-link">
+          <Typography variant={TypographyVariant.H2}>Achievements</Typography>
+        </Link>
+        <div className="wiki-achievements-preview">
+          {previewAchievements.map((achievement) => (
+            <div key={achievement.id} className="achievement-preview-card">
+              <Typography variant={TypographyVariant.BodySmall} style={{ fontWeight: 500 }}>
+                {achievement.name}
+              </Typography>
+              <Typography variant={TypographyVariant.BodySmall} color="var(--grey-400)">
+                {achievement.description}
+              </Typography>
+            </div>
+          ))}
+        </div>
+        <Link to={ROUTES.WIKI_ACHIEVEMENTS} className="wiki-view-all-link">
+          <Typography variant={TypographyVariant.Body}>View all achievements</Typography>
           <Icon name="chevron-right" size={16} />
         </Link>
       </div>

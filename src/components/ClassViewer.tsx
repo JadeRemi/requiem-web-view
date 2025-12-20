@@ -1,18 +1,11 @@
-import { Suspense, useMemo } from 'react'
-import { Canvas } from '@react-three/fiber'
+import { Suspense, useMemo, useEffect } from 'react'
+import { Canvas, useThree } from '@react-three/fiber'
 import { OrbitControls, PerspectiveCamera, useGLTF } from '@react-three/drei'
 import { clone as cloneGltf } from 'three/examples/jsm/utils/SkeletonUtils.js'
 import type { PlayerClass } from '../mock/classes'
 
 /**
  * Figurine positioning config - adjust these to center the model in the viewer
- *
- * WHAT WORKS (from EnemyViewer):
- * 1. Use SkeletonUtils.clone() instead of scene.clone()
- * 2. Use SceneContent wrapper component
- * 3. Position via <group position={[x, y, 0]}> wrapper around Model
- * 4. Model only handles scale, not position
- * 5. Canvas with frameloop="always"
  */
 const FIGURINE_CONFIG = {
   /** X offset for all figurines */
@@ -25,6 +18,26 @@ const FIGURINE_CONFIG = {
   cameraY: 0.8,
   /** Camera distance */
   cameraDistance: 4,
+}
+
+/**
+ * Component to handle WebGL context disposal on unmount
+ */
+function ContextDisposer() {
+  const { gl } = useThree()
+
+  useEffect(() => {
+    return () => {
+      // Only dispose if context is not already lost
+      const context = gl.getContext()
+      if (context && !context.isContextLost()) {
+        gl.dispose()
+        gl.forceContextLoss()
+      }
+    }
+  }, [gl])
+
+  return null
 }
 
 interface ModelProps {
@@ -83,7 +96,8 @@ interface ClassViewerProps {
 export function ClassViewer({ playerClass }: ClassViewerProps) {
   return (
     <div className="class-viewer">
-      <Canvas key={playerClass.id} frameloop="always">
+      <Canvas key={playerClass.id} frameloop="demand">
+        <ContextDisposer />
         <Suspense fallback={null}>
           <SceneContent
             modelPath={playerClass.modelPath}

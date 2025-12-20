@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, Link, useLocation } from 'react-router-dom'
 import { Icon, IconName } from './Icon'
+import { Typography, TypographyVariant } from './Typography'
 import { ROUTES } from '../config'
 
 interface SidebarItem {
@@ -26,22 +27,45 @@ const SIDEBAR_ITEMS: SidebarItem[] = [
  * - Shows icons and labels
  * - Active state highlighting
  */
+// Wiki subpage paths that should show the back link
+const WIKI_SUBPAGES = [
+  ROUTES.WIKI_CLASSES,
+  ROUTES.WIKI_ITEMS,
+  ROUTES.WIKI_ENEMIES,
+  ROUTES.WIKI_ATTRIBUTES,
+  ROUTES.WIKI_ACHIEVEMENTS,
+]
+
 export function Sidebar() {
   const [isOpen, setIsOpen] = useState(false)
+  const location = useLocation()
 
   const toggleSidebar = () => setIsOpen((prev) => !prev)
+
+  // Show wiki back link when on a wiki subpage and sidebar is collapsed
+  const isWikiSubpage = WIKI_SUBPAGES.some(path => location.pathname === path)
 
   return (
     <>
       {/* Burger toggle button - always visible */}
-      <button
-        className="sidebar-toggle"
-        onClick={toggleSidebar}
-        aria-label={isOpen ? 'Close menu' : 'Open menu'}
-        aria-expanded={isOpen}
-      >
-        <Icon name={isOpen ? 'close' : 'menu'} size={24} />
-      </button>
+      <div className="sidebar-toggle-row">
+        <button
+          className="sidebar-toggle"
+          onClick={toggleSidebar}
+          aria-label={isOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={isOpen}
+        >
+          <Icon name={isOpen ? 'close' : 'menu'} size={24} />
+        </button>
+
+        {/* Wiki back link - shown when on wiki subpage and sidebar is collapsed */}
+        {isWikiSubpage && !isOpen && (
+          <Link to={ROUTES.WIKI} className="sidebar-wiki-back">
+            <Icon name="chevron-left" size={18} />
+            <Typography variant={TypographyVariant.BodySmall}>Wiki</Typography>
+          </Link>
+        )}
+      </div>
 
       {/* Overlay when sidebar is open */}
       {isOpen && (

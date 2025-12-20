@@ -1,5 +1,5 @@
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { SkinViewer } from '../components/SkinViewer'
 import { EquipmentViewer } from '../components/EquipmentViewer'
 import { Typography, TypographyVariant } from '../components/Typography'
@@ -12,8 +12,11 @@ import { ROUTES, GAME_STATS } from '../config'
 import { formatShortDate, formatRelativeTime } from '../utils/dateFormat'
 import { EQUIPMENT_MODELS, type EquipmentModel } from '../mock/equipment'
 import { findPlayerGuild, findPlayerGuildMembership, getGuildRoleLabel } from '../mock/guilds'
+import { getRandomClassForPlayer } from '../mock/classes'
+import { getUnlockedAchievementsWithData } from '../mock/achievements'
 import type { RankedStat, PlayerDTO } from '../types/api'
 import type { SkinViewerConfig } from '../types/skin'
+import { formatShortDate as formatTooltipDate } from '../utils/dateFormat'
 
 /** Display a ranked stat with value and rank */
 function StatDisplay({ label, stat }: { label: string; stat: RankedStat }) {
@@ -68,6 +71,9 @@ export function ProfilePage() {
   const [error, setError] = useState<string | null>(null)
   
   const [selectedEquipment, setSelectedEquipment] = useState<EquipmentModel | null>(null)
+  const [achievementsExpanded, setAchievementsExpanded] = useState(false)
+  const [visibleAchievementCount, setVisibleAchievementCount] = useState<number | null>(null)
+  const achievementsRowRef = useRef<HTMLDivElement>(null)
 
   // Persisted settings from store
   const playerAnimate = useSettingsStore((s) => s.playerAnimate)
@@ -118,6 +124,49 @@ export function ProfilePage() {
       setSelectedEquipment(equipment)
     }
   }
+
+  // Calculate how many achievements fit in one row
+  const allAchievements = getUnlockedAchievementsWithData()
+  const profileAchievementsRef = useRef<HTMLDivElement>(null)
+  const [hasMeasured, setHasMeasured] = useState(false)
+
+  useEffect(() => {
+    // Don't measure while loading or if no player data
+    if (loading || !player) return
+    if (hasMeasured || achievementsExpanded) return
+
+    // Wait for next frame to ensure DOM is rendered
+    const timeoutId = setTimeout(() => {
+      if (!achievementsRowRef.current || !profileAchievementsRef.current) return
+
+      const container = achievementsRowRef.current
+      const children = Array.from(container.children) as HTMLElement[]
+      if (children.length === 0) return
+
+      const containerWidth = profileAchievementsRef.current.offsetWidth
+      let totalWidth = 0
+      let count = 0
+      const gap = 8 // var(--space-2)
+
+      for (const child of children) {
+        const childWidth = child.offsetWidth + (count > 0 ? gap : 0)
+        // Reserve space for "+N more" button (approx 90px)
+        if (totalWidth + childWidth > containerWidth - 90) break
+        totalWidth += childWidth
+        count++
+      }
+
+      // If all fit, show all (-1 means show all)
+      if (count >= allAchievements.length) {
+        setVisibleAchievementCount(-1)
+      } else {
+        setVisibleAchievementCount(Math.max(1, count))
+      }
+      setHasMeasured(true)
+    }, 0)
+
+    return () => clearTimeout(timeoutId)
+  }, [loading, player, allAchievements.length, achievementsExpanded, hasMeasured])
 
   // Show loader while fetching
   if (loading) {
@@ -191,6 +240,22 @@ export function ProfilePage() {
                       <span className="profile-guild-name">{guild.name}</span>
                       <span className="profile-guild-role">({getGuildRoleLabel(membership.role)})</span>
                     </Link>
+                  )
+                })()}
+                {(() => {
+                  const playerClass = getRandomClassForPlayer(player.uuid)
+                  return (
+                    <div className="profile-class-row">
+                      <Typography variant={TypographyVariant.Caption} color="var(--color-text-secondary)">
+                        Main Class:
+                      </Typography>
+                      <Link
+                        to={`${ROUTES.WIKI_CLASSES}#${playerClass.id}`}
+                        className="profile-class-link"
+                      >
+                        {playerClass.name}
+                      </Link>
+                    </div>
                   )
                 })()}
               </div>
@@ -279,6 +344,65 @@ export function ProfilePage() {
               </div>
             </div>
           )}
+        </div>
+
+        {/* Last Achievements Section */}
+        <div className="profile-achievements" ref={profileAchievementsRef}>
+          <div className="profile-achievements-header">
+            <Typography
+              variant={TypographyVariant.Caption}
+              color="var(--color-text-secondary)"
+            >
+              Latest Achievements
+            </Typography>
+            {achievementsExpanded && (
+              <button
+                className="profile-achievements-collapse"
+                onClick={() => setAchievementsExpanded(false)}
+              >
+                (collapse)
+              </button>
+            )}
+          </div>
+          <div
+            ref={achievementsRowRef}
+            className={`profile-achievements-row ${achievementsExpanded ? 'expanded' : ''}`}
+            style={!hasMeasured && !achievementsExpanded ? { visibility: 'hidden' } : undefined}
+          >
+            {(() => {
+              // Before measuring or when expanded, show all
+              // After measuring: -1 = all fit, positive number = visible count
+              const showAll = achievementsExpanded || visibleAchievementCount === -1 || !hasMeasured
+              const displayedAchievements = showAll
+                ? allAchievements
+                : allAchievements.slice(0, visibleAchievementCount ?? 1)
+              const hiddenCount = allAchievements.length - displayedAchievements.length
+
+              return (
+                <>
+                  {displayedAchievements.map((achievement) => (
+                    <Link
+                      key={achievement.id}
+                      to={`${ROUTES.WIKI_ACHIEVEMENTS}#${achievement.id}`}
+                      className="profile-achievement-btn"
+                      title={`Unlocked: ${formatTooltipDate(achievement.unlockedAt)}`}
+                    >
+                      <span className="profile-achievement-trophy">♔</span>
+                      <span className="profile-achievement-name">{achievement.name}</span>
+                    </Link>
+                  ))}
+                  {hiddenCount > 0 && !achievementsExpanded && hasMeasured && (
+                    <button
+                      className="profile-achievement-more"
+                      onClick={() => setAchievementsExpanded(true)}
+                    >
+                      +{hiddenCount} more
+                    </button>
+                  )}
+                </>
+              )
+            })()}
+          </div>
         </div>
       </div>
     </div>

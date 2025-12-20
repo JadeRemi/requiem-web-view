@@ -105,10 +105,6 @@ export function ChangelogPage() {
   return (
     <div className="page changelog-page">
       <div className="changelog-content">
-        <div className="changelog-header">
-          <Typography variant={TypographyVariant.H1}>Changelog</Typography>
-        </div>
-
         {user?.type === 'game' && lastVisit && (
           <SinceLastVisit patches={newPatches} lastVisitDate={lastVisit} />
         )}

@@ -1,0 +1,48 @@
+import type { LadderEntry } from '../../types/ladder'
+
+/**
+ * Player Kills Ladder
+ * Sorted by total PvP kills (descending)
+ */
+export const KILLS_LADDER: LadderEntry[] = [
+  { uuid: 'a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d', value: 1248 },
+  { uuid: 'd4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a', value: 1156 },
+  { uuid: 'b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e', value: 1089 },
+  { uuid: 'b8c9d0e1-f2a3-4b4c-5d6e-7f8a9b0c1d2e', value: 978 },
+  { uuid: 'e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8a9b', value: 934 },
+  { uuid: 'c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f', value: 876 },
+  { uuid: 'a7b8c9d0-e1f2-4a3b-4c5d-6e7f8a9b0c1d', value: 823 },
+  { uuid: 'd0e1f2a3-b4c5-4d6e-7f8a-9b0c1d2e3f4a', value: 745 },
+  { uuid: 'f6a7b8c9-d0e1-4f2a-3b4c-5d6e7f8a9b0c', value: 687 },
+  { uuid: 'c9d0e1f2-a3b4-4c5d-6e7f-8a9b0c1d2e3f', value: 612 },
+  { uuid: 'c5d6e7f8-a9b0-4c1d-2e3f-4a5b6c7d8e9f', value: 612 },
+  { uuid: 'a3b4c5d6-e7f8-4a9b-0c1d-2e3f4a5b6c7d', value: 567 },
+  { uuid: 'b6c7d8e9-f0a1-4b2c-3d4e-5f6a7b8c9d0e', value: 567 },
+  { uuid: 'a9b0c1d2-e3f4-4a5b-6c7d-8e9f0a1b2c3d', value: 523 },
+  { uuid: 'e7f8a9b0-c1d2-4e3f-4a5b-6c7d8e9f0a1b', value: 456 },
+  { uuid: 'e3f4a5b6-c7d8-4e9f-0a1b-2c3d4e5f6a7b', value: 445 },
+  { uuid: 'e1f2a3b4-c5d6-4e7f-8a9b-0c1d2e3f4a5b', value: 423 },
+  { uuid: 'c1d2e3f4-a5b6-4c7d-8e9f-0a1b2c3d4e5f', value: 389 },
+  { uuid: 'f4a5b6c7-d8e9-4f0a-1b2c-3d4e5f6a7b8c', value: 378 },
+  { uuid: 'b4c5d6e7-f8a9-4b0c-1d2e-3f4a5b6c7d8e', value: 345 },
+  { uuid: 'e9f0a1b2-c3d4-4e5f-6a7b-8c9d0e1f2a3b', value: 345 },
+  { uuid: 'b0c1d2e3-f4a5-4b6c-7d8e-9f0a1b2c3d4e', value: 312 },
+  { uuid: 'c7d8e9f0-a1b2-4c3d-4e5f-6a7b8c9d0e1f', value: 289 },
+  { uuid: 'f2a3b4c5-d6e7-4f8a-9b0c-1d2e3f4a5b6c', value: 289 },
+  { uuid: 'b2c3d4e5-f6a7-4b8c-9d0e-2f3a4b5c6d7e', value: 289 },
+  { uuid: 'a5b6c7d8-e9f0-4a1b-2c3d-4e5f6a7b8c9d', value: 234 },
+  { uuid: 'd6e7f8a9-b0c1-4d2e-3f4a-5b6c7d8e9f0a', value: 234 },
+  { uuid: 'f0a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c', value: 212 },
+  { uuid: 'd8e9f0a1-b2c3-4d4e-5f6a-7b8c9d0e1f2a', value: 178 },
+  { uuid: 'f8a9b0c1-d2e3-4f4a-5b6c-7d8e9f0a1b2c', value: 178 },
+  { uuid: 'd4e5f6a7-b8c9-4d0e-1f2a-4b5c6d7e8f9a', value: 178 },
+  { uuid: 'd2e3f4a5-b6c7-4d8e-9f0a-1b2c3d4e5f6a', value: 156 },
+  { uuid: 'a1b2c3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6d', value: 156 },
+  { uuid: 'f6a7b8c9-d0e1-4f2a-3b4c-6d7e8f9a0b1c', value: 156 },
+  { uuid: 'b8c9d0e1-f2a3-4b4c-5d6e-8f9a0b1c2d3e', value: 145 },
+  { uuid: 'c3d4e5f6-a7b8-4c9d-0e1f-3a4b5c6d7e8f', value: 134 },
+  { uuid: 'a7b8c9d0-e1f2-4a3b-4c5d-7e8f9a0b1c2d', value: 112 },
+  { uuid: 'e5f6a7b8-c9d0-4e1f-2a3b-5c6d7e8f9a0b', value: 98 },
+  { uuid: 'c9d0e1f2-a3b4-4c5d-6e7f-9a0b1c2d3e4f', value: 78 },
+  { uuid: 'd0e1f2a3-b4c5-4d6e-7f8a-0b1c2d3e4f5a', value: 56 },
+]

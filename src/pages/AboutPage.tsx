@@ -108,10 +108,6 @@ export function AboutPage() {
   return (
     <div className="about-page">
       <div className="about-content">
-        <div className="about-header">
-          <Typography variant={TypographyVariant.H1}>About</Typography>
-        </div>
-
         <div className="ip-box-wrapper">
           <button className="ip-box" onClick={handleCopyIP}>
             <span className="ip-text">{SERVER_IP}</span>

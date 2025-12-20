@@ -7,6 +7,8 @@ import { WikiPage } from './pages/WikiPage'
 import { WikiClassesPage } from './pages/WikiClassesPage'
 import { WikiItemsPage } from './pages/WikiItemsPage'
 import { WikiEnemiesPage } from './pages/WikiEnemiesPage'
+import { WikiAttributesPage } from './pages/WikiAttributesPage'
+import { WikiAchievementsPage } from './pages/WikiAchievementsPage'
 import { GuildsPage } from './pages/GuildsPage'
 import { ChangelogPage } from './pages/ChangelogPage'
 import { AboutPage } from './pages/AboutPage'
@@ -38,6 +40,8 @@ function App() {
                 <Route path={ROUTES.WIKI_CLASSES} element={<WikiClassesPage />} />
                 <Route path={ROUTES.WIKI_ITEMS} element={<WikiItemsPage />} />
                 <Route path={ROUTES.WIKI_ENEMIES} element={<WikiEnemiesPage />} />
+                <Route path={ROUTES.WIKI_ATTRIBUTES} element={<WikiAttributesPage />} />
+                <Route path={ROUTES.WIKI_ACHIEVEMENTS} element={<WikiAchievementsPage />} />
                 <Route path={ROUTES.GUILDS} element={<GuildsPage />} />
                 <Route path={ROUTES.CHANGELOG} element={<ChangelogPage />} />
                 <Route path={ROUTES.ABOUT} element={<AboutPage />} />

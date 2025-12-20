@@ -1,10 +1,7 @@
-import { Link } from 'react-router-dom'
 import { Typography, TypographyVariant } from '../components/Typography'
 import { EquipmentViewer } from '../components/EquipmentViewer'
 import { EQUIPMENT_MODELS, EquipmentModel } from '../mock/equipment'
 import { usePageTitle } from '../hooks/usePageTitle'
-import { ROUTES } from '../config'
-import { Icon } from '../components/Icon'
 
 interface ItemCardProps {
   item: EquipmentModel
@@ -28,13 +25,7 @@ export function WikiItemsPage() {
 
   return (
     <div className="wiki-page">
-      <div className="wiki-header">
-        <Link to={ROUTES.WIKI} className="wiki-back-link">
-          <Icon name="chevron-left" size={20} />
-          <Typography variant={TypographyVariant.Body}>Wiki</Typography>
-        </Link>
-        <Typography variant={TypographyVariant.H1}>Items</Typography>
-      </div>
+      <div className="wiki-header" />
 
       <div className="wiki-section">
         <div className="wiki-items-grid">

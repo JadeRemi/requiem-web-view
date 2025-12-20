@@ -6,11 +6,17 @@
 /* ===========================================
    Sidebar
    =========================================== */
-.sidebar-toggle {
+.sidebar-toggle-row {
   position: fixed;
   top: var(--space-4);
   left: var(--space-4);
   z-index: 1001;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.sidebar-toggle {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -27,6 +33,25 @@
 .sidebar-toggle:hover {
   background: var(--grey-700);
   color: var(--grey-0);
+}
+
+.sidebar-wiki-back {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  height: 44px;
+  padding: 0 var(--space-3);
+  background: var(--grey-800);
+  border: 1px solid var(--grey-700);
+  border-radius: var(--radius-md);
+  color: var(--grey-300);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.sidebar-wiki-back:hover {
+  background: var(--grey-700);
+  color: var(--grey-100);
 }
 
 .sidebar-overlay {
@@ -180,12 +205,10 @@
 
 .control-panel button:not(.icon-toggle):hover {
   background: var(--grey-0);
-  transform: translateY(-1px);
   box-shadow: var(--shadow-md);
 }
 
 .control-panel button:not(.icon-toggle):active {
-  transform: translateY(0);
   background: var(--grey-300);
 }
 

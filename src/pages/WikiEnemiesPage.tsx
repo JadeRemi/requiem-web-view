@@ -1,11 +1,9 @@
 import { useState, useCallback } from 'react'
-import { Link } from 'react-router-dom'
 import { Typography, TypographyVariant } from '../components/Typography'
 import { EnemyViewer } from '../components/EnemyViewer'
 import { ENEMY_MODELS, EnemyModel } from '../mock/enemies'
 import { useSettingsStore } from '../stores/settingsStore'
 import { usePageTitle } from '../hooks/usePageTitle'
-import { ROUTES } from '../config'
 import { Icon } from '../components/Icon'
 
 interface EnemyCardProps {
@@ -120,13 +118,7 @@ export function WikiEnemiesPage() {
 
   return (
     <div className="wiki-page">
-      <div className="wiki-header">
-        <Link to={ROUTES.WIKI} className="wiki-back-link">
-          <Icon name="chevron-left" size={20} />
-          <Typography variant={TypographyVariant.Body}>Wiki</Typography>
-        </Link>
-        <Typography variant={TypographyVariant.H1}>Enemies</Typography>
-      </div>
+      <div className="wiki-header" />
 
       <div className="wiki-section">
         <div className="carousel-container">
