@@ -4,6 +4,8 @@
  */
 
 @import './styles/palette.css';
+@import './styles/mc-colors.css';
+@import './styles/cursor.css';
 @import './styles/base.css';
 @import './styles/components/index.css';
 @import './styles/pages/index.css';

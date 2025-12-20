@@ -17,8 +17,10 @@ const SIDEBAR_ITEMS: SidebarItem[] = [
   { path: ROUTES.GUILDS, label: 'Guilds', icon: 'users' },
   { path: ROUTES.MAP, label: 'World Map', icon: 'map' },
   { path: ROUTES.WIKI, label: 'Wiki', icon: 'book' },
+  { path: ROUTES.STORE, label: 'Store', icon: 'gem' },
   { path: ROUTES.CHANGELOG, label: 'Changelog', icon: 'scroll' },
   { path: ROUTES.ABOUT, label: 'About', icon: 'info' },
+  { path: ROUTES.SETTINGS, label: 'Settings', icon: 'settings' },
 ]
 
 /**

@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 interface ViewerSettings {
   /** Player model animation enabled */
@@ -11,7 +12,12 @@ interface ViewerSettings {
   enemyRotate: boolean
 }
 
-interface SettingsState extends ViewerSettings {
+interface AppSettings {
+  /** Custom Minecraft-style cursor enabled */
+  customCursor: boolean
+}
+
+interface SettingsState extends ViewerSettings, AppSettings {
   /** Toggle player animation */
   setPlayerAnimate: (value: boolean) => void
   /** Toggle player rotation */
@@ -20,22 +26,35 @@ interface SettingsState extends ViewerSettings {
   setEquipmentRotate: (value: boolean) => void
   /** Toggle enemy rotation */
   setEnemyRotate: (value: boolean) => void
+  /** Toggle custom cursor */
+  setCustomCursor: (value: boolean) => void
 }
 
 /**
  * Settings Store
- * 
- * In-memory app settings (persists during session)
+ *
+ * Persisted app settings using localStorage
  */
-export const useSettingsStore = create<SettingsState>((set) => ({
-  // Default values
-  playerAnimate: true,
-  playerRotate: true,
-  equipmentRotate: true,
-  enemyRotate: true,
+export const useSettingsStore = create<SettingsState>()(
+  persist(
+    (set) => ({
+      // Default values - Viewer settings
+      playerAnimate: true,
+      playerRotate: true,
+      equipmentRotate: true,
+      enemyRotate: true,
 
-  setPlayerAnimate: (value) => set({ playerAnimate: value }),
-  setPlayerRotate: (value) => set({ playerRotate: value }),
-  setEquipmentRotate: (value) => set({ equipmentRotate: value }),
-  setEnemyRotate: (value) => set({ enemyRotate: value }),
-}))
+      // Default values - App settings
+      customCursor: false,
+
+      setPlayerAnimate: (value) => set({ playerAnimate: value }),
+      setPlayerRotate: (value) => set({ playerRotate: value }),
+      setEquipmentRotate: (value) => set({ equipmentRotate: value }),
+      setEnemyRotate: (value) => set({ enemyRotate: value }),
+      setCustomCursor: (value) => set({ customCursor: value }),
+    }),
+    {
+      name: 'requiem-settings',
+    }
+  )
+)

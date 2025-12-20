@@ -69,7 +69,7 @@
   font-family: var(--font-orbitron);
   font-size: var(--text-sm);
   font-weight: 600;
-  color: var(--magenta-400);
+  color: var(--grey-400);
 }
 
 .guild-status-badge {

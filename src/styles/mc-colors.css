@@ -1,0 +1,77 @@
+/**
+ * Minecraft Color Codes
+ * Based on https://htmlcolorcodes.com/minecraft-color-codes/
+ * These colors represent the game's palette, not the site's design palette.
+ */
+
+:root {
+  /* Minecraft Text Colors */
+  --mc-black: #000000;
+  --mc-dark-blue: #0000aa;
+  --mc-dark-green: #00aa00;
+  --mc-dark-aqua: #00aaaa;
+  --mc-dark-red: #aa0000;
+  --mc-dark-purple: #aa00aa;
+  --mc-gold: #ffaa00;
+  --mc-gray: #aaaaaa;
+  --mc-dark-gray: #555555;
+  --mc-blue: #5555ff;
+  --mc-green: #55ff55;
+  --mc-aqua: #55ffff;
+  --mc-red: #ff5555;
+  --mc-light-purple: #ff55ff;
+  --mc-yellow: #ffff55;
+  --mc-white: #ffffff;
+
+  /* Minecraft Item Rarity Colors */
+  --mc-rarity-common: var(--mc-white);
+  --mc-rarity-uncommon: var(--mc-yellow);
+  --mc-rarity-rare: var(--mc-aqua);
+  --mc-rarity-epic: var(--mc-light-purple);
+  --mc-rarity-legendary: var(--mc-gold);
+  --mc-rarity-mythic: var(--mc-light-purple);
+
+  /* Minecraft Tooltip Backgrounds */
+  --mc-tooltip-bg: #100010;
+  --mc-tooltip-border: #280a63;
+  --mc-tooltip-border-highlight: #5000aa;
+
+  /* Minecraft Text Shadow (for each color) */
+  --mc-shadow-black: #000000;
+  --mc-shadow-dark-blue: #00002a;
+  --mc-shadow-dark-green: #002a00;
+  --mc-shadow-dark-aqua: #002a2a;
+  --mc-shadow-dark-red: #2a0000;
+  --mc-shadow-dark-purple: #2a002a;
+  --mc-shadow-gold: #2a2a00;
+  --mc-shadow-gray: #2a2a2a;
+  --mc-shadow-dark-gray: #151515;
+  --mc-shadow-blue: #15153f;
+  --mc-shadow-green: #153f15;
+  --mc-shadow-aqua: #153f3f;
+  --mc-shadow-red: #3f1515;
+  --mc-shadow-light-purple: #3f153f;
+  --mc-shadow-yellow: #3f3f15;
+  --mc-shadow-white: #3f3f3f;
+}
+
+/* Minecraft Color Classes */
+.mc-black { color: var(--mc-black); text-shadow: 2px 2px var(--mc-shadow-black); }
+.mc-dark-blue { color: var(--mc-dark-blue); text-shadow: 2px 2px var(--mc-shadow-dark-blue); }
+.mc-dark-green { color: var(--mc-dark-green); text-shadow: 2px 2px var(--mc-shadow-dark-green); }
+.mc-dark-aqua { color: var(--mc-dark-aqua); text-shadow: 2px 2px var(--mc-shadow-dark-aqua); }
+.mc-dark-red { color: var(--mc-dark-red); text-shadow: 2px 2px var(--mc-shadow-dark-red); }
+.mc-dark-purple { color: var(--mc-dark-purple); text-shadow: 2px 2px var(--mc-shadow-dark-purple); }
+.mc-gold { color: var(--mc-gold); text-shadow: 2px 2px var(--mc-shadow-gold); }
+.mc-gray { color: var(--mc-gray); text-shadow: 2px 2px var(--mc-shadow-gray); }
+.mc-dark-gray { color: var(--mc-dark-gray); text-shadow: 2px 2px var(--mc-shadow-dark-gray); }
+.mc-blue { color: var(--mc-blue); text-shadow: 2px 2px var(--mc-shadow-blue); }
+.mc-green { color: var(--mc-green); text-shadow: 2px 2px var(--mc-shadow-green); }
+.mc-aqua { color: var(--mc-aqua); text-shadow: 2px 2px var(--mc-shadow-aqua); }
+.mc-red { color: var(--mc-red); text-shadow: 2px 2px var(--mc-shadow-red); }
+.mc-light-purple { color: var(--mc-light-purple); text-shadow: 2px 2px var(--mc-shadow-light-purple); }
+.mc-yellow { color: var(--mc-yellow); text-shadow: 2px 2px var(--mc-shadow-yellow); }
+.mc-white { color: var(--mc-white); text-shadow: 2px 2px var(--mc-shadow-white); }
+
+/* Bold variant */
+.mc-bold { font-weight: bold; }

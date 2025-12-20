@@ -42,6 +42,8 @@ export const ROUTES = {
   CHANGELOG: '/changelog',
   ABOUT: '/about',
   LOGIN: '/login',
+  SETTINGS: '/settings',
+  STORE: '/store',
 } as const
 
 /** Site name for page titles */
@@ -64,6 +66,8 @@ export const PAGE_TITLES: Record<string, string> = {
   [ROUTES.CHANGELOG]: 'Changelog',
   [ROUTES.ABOUT]: 'About',
   [ROUTES.LOGIN]: 'Login',
+  [ROUTES.SETTINGS]: 'Settings',
+  [ROUTES.STORE]: 'Store',
 }
 
 /** Skin viewer default settings */
@@ -202,4 +206,30 @@ export const CYCLE_RULES = {
     destruction: true,
     preserveInventory: false,
   },
+} as const
+
+/** Currency configuration */
+export const CURRENCY = {
+  /** Display name for the currency */
+  NAME: 'Qreds',
+  /** Path to coin model */
+  MODEL_PATH: '/models/donate/coin.glb',
+  /** Mock user balance */
+  MOCK_BALANCE: 350,
+  /** Coin model display settings */
+  COIN_MODEL: {
+    scale: 1,
+    offsetX: 0,
+    offsetY: 0,
+  },
+} as const
+
+/** Store configuration */
+export const STORE = {
+  /** Available purchase options */
+  PURCHASE_OPTIONS: [30, 100, 300] as const,
+  /** Store items/privileges */
+  ITEMS: [
+    { id: 'premium', name: 'Premium', price: 100 },
+  ] as const,
 } as const

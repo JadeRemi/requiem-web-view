@@ -1,0 +1,120 @@
+/**
+ * Minecraft-style Item Tooltip Styles
+ */
+
+.mc-tooltip {
+  position: relative;
+  display: inline-block;
+  padding: 4px;
+  font-family: var(--font-minecraftia);
+  font-size: 16px;
+  color: var(--mc-white);
+  text-shadow: 2px 2px var(--mc-shadow-white);
+  line-height: 1.2;
+}
+
+/* Outer border (black) - positioned absolutely */
+.mc-tooltip-border-top {
+  position: absolute;
+  top: 0;
+  left: 4px;
+  right: 4px;
+  height: 4px;
+  background: var(--mc-black);
+}
+
+.mc-tooltip-border-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 4px;
+  right: 4px;
+  height: 4px;
+  background: var(--mc-black);
+}
+
+.mc-tooltip-border-left {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  bottom: 4px;
+  width: 4px;
+  background: var(--mc-black);
+}
+
+.mc-tooltip-border-right {
+  position: absolute;
+  top: 4px;
+  right: 0;
+  bottom: 4px;
+  width: 4px;
+  background: var(--mc-black);
+}
+
+/* Inner container */
+.mc-tooltip-inner {
+  position: relative;
+  background: var(--mc-tooltip-bg);
+}
+
+/* Inner border (purple gradient) */
+.mc-tooltip-inner-border-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--mc-tooltip-border);
+}
+
+.mc-tooltip-inner-border-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--mc-tooltip-border);
+}
+
+.mc-tooltip-inner-border-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--mc-tooltip-border);
+}
+
+.mc-tooltip-inner-border-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--mc-tooltip-border);
+}
+
+/* Content area with padding */
+.mc-tooltip-content {
+  position: relative;
+  padding: 8px;
+  z-index: 1;
+}
+
+/* Item name line */
+.mc-tooltip-name {
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* Regular tooltip line */
+.mc-tooltip-line {
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* Rarity line at bottom */
+.mc-tooltip-rarity {
+  margin: 0;
+  margin-top: 4px;
+  white-space: nowrap;
+}

@@ -183,8 +183,9 @@
   font-weight: 700;
   text-transform: uppercase;
   padding: 2px var(--space-1);
-  background: var(--magenta-600);
-  color: var(--grey-100);
+  background: transparent;
+  color: var(--grey-300);
+  border: 1px solid var(--grey-600);
   border-radius: var(--radius-sm);
 }
 

@@ -2,8 +2,9 @@ import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { Icon } from './Icon'
 import { FacePreview } from './FacePreview'
 import { Blinker } from './Blinker'
+import { CoinViewer } from './CoinViewer'
 import { useAuth } from '../contexts/AuthContext'
-import { ROUTES } from '../config'
+import { ROUTES, CURRENCY } from '../config'
 import { findPlayerByUuid } from '../mock/ladder'
 import { isPlayerOnline } from '../mock/online-players'
 
@@ -54,23 +55,30 @@ export function Header() {
   return (
     <header className="app-header">
       {isLoggedIn && user && (
-        <div className="header-user-info">
-          {user.type === 'game' && (
-            <Link to={`${ROUTES.PROFILE}?uuid=${user.gameUuid}`} className="header-user-link">
-              {getSkinHash() && (
-                <FacePreview skinHash={getSkinHash()!} size={18} className="header-user-face" />
-              )}
-              <span className="header-user-name">{getDisplayName()}</span>
-              {isPlayerOnline(user.gameUuid) && <Blinker />}
-            </Link>
-          )}
-          {user.type === 'discord' && (
-            <>
-              <Icon name="discord" size={16} className="header-user-discord-icon" />
-              <span className="header-user-name">{getDisplayName()}</span>
-            </>
-          )}
-        </div>
+        <>
+          <div className="header-currency">
+            <span className="header-currency-amount">{CURRENCY.MOCK_BALANCE}</span>
+            <span className="header-currency-x">×</span>
+            <CoinViewer size={24} />
+          </div>
+          <div className="header-user-info">
+            {user.type === 'game' && (
+              <Link to={`${ROUTES.PROFILE}?uuid=${user.gameUuid}`} className="header-user-link">
+                {getSkinHash() && (
+                  <FacePreview skinHash={getSkinHash()!} size={18} className="header-user-face" />
+                )}
+                <span className="header-user-name">{getDisplayName()}</span>
+                {isPlayerOnline(user.gameUuid) && <Blinker />}
+              </Link>
+            )}
+            {user.type === 'discord' && (
+              <>
+                <Icon name="discord" size={16} className="header-user-discord-icon" />
+                <span className="header-user-name">{getDisplayName()}</span>
+              </>
+            )}
+          </div>
+        </>
       )}
       <button className="header-auth-btn" onClick={handleClick}>
         <Icon name={isLoggedIn ? 'logout' : 'login'} size={20} />

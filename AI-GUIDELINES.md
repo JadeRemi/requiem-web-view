@@ -27,6 +27,7 @@ This document contains project preferences and guidelines for AI assistants work
 - **NEVER add unrequested changes** - Only implement exactly what is asked. Do not add "improvements", extra features, or style changes that were not requested.
 - **Ask before making assumptions** - If requirements are unclear, ask for clarification rather than making assumptions.
 - **Preserve existing styles when refactoring** - When splitting or reorganizing CSS files, do not modify any style values. Only reorganize the structure.
+- **No duplicate page headers** - Pages should NOT have their own H1 headers with the page title. The sidebar already shows the current page, so adding "Settings" heading to Settings page is redundant. Exception: pages where the header adds context beyond just the page name.
 
 ## Development Preferences
 
