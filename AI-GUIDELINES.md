@@ -64,6 +64,36 @@ Mock data for development lives in `/src/mock/`:
 - Use @react-three/drei for common abstractions and helpers
 - Keep 3D scene logic separate from UI components
 
+#### Making 3D Models Face the Camera
+
+When creating a new 3D model viewer and the model appears invisible or faces away from the camera, the **key fix** is using `OrbitControls` with an explicit `target` prop. Without `target`, the camera doesn't automatically look at the model.
+
+**What works (EnemyViewer pattern):**
+```tsx
+<PerspectiveCamera
+  makeDefault
+  position={[0, 0.8, -4]}  // Camera at NEGATIVE Z
+  fov={50}
+/>
+<OrbitControls
+  enablePan={false}
+  enableZoom={false}
+  enableRotate={false}  // Disable if non-interactive
+  target={[0, 0.8, 0]}  // CRITICAL: Makes camera look at this point
+/>
+```
+
+**What doesn't work:**
+- `PerspectiveCamera` alone without `OrbitControls` - camera won't look at model
+- `OrbitControls` without explicit `target` prop - unpredictable behavior
+- Trying to fix with `<Center>`, axis inversion, or model `rotation` props - these don't address the core issue
+- Camera at positive Z without target - model faces away
+
+**Reference implementations:**
+- `EnemyViewer.tsx` - Camera at negative Z + OrbitControls with target (model faces camera)
+- `SkinViewer.tsx` - Camera at positive Z + OrbitControls with target (model faces camera)
+- `EquipmentViewer.tsx` - Uses model rotation props (requires per-model tuning)
+
 ## File Structure
 
 ```

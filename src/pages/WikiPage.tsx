@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react'
 import { Typography, TypographyVariant } from '../components/Typography'
 import { EnemyViewer } from '../components/EnemyViewer'
 import { EquipmentViewer } from '../components/EquipmentViewer'
+import { ClassViewer } from '../components/ClassViewer'
 import { ENEMY_MODELS, EnemyModel } from '../mock/enemies'
 import { EQUIPMENT_MODELS, EquipmentModel } from '../mock/equipment'
 import { PLAYER_CLASSES, PlayerClass } from '../mock/classes'
@@ -65,24 +66,13 @@ interface ClassCardProps {
 }
 
 function ClassCard({ playerClass }: ClassCardProps) {
-  // Create a temporary equipment model for the figurine
-  const figurineModel: EquipmentModel = {
-    id: playerClass.id,
-    name: playerClass.name,
-    path: playerClass.modelPath,
-    scale: playerClass.scale,
-    rotationX: 0,
-    rotationY: 0,
-    rotationZ: 0,
-  }
-
   return (
     <div className="wiki-class-card">
       <div className="wiki-class-viewer">
-        <EquipmentViewer model={figurineModel} autoRotate={false} />
+        <ClassViewer playerClass={playerClass} />
       </div>
       <div className="wiki-class-info">
-        <Typography variant={TypographyVariant.H4}>{playerClass.name}</Typography>
+        <Typography variant={TypographyVariant.H3}>{playerClass.name}</Typography>
         <Typography variant={TypographyVariant.Body} color="var(--color-text-secondary)">
           {playerClass.description}
         </Typography>
