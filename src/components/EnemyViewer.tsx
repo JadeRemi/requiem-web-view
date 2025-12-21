@@ -4,6 +4,7 @@ import { OrbitControls, PerspectiveCamera, useGLTF } from '@react-three/drei'
 import { clone as cloneGltf } from 'three/examples/jsm/utils/SkeletonUtils.js'
 import { Icon } from './Icon'
 import { Tooltip } from './Tooltip'
+import { assetPath } from '../utils/assetPath'
 import type { EnemyModel } from '../mock/enemies'
 
 /** Fixed camera target Y position */
@@ -22,7 +23,7 @@ interface ModelProps {
 }
 
 function Model({ modelPath, configScale, onLoaded }: ModelProps) {
-  const { scene } = useGLTF(modelPath)
+  const { scene } = useGLTF(assetPath(modelPath))
   const hasCalledOnLoaded = useRef(false)
 
   const clonedScene = useMemo(() => {

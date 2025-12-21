@@ -8,16 +8,17 @@ import { useToast } from '../components/Toast'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { SHARE_CONFIG, SERVER_VERSION } from '../config'
 import { EQUIPMENT_MODELS } from '../mock/equipment'
+import { assetPath } from '../utils/assetPath'
 
 const SERVER_IP = 'play.requiem.com:25565'
 
 const SCREENSHOTS = [
   {
-    src: '/images/screenshots/screen-1.jpg',
+    src: assetPath('/images/screenshots/screen-1.jpg'),
     description: 'Explore vast custom dungeons filled with unique challenges',
   },
   {
-    src: '/images/screenshots/screen-2.jpg',
+    src: assetPath('/images/screenshots/screen-2.jpg'),
     description: 'Battle fearsome bosses with custom abilities and mechanics',
   },
 ]

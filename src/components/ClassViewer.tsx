@@ -2,6 +2,7 @@ import { Suspense, useMemo, useEffect } from 'react'
 import { Canvas, useThree } from '@react-three/fiber'
 import { OrbitControls, PerspectiveCamera, useGLTF } from '@react-three/drei'
 import { clone as cloneGltf } from 'three/examples/jsm/utils/SkeletonUtils.js'
+import { assetPath } from '../utils/assetPath'
 import type { PlayerClass } from '../mock/classes'
 
 /**
@@ -46,7 +47,7 @@ interface ModelProps {
 }
 
 function Model({ path, scale }: ModelProps) {
-  const { scene } = useGLTF(path)
+  const { scene } = useGLTF(assetPath(path))
 
   const clonedScene = useMemo(() => {
     const clone = cloneGltf(scene)

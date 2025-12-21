@@ -4,6 +4,7 @@ import { OrbitControls, PerspectiveCamera, useGLTF, Center } from '@react-three/
 import { Group } from 'three'
 import { Icon } from './Icon'
 import { Tooltip } from './Tooltip'
+import { assetPath } from '../utils/assetPath'
 import type { EquipmentModel } from '../mock/equipment'
 
 interface ModelProps {
@@ -13,7 +14,7 @@ interface ModelProps {
 
 function Model({ model, autoRotate }: ModelProps) {
   const groupRef = useRef<Group>(null)
-  const { scene } = useGLTF(model.path)
+  const { scene } = useGLTF(assetPath(model.path))
   
   // Clone scene for each instance
   const clonedScene = useMemo(() => scene.clone(), [scene])

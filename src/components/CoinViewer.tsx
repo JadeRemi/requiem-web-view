@@ -1,4 +1,5 @@
 import { CURRENCY } from '../config'
+import { assetPath } from '../utils/assetPath'
 
 interface CoinViewerProps {
   size?: number
@@ -11,18 +12,18 @@ interface CoinViewerProps {
  */
 export function CoinViewer({ size = 24, className = '' }: CoinViewerProps) {
   const { scale, opacity } = CURRENCY.COIN_GIF
-  
+
   return (
     <div
       className={`coin-viewer ${className}`}
       style={{ width: size, height: size, pointerEvents: 'none' }}
     >
-      <img 
-        src="/images/coin-flip.gif" 
-        alt="coin" 
+      <img
+        src={assetPath('/images/coin-flip.gif')}
+        alt="coin"
         className="coin-gif"
-        style={{ 
-          width: size, 
+        style={{
+          width: size,
           height: size,
           objectFit: 'contain',
           opacity,
