@@ -41,7 +41,8 @@
   border: 1px solid var(--grey-700);
   border-radius: var(--radius-md);
   text-align: left;
-  max-width: 500px;
+  width: 100%;
+  max-width: 540px;
 }
 
 .home-latest-patch-header {
@@ -64,7 +65,7 @@
   display: block;
   padding: var(--space-2) var(--space-3);
   text-align: center;
-  font-family: var(--font-inter);
+  font-family: var(--font-nirmala);
   font-size: var(--text-sm);
   color: var(--grey-300);
   text-decoration: none;
@@ -81,7 +82,8 @@
 /* Home Online Section */
 .home-online-section {
   margin-bottom: var(--space-6);
-  max-width: 500px;
+  width: 100%;
+  max-width: 540px;
 }
 
 .home-online-header {
@@ -136,7 +138,7 @@
 }
 
 .online-player-name {
-  font-family: var(--font-inter);
+  font-family: var(--font-nirmala);
   font-size: var(--text-sm);
 }
 
@@ -147,7 +149,7 @@
 }
 
 .online-player-class {
-  font-family: var(--font-inter);
+  font-family: var(--font-nirmala);
   font-size: var(--text-sm);
   color: var(--grey-300);
   text-decoration: none;
@@ -160,7 +162,7 @@
 }
 
 .online-player-level {
-  font-family: var(--font-inter);
+  font-family: var(--font-nirmala);
   font-size: var(--text-sm);
   color: var(--grey-500);
 }
@@ -175,6 +177,7 @@
 
 .chart-range-filter {
   display: flex;
+  flex-wrap: nowrap;
   gap: var(--space-1);
   background: var(--grey-850);
   border: 1px solid var(--grey-700);
@@ -184,19 +187,21 @@
 }
 
 .chart-range-option {
-  flex: 1;
+  flex: 1 1 0;
+  min-width: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-1) var(--space-3);
+  padding: var(--space-1) var(--space-2);
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: all var(--transition-fast);
-  font-family: var(--font-inter);
+  font-family: var(--font-nirmala);
   font-size: var(--text-sm);
   color: var(--grey-400);
   background: transparent;
   border: none;
+  white-space: nowrap;
 }
 
 .chart-range-option:hover {
@@ -215,7 +220,7 @@
 }
 
 .online-chart .chart-label {
-  font-family: var(--font-inter);
+  font-family: var(--font-nirmala);
   font-size: 9px;
   fill: var(--grey-500);
 }
@@ -226,8 +231,8 @@
 }
 
 .online-chart .chart-tooltip-text {
-  font-family: var(--font-inter);
-  font-size: 10px;
+  font-family: var(--font-nirmala);
+  font-size: 12px;
   font-weight: 600;
   fill: var(--color-text-primary);
 }

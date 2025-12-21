@@ -46,7 +46,7 @@
   padding: var(--space-1) 0;
   padding-left: var(--space-4);
   color: var(--color-text-secondary);
-  font-family: var(--font-inter);
+  font-family: var(--font-nirmala);
   font-size: var(--text-base);
   text-align: left;
   cursor: pointer;
@@ -380,7 +380,7 @@
 
 .attributes-table td {
   padding: var(--space-3) var(--space-4);
-  font-family: var(--font-inter);
+  font-family: var(--font-nirmala);
   font-size: var(--text-sm);
   color: var(--grey-300);
   border-bottom: 1px solid var(--grey-800);
@@ -444,7 +444,7 @@
 
 .attributes-preview-table td {
   padding: var(--space-2) var(--space-3);
-  font-family: var(--font-inter);
+  font-family: var(--font-nirmala);
   font-size: var(--text-sm);
   color: var(--grey-400);
   border-bottom: 1px solid var(--grey-800);
@@ -626,7 +626,7 @@
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: all var(--transition-fast);
-  font-family: var(--font-inter);
+  font-family: var(--font-nirmala);
   font-size: var(--text-sm);
   color: var(--grey-400);
 }
@@ -782,7 +782,7 @@
 
 .terms-table td {
   padding: var(--space-3) var(--space-4);
-  font-family: var(--font-inter);
+  font-family: var(--font-nirmala);
   font-size: var(--text-sm);
   color: var(--grey-300);
   border-bottom: 1px solid var(--grey-800);
@@ -830,7 +830,7 @@
 
 .commands-table td {
   padding: var(--space-3) var(--space-4);
-  font-family: var(--font-inter);
+  font-family: var(--font-nirmala);
   font-size: var(--text-sm);
   color: var(--grey-300);
   border-bottom: 1px solid var(--grey-800);

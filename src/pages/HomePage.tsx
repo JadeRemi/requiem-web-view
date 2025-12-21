@@ -42,8 +42,8 @@ function OnlineChart({ data, range }: OnlineChartProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
   const chartWidth = 400
-  const chartHeight = 120
-  const padding = { top: 10, right: 10, bottom: 25, left: 35 }
+  const chartHeight = 140
+  const padding = { top: 35, right: 10, bottom: 25, left: 35 }
   const innerWidth = chartWidth - padding.left - padding.right
   const innerHeight = chartHeight - padding.top - padding.bottom
 
@@ -92,48 +92,51 @@ function OnlineChart({ data, range }: OnlineChartProps) {
       {/* Line */}
       <path d={linePath} fill="none" stroke="var(--magenta-800)" strokeWidth="2" />
 
-      {/* Data points */}
-      {points.map((point, i) => {
-        // Position tooltip below if point is near the top
-        const tooltipAbove = point.y > 30
-        const tooltipY = tooltipAbove ? point.y - 25 : point.y + 10
-        const textY = tooltipAbove ? point.y - 13 : point.y + 22
+      {/* Data points - circles only */}
+      {points.map((point, i) => (
+        <circle
+          key={i}
+          cx={point.x}
+          cy={point.y}
+          r={hoveredIndex === i ? 5 : 3}
+          fill="var(--magenta-600)"
+          className="chart-point"
+          onMouseEnter={() => setHoveredIndex(i)}
+          onMouseLeave={() => setHoveredIndex(null)}
+        />
+      ))}
+
+      {/* Tooltip - rendered last to appear on top */}
+      {hoveredIndex !== null && points[hoveredIndex] && (() => {
+        const point = points[hoveredIndex]!
+        const tooltipWidth = 48
+        const tooltipY = point.y - 32
+        const textY = point.y - 17
+        // Clamp tooltip X to prevent overflow on edges
+        const tooltipX = Math.max(tooltipWidth / 2, Math.min(point.x, chartWidth - tooltipWidth / 2))
 
         return (
-          <g key={i}>
-            <circle
-              cx={point.x}
-              cy={point.y}
-              r={hoveredIndex === i ? 5 : 3}
-              fill="var(--magenta-600)"
-              className="chart-point"
-              onMouseEnter={() => setHoveredIndex(i)}
-              onMouseLeave={() => setHoveredIndex(null)}
+          <g className="chart-tooltip">
+            <rect
+              x={tooltipX - tooltipWidth / 2}
+              y={tooltipY}
+              width={tooltipWidth}
+              height="22"
+              rx="4"
+              fill="var(--grey-800)"
+              stroke="var(--grey-600)"
             />
-            {hoveredIndex === i && (
-              <g className="chart-tooltip">
-                <rect
-                  x={point.x - 20}
-                  y={tooltipY}
-                  width="40"
-                  height="18"
-                  rx="4"
-                  fill="var(--grey-800)"
-                  stroke="var(--grey-600)"
-                />
-                <text
-                  x={point.x}
-                  y={textY}
-                  textAnchor="middle"
-                  className="chart-tooltip-text"
-                >
-                  {point.data.count}
-                </text>
-              </g>
-            )}
+            <text
+              x={tooltipX}
+              y={textY}
+              textAnchor="middle"
+              className="chart-tooltip-text"
+            >
+              {point.data.count}
+            </text>
           </g>
         )
-      })}
+      })()}
 
       {/* X-axis labels */}
       {points.map((point, i) => {

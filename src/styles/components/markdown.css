@@ -23,7 +23,7 @@
 }
 
 .markdown-paragraph {
-  font-family: var(--font-inter);
+  font-family: var(--font-nirmala);
   font-size: var(--text-sm);
   color: var(--grey-300);
   margin-bottom: var(--space-1);
@@ -37,7 +37,7 @@
 
 .markdown-list > li {
   position: relative;
-  font-family: var(--font-inter);
+  font-family: var(--font-nirmala);
   font-size: var(--text-sm);
   color: var(--grey-300);
   margin-bottom: 2px;
