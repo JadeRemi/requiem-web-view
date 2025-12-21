@@ -2,9 +2,12 @@ import { useState } from 'react'
 import { Typography, TypographyVariant } from '../components/Typography'
 import { Icon, IconName } from '../components/Icon'
 import { ImageCard } from '../components/ImageCard'
+import { EquipmentViewer } from '../components/EquipmentViewer'
+import { ItemTooltip } from '../components/ItemTooltip'
 import { useToast } from '../components/Toast'
 import { usePageTitle } from '../hooks/usePageTitle'
-import { SHARE_CONFIG } from '../config'
+import { SHARE_CONFIG, SERVER_VERSION } from '../config'
+import { EQUIPMENT_MODELS } from '../mock/equipment'
 
 const SERVER_IP = 'play.requiem.com:25565'
 
@@ -16,6 +19,26 @@ const SCREENSHOTS = [
   {
     src: '/images/screenshots/screen-2.jpg',
     description: 'Battle fearsome bosses with custom abilities and mechanics',
+  },
+]
+
+/** Article blocks with placeholder text */
+const ARTICLE_BLOCKS = [
+  {
+    id: 'block-1',
+    text: 'Discover a vast world of adventure where every corner holds secrets waiting to be uncovered. From ancient ruins to mystical forests, the journey never ends. Explore hidden caves, forgotten temples, and treacherous dungeons that challenge even the most seasoned adventurers.',
+  },
+  {
+    id: 'block-2',
+    text: 'Master unique combat mechanics that reward skill and strategy. Each weapon type offers distinct playstyles, allowing you to craft your perfect warrior. Learn to time your attacks, manage your resources, and exploit enemy weaknesses to emerge victorious from every encounter.',
+  },
+  {
+    id: 'block-3',
+    text: 'Join forces with other players to tackle challenging dungeons and formidable bosses. Cooperation and coordination are the keys to victory. Form lasting alliances, share knowledge, and build a reputation as your guild conquers the most dangerous content the server has to offer.',
+  },
+  {
+    id: 'block-4',
+    text: 'Progress through an intricate class system that lets you specialize and evolve your character. Unlock powerful abilities as you grow stronger. Choose your path wisely — each class offers unique skills and playstyles that fundamentally change how you experience the game.',
   },
 ]
 
@@ -70,6 +93,30 @@ const SOCIAL_LINKS: SocialLink[] = [
     getUrl: (url, text) => `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}&summary=${encodeURIComponent(text)}`,
   },
 ]
+
+/** Article block item card - square, no rotation, tooltip on hover */
+function ArticleItemCard({ itemIndex, tooltipSide }: { itemIndex: number; tooltipSide: 'left' | 'right' }) {
+  const [isHovered, setIsHovered] = useState(false)
+  const item = EQUIPMENT_MODELS[itemIndex]
+  if (!item) return null
+
+  return (
+    <div
+      className="about-article-item"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="about-article-item-viewer">
+        <EquipmentViewer model={item} autoRotate={false} />
+      </div>
+      {isHovered && item.tooltip && (
+        <div className={`about-article-item-tooltip tooltip-${tooltipSide}`}>
+          <ItemTooltip item={item.tooltip} />
+        </div>
+      )}
+    </div>
+  )
+}
 
 export function AboutPage() {
   usePageTitle()
@@ -160,6 +207,30 @@ export function AboutPage() {
             Requiem is a custom RPG server featuring unique gameplay mechanics,
             custom enemies, and an immersive experience.
           </Typography>
+          <Typography variant={TypographyVariant.Body}>
+            Works on versions {SERVER_VERSION.MIN}–{SERVER_VERSION.MAX}.
+          </Typography>
+          <Typography variant={TypographyVariant.Body}>
+            Runs on vanilla client with no mods required. The server uses an automatically
+            downloaded resource pack for custom textures and models.
+          </Typography>
+        </div>
+
+        {/* Article Blocks */}
+        <div className="about-article-section">
+          {ARTICLE_BLOCKS.map((block, index) => (
+            <div
+              key={block.id}
+              className={`about-article-block ${index % 2 === 0 ? 'illustration-left' : 'illustration-right'}`}
+            >
+              <ArticleItemCard itemIndex={index} tooltipSide={index % 2 === 0 ? 'right' : 'left'} />
+              <div className="about-article-text">
+                <Typography variant={TypographyVariant.Body}>
+                  {block.text}
+                </Typography>
+              </div>
+            </div>
+          ))}
         </div>
 
         <div className="screenshot-cards">

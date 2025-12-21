@@ -210,6 +210,10 @@ The project uses CSS custom properties defined in `src/styles/palette.css`:
 - Use grey scale (grey-100 to grey-500) for hover states
 - Use magenta for accent colors when needed
 
+### Layout Rules
+
+- **Prefer flex gap over margins** - When creating space between elements in a flex container, use `gap` property instead of margins on child elements. This keeps spacing logic centralized in the parent container.
+
 ### Fonts
 
 Available font variables:

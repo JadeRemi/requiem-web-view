@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, ReactNode, CSSProperties, useEffect } from 'react'
+import { useState, useRef, useCallback, ReactNode, CSSProperties, useEffect, RefObject } from 'react'
 import { createPortal } from 'react-dom'
 
 export type TooltipPosition = 'top' | 'bottom' | 'left' | 'right'
@@ -12,6 +12,8 @@ interface TooltipProps {
   children: ReactNode
   /** Delay before showing tooltip (ms) */
   delay?: number
+  /** Optional ref to element for positioning (tooltip points here instead of wrapper) */
+  anchorRef?: RefObject<HTMLElement>
 }
 
 /**
@@ -93,7 +95,7 @@ function TooltipPortal({
  *   <button>Animate</button>
  * </Tooltip>
  */
-export function Tooltip({ content, position = 'top', children, delay = 0 }: TooltipProps) {
+export function Tooltip({ content, position = 'top', children, delay = 0, anchorRef }: TooltipProps) {
   const [isVisible, setIsVisible] = useState(false)
   const [triggerRect, setTriggerRect] = useState<DOMRect | null>(null)
   const triggerRef = useRef<HTMLDivElement>(null)
@@ -105,8 +107,10 @@ export function Tooltip({ content, position = 'top', children, delay = 0 }: Tool
     }
 
     const show = () => {
-      if (triggerRef.current) {
-        setTriggerRect(triggerRef.current.getBoundingClientRect())
+      // Use anchorRef for positioning if provided, otherwise use trigger wrapper
+      const targetElement = anchorRef?.current ?? triggerRef.current
+      if (targetElement) {
+        setTriggerRect(targetElement.getBoundingClientRect())
         setIsVisible(true)
       }
     }
@@ -116,7 +120,7 @@ export function Tooltip({ content, position = 'top', children, delay = 0 }: Tool
     } else {
       show()
     }
-  }, [delay])
+  }, [delay, anchorRef])
 
   const hideTooltip = useCallback(() => {
     if (timeoutRef.current) {

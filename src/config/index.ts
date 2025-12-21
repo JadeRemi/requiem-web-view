@@ -39,6 +39,7 @@ export const ROUTES = {
   WIKI_ACHIEVEMENTS: '/wiki/achievements',
   WIKI_TERMS: '/wiki/terms',
   WIKI_CARDS: '/wiki/cards',
+  WIKI_COMMANDS: '/wiki/commands',
   GUILDS: '/guilds',
   CHANGELOG: '/changelog',
   ABOUT: '/about',
@@ -64,6 +65,7 @@ export const PAGE_TITLES: Record<string, string> = {
   [ROUTES.WIKI_ACHIEVEMENTS]: 'Wiki - Achievements',
   [ROUTES.WIKI_TERMS]: 'Wiki - Terms',
   [ROUTES.WIKI_CARDS]: 'Wiki - Cards',
+  [ROUTES.WIKI_COMMANDS]: 'Wiki - Commands',
   [ROUTES.GUILDS]: 'Guilds',
   [ROUTES.CHANGELOG]: 'Changelog',
   [ROUTES.ABOUT]: 'About',
@@ -214,16 +216,8 @@ export const CYCLE_RULES = {
 export const CURRENCY = {
   /** Display name for the currency */
   NAME: 'Qreds',
-  /** Path to coin model */
-  MODEL_PATH: '/models/donate/coin.glb',
   /** Mock user balance */
   MOCK_BALANCE: 350,
-  /** Coin model display settings */
-  COIN_MODEL: {
-    scale: 1,
-    offsetX: 0,
-    offsetY: 0,
-  },
   /** Coin GIF display settings */
   COIN_GIF: {
     scale: 0.7,
@@ -235,4 +229,12 @@ export const CURRENCY = {
 export const STORE = {
   /** Available purchase options (coin amounts) */
   PURCHASE_OPTIONS: [30, 100, 300] as const,
+} as const
+
+/** Server version configuration */
+export const SERVER_VERSION = {
+  /** Minimum supported Minecraft version */
+  MIN: '1.16.5',
+  /** Maximum supported Minecraft version */
+  MAX: '1.21.5',
 } as const

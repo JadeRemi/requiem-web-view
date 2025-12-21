@@ -139,10 +139,17 @@
   color: var(--grey-100);
 }
 
+/* Confirm Area (button + checkbox) */
+.store-confirm-area {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
 /* Confirm Button */
 .store-confirm-btn {
   width: 100%;
-  margin-top: var(--space-4);
   padding: var(--space-3) var(--space-4);
   background: var(--grey-700);
   border: 1px solid var(--grey-600);
@@ -309,4 +316,181 @@
 .store-privilege-dash {
   color: var(--grey-500);
   flex-shrink: 0;
+}
+
+/* Anonymous Checkbox */
+.store-anonymous-check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  cursor: pointer;
+  user-select: none;
+}
+
+.store-anonymous-check input {
+  display: none;
+}
+
+.store-anonymous-checkmark {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  background: var(--grey-800);
+  border: 1px solid var(--grey-600);
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.store-anonymous-check:hover .store-anonymous-checkmark {
+  border-color: var(--grey-500);
+  background: var(--grey-750);
+}
+
+.store-anonymous-check input:checked + .store-anonymous-checkmark {
+  background: var(--grey-600);
+  border-color: var(--grey-500);
+}
+
+.store-anonymous-check input:checked + .store-anonymous-checkmark::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 5px;
+  height: 9px;
+  border: solid var(--grey-100);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.store-anonymous-label {
+  color: var(--grey-400);
+  font-size: var(--text-sm);
+  font-family: var(--font-inter);
+}
+
+.store-anonymous-check:hover .store-anonymous-label {
+  color: var(--grey-300);
+}
+
+/* Last Purchases List */
+.store-purchases-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.store-purchase-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--grey-800);
+}
+
+.store-purchase-row:last-child {
+  border-bottom: none;
+}
+
+.store-purchase-user {
+  flex: 1;
+  min-width: 0;
+}
+
+.store-purchase-user-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  text-decoration: none;
+  color: inherit;
+}
+
+.store-purchase-user-link:hover .store-purchase-username {
+  text-decoration: underline;
+}
+
+.store-purchase-username {
+  color: var(--grey-200);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.store-purchase-anonymous {
+  color: var(--grey-500);
+  font-size: var(--text-sm);
+  font-style: italic;
+}
+
+.store-purchase-item {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  color: var(--grey-300);
+  font-size: var(--text-sm);
+}
+
+.store-purchase-coins {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: var(--font-orbitron);
+}
+
+.store-purchase-time {
+  color: var(--grey-500);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+}
+
+/* Loading skeleton */
+.store-purchases-loading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.store-purchase-row-skeleton {
+  height: 36px;
+  background: linear-gradient(
+    90deg,
+    var(--grey-800) 25%,
+    var(--grey-750) 50%,
+    var(--grey-800) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s infinite;
+  border-radius: var(--radius-sm);
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Load more button */
+.store-load-more {
+  width: 100%;
+  margin-top: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  background: var(--grey-800);
+  border: 1px solid var(--grey-700);
+  border-radius: var(--radius-sm);
+  color: var(--grey-400);
+  font-family: var(--font-inter);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.store-load-more:hover {
+  background: var(--grey-750);
+  border-color: var(--grey-600);
+  color: var(--grey-200);
 }

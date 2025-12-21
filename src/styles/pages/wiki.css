@@ -184,9 +184,16 @@
 /* Wiki Sections */
 .wiki-section {
   margin-bottom: var(--space-10);
+  padding-bottom: var(--space-10);
+  border-bottom: 1px solid var(--grey-800);
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+}
+
+.wiki-section:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
 /* Wiki section link (clickable headers) */
@@ -798,6 +805,55 @@
 }
 
 .term-description {
+  color: var(--grey-400);
+  line-height: 1.5;
+}
+
+/* Wiki Commands Table */
+.wiki-commands-page {
+  overflow-y: auto;
+}
+
+.commands-table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.commands-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--grey-900);
+  border: 1px solid var(--grey-700);
+  border-radius: var(--radius-md);
+}
+
+.commands-table td {
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--font-inter);
+  font-size: var(--text-sm);
+  color: var(--grey-300);
+  border-bottom: 1px solid var(--grey-800);
+  vertical-align: top;
+}
+
+.commands-table tbody tr:hover {
+  background: var(--grey-850);
+}
+
+.commands-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.command-name {
+  font-weight: 500;
+  color: var(--grey-100);
+  white-space: nowrap;
+  width: 220px;
+  font-family: var(--font-mono);
+}
+
+.command-description {
   color: var(--grey-400);
   line-height: 1.5;
 }
