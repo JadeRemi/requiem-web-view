@@ -7,7 +7,7 @@ import { ItemTooltipData } from '../types/item'
 export const MOCK_DRAGON_HELMET: ItemTooltipData = {
   name: 'Godly Strong Dragon Helmet',
   nameColor: 'gold',
-  rarity: 'legendary',
+  rarity: 5,
   type: 'helmet',
   lines: [
     // Strength stat
@@ -110,7 +110,7 @@ export const MOCK_DRAGON_HELMET: ItemTooltipData = {
 export const MOCK_SHADOW_DAGGER: ItemTooltipData = {
   name: 'Shadow Assassin Dagger',
   nameColor: 'dark_purple',
-  rarity: 'epic',
+  rarity: 4,
   type: 'sword',
   lines: [
     [
@@ -148,7 +148,7 @@ export const MOCK_SHADOW_DAGGER: ItemTooltipData = {
 export const MOCK_HEALING_POTION: ItemTooltipData = {
   name: 'Splash Potion of Healing III',
   nameColor: 'light_purple',
-  rarity: 'rare',
+  rarity: 3,
   type: 'consumable',
   lines: [
     [

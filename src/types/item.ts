@@ -32,8 +32,8 @@ export interface TextSegment {
 /** A single line in an item tooltip */
 export type TooltipLine = TextSegment[]
 
-/** Item rarity levels */
-export type ItemRarity = 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary' | 'mythic'
+/** Item rarity levels (1-5 stars) */
+export type ItemRarity = 1 | 2 | 3 | 4 | 5
 
 /** Item type (armor slot, weapon, etc.) */
 export type ItemType =
@@ -82,14 +82,11 @@ export const MC_COLOR_CLASS_MAP: Record<MCColor, string> = {
   white: 'mc-white',
 }
 
-/** Map rarity to display text and color */
-export const RARITY_CONFIG: Record<ItemRarity, { label: string; color: MCColor }> = {
-  common: { label: 'COMMON', color: 'white' },
-  uncommon: { label: 'UNCOMMON', color: 'yellow' },
-  rare: { label: 'RARE', color: 'aqua' },
-  epic: { label: 'EPIC', color: 'dark_purple' },
-  legendary: { label: 'LEGENDARY', color: 'gold' },
-  mythic: { label: 'MYTHIC', color: 'light_purple' },
+/** Generate star rating string from rarity (1-5) */
+export function getRarityStars(rarity: ItemRarity): string {
+  const filled = '★'
+  const empty = '☆'
+  return filled.repeat(rarity) + empty.repeat(5 - rarity)
 }
 
 /** Map item type to display text */

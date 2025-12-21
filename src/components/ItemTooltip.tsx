@@ -1,4 +1,4 @@
-import { ItemTooltipData, MC_COLOR_CLASS_MAP, RARITY_CONFIG, ITEM_TYPE_LABELS, TextSegment } from '../types/item'
+import { ItemTooltipData, MC_COLOR_CLASS_MAP, getRarityStars, TextSegment } from '../types/item'
 
 interface ItemTooltipProps {
   item: ItemTooltipData
@@ -26,13 +26,11 @@ function TextSegmentSpan({ segment }: { segment: TextSegment }) {
  * - Pixel-style double border (outer black, inner purple gradient)
  * - Minecraftia font
  * - Color-coded text segments
- * - Proper text shadows
+ * - Star-based rarity display
  */
 export function ItemTooltip({ item, className = '' }: ItemTooltipProps) {
-  const rarityConfig = RARITY_CONFIG[item.rarity]
-  const typeLabel = ITEM_TYPE_LABELS[item.type]
   const nameColorClass = MC_COLOR_CLASS_MAP[item.nameColor]
-  const rarityColorClass = MC_COLOR_CLASS_MAP[rarityConfig.color]
+  const rarityStars = getRarityStars(item.rarity)
 
   return (
     <div className={`mc-tooltip ${className}`}>
@@ -57,6 +55,12 @@ export function ItemTooltip({ item, className = '' }: ItemTooltipProps) {
             {item.name}
           </p>
 
+          {/* Rarity stars - first line after title */}
+          <p className="mc-tooltip-rarity">
+            <span className="mc-gray">Rarity: </span>
+            <span className="mc-gold">{rarityStars}</span>
+          </p>
+
           {/* Stats and description lines */}
           {item.lines.map((line, lineIndex) => (
             <p key={lineIndex} className="mc-tooltip-line">
@@ -70,11 +74,6 @@ export function ItemTooltip({ item, className = '' }: ItemTooltipProps) {
               )}
             </p>
           ))}
-
-          {/* Rarity + Type line */}
-          <p className={`mc-tooltip-rarity ${rarityColorClass} mc-bold`}>
-            {rarityConfig.label} {typeLabel}
-          </p>
         </div>
       </div>
     </div>

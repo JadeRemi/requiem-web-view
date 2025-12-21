@@ -9,6 +9,8 @@ import { EQUIPMENT_MODELS, EquipmentModel } from '../mock/equipment'
 import { getPreviewClasses, PlayerClass } from '../mock/classes'
 import { GAME_ATTRIBUTES } from '../mock/attributes'
 import { ACHIEVEMENTS } from '../mock/achievements'
+import { getRandomCards } from '../mock/cards'
+import { CardItem } from './WikiCardsPage'
 import { useSettingsStore } from '../stores/settingsStore'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { Icon } from '../components/Icon'
@@ -85,6 +87,7 @@ function ClassCard({ playerClass }: ClassCardProps) {
   )
 }
 
+
 // Get enemy at cyclic index
 function getEnemy(index: number): EnemyModel {
   const len = ENEMY_MODELS.length
@@ -125,6 +128,9 @@ export function WikiPage() {
     const shuffled = [...ACHIEVEMENTS].sort(() => Math.random() - 0.5)
     return shuffled.slice(0, 5)
   }, [])
+
+  // Random cards for preview
+  const previewCards = useMemo(() => getRandomCards(6), [])
 
   const scroll = useCallback((direction: 'left' | 'right') => {
     if (isAnimating) return
@@ -208,6 +214,9 @@ export function WikiPage() {
           <button className="wiki-toc-link" onClick={() => scrollToSection('terms')}>
             Terms
           </button>
+          <button className="wiki-toc-link" onClick={() => scrollToSection('cards')}>
+            Cards
+          </button>
         </nav>
       </div>
 
@@ -248,6 +257,10 @@ export function WikiPage() {
             <Icon name="chevron-right" size={24} />
           </button>
         </div>
+        <Link to={ROUTES.WIKI_ENEMIES} className="wiki-view-all-link">
+          <Typography variant={TypographyVariant.Body}>View all enemies</Typography>
+          <Icon name="chevron-right" size={16} />
+        </Link>
       </div>
 
       {/* Items Section */}
@@ -260,6 +273,10 @@ export function WikiPage() {
             <ItemCard key={item.id} item={item} />
           ))}
         </div>
+        <Link to={ROUTES.WIKI_ITEMS} className="wiki-view-all-link">
+          <Typography variant={TypographyVariant.Body}>View all items</Typography>
+          <Icon name="chevron-right" size={16} />
+        </Link>
       </div>
 
       {/* Classes Section */}
@@ -329,6 +346,22 @@ export function WikiPage() {
         <Typography variant={TypographyVariant.H2}>Terms</Typography>
         <Link to={ROUTES.WIKI_TERMS} className="wiki-view-all-link">
           <Typography variant={TypographyVariant.Body}>View all terms</Typography>
+          <Icon name="chevron-right" size={16} />
+        </Link>
+      </div>
+
+      {/* Cards Section */}
+      <div id="cards" className="wiki-section">
+        <Link to={ROUTES.WIKI_CARDS} className="wiki-section-link">
+          <Typography variant={TypographyVariant.H2}>Cards</Typography>
+        </Link>
+        <div className="wiki-cards-preview-row">
+          {previewCards.map((card, index) => (
+            <CardItem key={card.id} card={card} index={index} small />
+          ))}
+        </div>
+        <Link to={ROUTES.WIKI_CARDS} className="wiki-view-all-link">
+          <Typography variant={TypographyVariant.Body}>View all cards</Typography>
           <Icon name="chevron-right" size={16} />
         </Link>
       </div>
