@@ -40,12 +40,15 @@ interface EquipmentViewerProps {
   model: EquipmentModel
   autoRotate?: boolean
   onToggleRotate?: () => void
+  /** Disable all mouse controls (rotate, zoom, pan) */
+  disableControls?: boolean
 }
 
-export function EquipmentViewer({ 
-  model, 
+export function EquipmentViewer({
+  model,
   autoRotate = true,
   onToggleRotate,
+  disableControls = false,
 }: EquipmentViewerProps) {
   return (
     <div className="equipment-viewer">
@@ -56,7 +59,8 @@ export function EquipmentViewer({
             enablePan={false}
             minDistance={2}
             maxDistance={10}
-            enableRotate={true}
+            enableRotate={!disableControls}
+            enableZoom={!disableControls}
           />
           <ambientLight intensity={0.6} />
           <directionalLight position={[5, 10, 5]} intensity={1} />

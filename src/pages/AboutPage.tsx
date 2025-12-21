@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Typography, TypographyVariant } from '../components/Typography'
 import { Icon, IconName } from '../components/Icon'
 import { ImageCard } from '../components/ImageCard'
@@ -97,20 +97,48 @@ const SOCIAL_LINKS: SocialLink[] = [
 /** Article block item card - square, no rotation, tooltip on hover */
 function ArticleItemCard({ itemIndex, tooltipSide }: { itemIndex: number; tooltipSide: 'left' | 'right' }) {
   const [isHovered, setIsHovered] = useState(false)
+  const itemRef = useRef<HTMLDivElement>(null)
+  const [tooltipStyle, setTooltipStyle] = useState<React.CSSProperties>({})
   const item = EQUIPMENT_MODELS[itemIndex]
+
+  // Calculate tooltip position on hover
+  const handleMouseEnter = () => {
+    setIsHovered(true)
+    if (itemRef.current) {
+      const rect = itemRef.current.getBoundingClientRect()
+      const gap = 8
+      if (tooltipSide === 'left') {
+        setTooltipStyle({
+          position: 'fixed',
+          top: rect.top + rect.height / 2,
+          right: window.innerWidth - rect.left + gap,
+          transform: 'translateY(-50%)',
+        })
+      } else {
+        setTooltipStyle({
+          position: 'fixed',
+          top: rect.top + rect.height / 2,
+          left: rect.right + gap,
+          transform: 'translateY(-50%)',
+        })
+      }
+    }
+  }
+
   if (!item) return null
 
   return (
     <div
+      ref={itemRef}
       className="about-article-item"
-      onMouseEnter={() => setIsHovered(true)}
+      onMouseEnter={handleMouseEnter}
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="about-article-item-viewer">
-        <EquipmentViewer model={item} autoRotate={false} />
+        <EquipmentViewer model={item} autoRotate={false} disableControls />
       </div>
       {isHovered && item.tooltip && (
-        <div className={`about-article-item-tooltip tooltip-${tooltipSide}`}>
+        <div className="about-article-item-tooltip" style={tooltipStyle}>
           <ItemTooltip item={item.tooltip} />
         </div>
       )}
