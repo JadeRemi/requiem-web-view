@@ -64,20 +64,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const newUser: DiscordAuth = { type: 'discord', discordId, discordName }
     setUser(newUser)
     localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(newUser))
-    window.location.reload()
+    // Use base URL for proper reload on GitHub Pages
+    window.location.href = import.meta.env.BASE_URL
   }, [])
 
   const loginWithGame = useCallback((gameUuid: string, gameName: string) => {
     const newUser: GameAuth = { type: 'game', gameUuid, gameName }
     setUser(newUser)
     localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(newUser))
-    window.location.reload()
+    // Use base URL for proper reload on GitHub Pages
+    window.location.href = import.meta.env.BASE_URL
   }, [])
 
   const logout = useCallback(() => {
     setUser(null)
     localStorage.removeItem(AUTH_STORAGE_KEY)
-    window.location.reload()
+    // Use base URL for proper reload on GitHub Pages
+    window.location.href = import.meta.env.BASE_URL
   }, [])
 
   return (
