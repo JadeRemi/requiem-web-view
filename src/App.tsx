@@ -15,6 +15,7 @@ import { WikiCommandsPage } from './pages/WikiCommandsPage'
 import { GuildsPage } from './pages/GuildsPage'
 import { ChangelogPage } from './pages/ChangelogPage'
 import { AboutPage } from './pages/AboutPage'
+import { FaqPage } from './pages/FaqPage'
 import { LoginPage } from './pages/LoginPage'
 import { SettingsPage } from './pages/SettingsPage'
 import { StorePage } from './pages/StorePage'
@@ -57,6 +58,7 @@ function App() {
                   <Route path={ROUTES.GUILDS} element={<GuildsPage />} />
                   <Route path={ROUTES.CHANGELOG} element={<ChangelogPage />} />
                   <Route path={ROUTES.ABOUT} element={<AboutPage />} />
+                  <Route path={ROUTES.FAQ} element={<FaqPage />} />
                   <Route path={ROUTES.LOGIN} element={<LoginPage />} />
                   <Route path={ROUTES.SETTINGS} element={<SettingsPage />} />
                   <Route path={ROUTES.STORE} element={<StorePage />} />

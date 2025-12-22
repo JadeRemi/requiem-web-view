@@ -20,6 +20,7 @@ const SIDEBAR_ITEMS: SidebarItem[] = [
   { path: ROUTES.STORE, label: 'Store', icon: 'gem' },
   { path: ROUTES.CHANGELOG, label: 'Changelog', icon: 'scroll' },
   { path: ROUTES.ABOUT, label: 'About', icon: 'info' },
+  { path: ROUTES.FAQ, label: 'FAQ', icon: 'help-circle' },
   { path: ROUTES.SETTINGS, label: 'Settings', icon: 'settings' },
 ]
 
