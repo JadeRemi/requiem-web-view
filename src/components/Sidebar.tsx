@@ -13,14 +13,15 @@ interface SidebarItem {
 /** Pages shown in sidebar - add new pages here */
 const SIDEBAR_ITEMS: SidebarItem[] = [
   { path: ROUTES.HOME, label: 'Home', icon: 'home' },
+  { path: ROUTES.CHANGELOG, label: 'Changelog', icon: 'scroll' },
+  { path: ROUTES.ABOUT, label: 'About', icon: 'search' },
   { path: ROUTES.LADDER, label: 'Ladder', icon: 'trophy' },
-  { path: ROUTES.GUILDS, label: 'Guilds', icon: 'users' },
   { path: ROUTES.MAP, label: 'World Map', icon: 'map' },
+  { path: ROUTES.GUILDS, label: 'Guilds', icon: 'users' },
   { path: ROUTES.WIKI, label: 'Wiki', icon: 'book' },
   { path: ROUTES.STORE, label: 'Store', icon: 'gem' },
-  { path: ROUTES.CHANGELOG, label: 'Changelog', icon: 'scroll' },
-  { path: ROUTES.ABOUT, label: 'About', icon: 'info' },
   { path: ROUTES.FAQ, label: 'FAQ', icon: 'help-circle' },
+  { path: ROUTES.JOIN_TEAM, label: 'Join Team', icon: 'briefcase' },
   { path: ROUTES.SETTINGS, label: 'Settings', icon: 'settings' },
 ]
 
@@ -39,6 +40,7 @@ const WIKI_SUBPAGES = [
   ROUTES.WIKI_ACHIEVEMENTS,
   ROUTES.WIKI_TERMS,
   ROUTES.WIKI_CARDS,
+  ROUTES.WIKI_RECIPES,
 ]
 
 export function Sidebar() {

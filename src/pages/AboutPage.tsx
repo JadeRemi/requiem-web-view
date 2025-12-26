@@ -23,6 +23,20 @@ const SCREENSHOTS = [
   },
 ]
 
+/**
+ * Server Statistics
+ * - Cycles: ~3 days per cycle, running since 2022 (~365 cycles)
+ * - Figurines: Player sessions (playable class instances)
+ * - Deaths: Less than figurines (max 1 death per figurine before deletion)
+ * - Gold: Scarce resource
+ */
+const SERVER_STATS = [
+  { id: 'gold', label: 'Total Gold', value: 847_293 },
+  { id: 'deaths', label: 'Total Deaths', value: 12_847 },
+  { id: 'figurines', label: 'Figurines Activated', value: 18_432 },
+  { id: 'cycles', label: 'Total Cycles', value: 365 },
+]
+
 /** Article blocks with placeholder text */
 const ARTICLE_BLOCKS = [
   {
@@ -258,6 +272,16 @@ export function AboutPage() {
                   {block.text}
                 </Typography>
               </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Server Statistics */}
+        <div className="about-stats">
+          {SERVER_STATS.map((stat) => (
+            <div key={stat.id} className="about-stat-card">
+              <span className="about-stat-value">{stat.value.toLocaleString()}</span>
+              <span className="about-stat-label">{stat.label}</span>
             </div>
           ))}
         </div>

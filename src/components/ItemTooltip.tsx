@@ -61,6 +61,14 @@ export function ItemTooltip({ item, className = '' }: ItemTooltipProps) {
             <span className="mc-gold">{rarityStars}</span>
           </p>
 
+          {/* Type - second line after title */}
+          {item.type && (
+            <p className="mc-tooltip-type">
+              <span className="mc-gray">Type: </span>
+              <span className="mc-white">{item.type}</span>
+            </p>
+          )}
+
           {/* Stats and description lines */}
           {item.lines.map((line, lineIndex) => (
             <p key={lineIndex} className="mc-tooltip-line">

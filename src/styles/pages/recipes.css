@@ -1,0 +1,111 @@
+/**
+ * Wiki Recipes Page Styles
+ */
+
+.recipes-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: 600px;
+}
+
+.recipe-card {
+  position: relative;
+  background: var(--grey-850);
+  border: 1px solid var(--grey-700);
+  border-radius: var(--radius-lg);
+  overflow: visible;
+}
+
+.recipe-header {
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--grey-700);
+}
+
+.recipe-header h3,
+.recipe-header * {
+  font-family: var(--font-orbitron);
+  color: var(--grey-100) !important;
+  margin: 0;
+}
+
+.recipe-content {
+  position: relative;
+  height: 200px;
+}
+
+.recipe-canvas-wrapper {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.recipe-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  /* Align to left instead of center so positions are predictable */
+  justify-content: flex-start;
+  gap: var(--space-4);
+  /* Left padding to position grid where ThreeJS expects it */
+  padding: var(--space-4);
+  padding-left: 80px;
+}
+
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 52px);
+  grid-template-rows: repeat(3, 52px);
+  gap: 4px;
+}
+
+.recipe-slot {
+  width: 52px;
+  height: 52px;
+  background: transparent;
+  border: 1px solid var(--grey-600);
+  border-radius: var(--radius-sm);
+  cursor: default;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.recipe-slot-filled {
+  cursor: pointer;
+}
+
+.recipe-slot-filled:hover {
+  border-color: var(--magenta-400);
+  background: rgba(248, 127, 255, 0.1);
+}
+
+.recipe-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--grey-500);
+  padding: 0 var(--space-2);
+}
+
+.recipe-result {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.recipe-result .recipe-slot {
+  width: 64px;
+  height: 64px;
+  border-color: var(--grey-500);
+  border-width: 2px;
+}
+
+.recipe-result .recipe-slot-filled:hover {
+  border-color: var(--gold);
+  background: rgba(255, 215, 0, 0.1);
+}
+
+.recipe-tooltip {
+  z-index: 1000;
+  pointer-events: none;
+}
