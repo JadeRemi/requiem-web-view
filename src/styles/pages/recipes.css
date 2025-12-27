@@ -6,7 +6,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
-  max-width: 600px;
+  width: 600px;
+  margin: 0 auto;
 }
 
 .recipe-card {
@@ -75,8 +76,8 @@
 }
 
 .recipe-slot-filled:hover {
-  border-color: var(--magenta-400);
-  background: rgba(248, 127, 255, 0.1);
+  border-color: var(--gold);
+  background: rgba(255, 215, 0, 0.1);
 }
 
 .recipe-arrow {

@@ -313,6 +313,12 @@ export function AboutPage() {
           ))}
         </div>
 
+        <div className="about-gallery-link">
+          <Link to={ROUTES.GALLERY} className="about-large-link">
+            <Typography variant={TypographyVariant.H3}>Gallery</Typography>
+          </Link>
+        </div>
+
         {/* Player Reviews */}
         <div className="about-reviews">
           <Typography variant={TypographyVariant.H3} className="about-reviews-title">

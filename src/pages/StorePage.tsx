@@ -211,8 +211,8 @@ export function StorePage() {
             </label>
           </div>
 
-          {showConfirmButton && (
-            <div className="store-confirm-area">
+          <div className={`store-confirm-area ${showConfirmButton ? 'store-confirm-area-open' : ''}`}>
+            <div className="store-confirm-area-content">
               <button className="store-confirm-btn">
                 Confirm Purchase
               </button>
@@ -233,7 +233,7 @@ export function StorePage() {
                 </label>
               </Tooltip>
             </div>
-          )}
+          </div>
         </section>
 
         {/* Privileges */}

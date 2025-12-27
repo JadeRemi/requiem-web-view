@@ -23,6 +23,7 @@ import { FaqPage } from './pages/FaqPage'
 import { LoginPage } from './pages/LoginPage'
 import { SettingsPage } from './pages/SettingsPage'
 import { StorePage } from './pages/StorePage'
+import { GalleryPage } from './pages/GalleryPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import ErrorBoundary from './components/ErrorBoundary'
 import { ToastProvider } from './components/Toast'
@@ -70,6 +71,7 @@ function App() {
                   <Route path={ROUTES.LOGIN} element={<LoginPage />} />
                   <Route path={ROUTES.SETTINGS} element={<SettingsPage />} />
                   <Route path={ROUTES.STORE} element={<StorePage />} />
+                  <Route path={ROUTES.GALLERY} element={<GalleryPage />} />
                   <Route path="*" element={<NotFoundPage />} />
                 </Routes>
               </main>

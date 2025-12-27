@@ -224,7 +224,6 @@ export function WikiRecipesPage() {
       <div className="wiki-header" />
 
       <div className="wiki-section">
-        <Typography variant={TypographyVariant.H2}>Recipes</Typography>
         <div className="recipes-list">
           {RECIPES.map((recipe) => (
             <RecipeCard key={recipe.id} recipe={recipe} />

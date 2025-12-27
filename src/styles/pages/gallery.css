@@ -1,0 +1,40 @@
+/**
+ * Gallery Page Styles
+ */
+
+.gallery-page {
+  padding: var(--space-8);
+  padding-top: calc(var(--space-8) + 60px);
+  padding-bottom: var(--space-16);
+  height: 100%;
+  overflow-y: auto;
+}
+
+.gallery-content {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-6);
+}
+
+.gallery-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.gallery-item-meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: 0 var(--space-2);
+}
+
+.gallery-submitter {
+  color: var(--grey-300);
+  font-weight: 500;
+}

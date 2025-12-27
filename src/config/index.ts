@@ -51,6 +51,7 @@ export const ROUTES = {
   LOGIN: '/login',
   SETTINGS: '/settings',
   STORE: '/store',
+  GALLERY: '/gallery',
 } as const
 
 /** Site name for page titles */
@@ -82,6 +83,7 @@ export const PAGE_TITLES: Record<string, string> = {
   [ROUTES.LOGIN]: 'Login',
   [ROUTES.SETTINGS]: 'Settings',
   [ROUTES.STORE]: 'Store',
+  [ROUTES.GALLERY]: 'Gallery',
 }
 
 /** Skin viewer default settings */

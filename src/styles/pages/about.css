@@ -417,3 +417,9 @@
 .about-large-link:hover h3 {
   color: var(--grey-300);
 }
+
+/* Gallery Link under Screenshots */
+.about-gallery-link {
+  display: flex;
+  justify-content: center;
+}

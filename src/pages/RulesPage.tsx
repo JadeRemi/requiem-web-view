@@ -7,6 +7,13 @@ export function RulesPage() {
 
   return (
     <div className="rules-page">
+      <div className="rules-caption">
+        <Typography variant={TypographyVariant.BodySmall} color="var(--grey-600)">
+          Server rules are an addition to EULA and legal laws and do not permit anything prohibited by them.
+          <br />
+          Otherwise, most activities are allowed.
+        </Typography>
+      </div>
       <div className="rules-table-container">
           <table className="rules-table">
             <tbody>

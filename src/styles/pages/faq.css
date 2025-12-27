@@ -80,12 +80,28 @@
 
 .faq-item-open .faq-chevron {
   color: var(--grey-200);
+  transform: rotate(180deg);
 }
 
 .faq-answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--transition-normal);
+  border-top: 1px solid transparent;
+}
+
+.faq-answer-open {
+  grid-template-rows: 1fr;
+  border-top-color: var(--grey-700);
+}
+
+.faq-answer-content {
+  overflow: hidden;
+}
+
+.faq-answer-open .faq-answer-content {
   padding: var(--space-3) var(--space-5) var(--space-5);
   line-height: 1.7;
-  border-top: 1px solid var(--grey-700);
 }
 
 .faq-answer p {

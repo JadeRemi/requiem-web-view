@@ -113,18 +113,18 @@ export function FaqPage() {
                     {item.question}
                   </Typography>
                   <Icon
-                    name={isOpen ? 'chevron-up' : 'chevron-down'}
+                    name="chevron-down"
                     size={20}
                     className="faq-chevron"
                   />
                 </button>
-                {isOpen && (
-                  <div className="faq-answer">
+                <div className={`faq-answer ${isOpen ? 'faq-answer-open' : ''}`}>
+                  <div className="faq-answer-content">
                     <Typography variant={TypographyVariant.BodySmall} color="var(--color-text-secondary)">
                       {item.answer}
                     </Typography>
                   </div>
-                )}
+                </div>
               </div>
             )
           })}
