@@ -8,7 +8,7 @@ import { Tooltip } from './Tooltip'
 import type { SkinViewerProps, SkinViewerConfig } from '../types/skin'
 import { DEFAULT_CONFIG } from '../types/skin'
 import { decodeSkinHash } from '../utils/skinHash'
-import { DEFAULT_SKIN_HASH } from '../config'
+import { DEFAULT_SKIN_HASH, DEFAULT_SKIN_IMAGE } from '../config'
 
 interface ControlPanelProps {
   config: SkinViewerConfig
@@ -157,52 +157,75 @@ export function SkinViewer({
   const [skinTexture, setSkinTexture] = useState<Texture | null>(null)
   const [capeTexture, setCapeTexture] = useState<Texture | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  // Track if remote skin has loaded to prevent default skin from overriding it
+  const remoteLoadedRef = useRef(false)
 
   // Determine final skin URL - priority: skinUrl prop > skinHash prop > default hash
   const finalSkinUrl = skinUrl ?? getSkinUrlFromHash(skinHash ?? DEFAULT_SKIN_HASH)
   const finalCapeUrl = capeUrl ?? (skinHash ? getCapeUrlFromHash(skinHash) : null)
 
-  // Load skin texture with lazy loading
-  useEffect(() => {
-    if (!finalSkinUrl) {
-      setIsLoading(false)
-      return
-    }
+  // Helper to configure texture settings
+  const configureTexture = useCallback((texture: Texture) => {
+    texture.magFilter = NearestFilter
+    texture.minFilter = NearestFilter
+    texture.colorSpace = SRGBColorSpace
+    texture.needsUpdate = true
+  }, [])
 
-    setIsLoading(true)
+  // Load default skin immediately on mount, then load remote skin in parallel
+  useEffect(() => {
     const loader = new TextureLoader()
-    
-    // Create an image to handle CORS and lazy loading
-    const img = new Image()
-    img.crossOrigin = 'anonymous'
-    
-    img.onload = () => {
-      loader.load(
-        finalSkinUrl,
-        (texture) => {
-          texture.magFilter = NearestFilter
-          texture.minFilter = NearestFilter
-          texture.colorSpace = SRGBColorSpace
-          texture.needsUpdate = true
-          setSkinTexture(texture)
-          setIsLoading(false)
-        },
-        undefined,
-        (error) => {
-          console.error('Failed to load skin texture:', error)
-          setIsLoading(false)
+    remoteLoadedRef.current = false
+    setIsLoading(true)
+
+    // Load default skin first (local, fast)
+    loader.load(
+      DEFAULT_SKIN_IMAGE,
+      (defaultTexture) => {
+        configureTexture(defaultTexture)
+        // Only set default if remote hasn't loaded yet
+        if (!remoteLoadedRef.current) {
+          setSkinTexture(defaultTexture)
         }
-      )
-    }
-    
-    img.onerror = () => {
-      console.error('Failed to load skin image')
+      },
+      undefined,
+      (error) => {
+        console.error('Failed to load default skin texture:', error)
+      }
+    )
+
+    // Load remote skin in parallel (may take several seconds)
+    if (finalSkinUrl) {
+      const img = new Image()
+      img.crossOrigin = 'anonymous'
+
+      img.onload = () => {
+        loader.load(
+          finalSkinUrl,
+          (remoteTexture) => {
+            configureTexture(remoteTexture)
+            remoteLoadedRef.current = true
+            setSkinTexture(remoteTexture)
+            setIsLoading(false)
+          },
+          undefined,
+          (error) => {
+            console.error('Failed to load remote skin texture:', error)
+            setIsLoading(false)
+          }
+        )
+      }
+
+      img.onerror = () => {
+        console.error('Failed to load remote skin image')
+        setIsLoading(false)
+      }
+
+      img.src = finalSkinUrl
+    } else {
       setIsLoading(false)
     }
-    
-    // Start loading
-    img.src = finalSkinUrl
-  }, [finalSkinUrl])
+  }, [finalSkinUrl, configureTexture])
 
   // Load cape texture
   useEffect(() => {

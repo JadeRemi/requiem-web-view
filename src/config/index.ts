@@ -86,6 +86,9 @@ export const PAGE_TITLES: Record<string, string> = {
   [ROUTES.GALLERY]: 'Gallery',
 }
 
+/** Default fallback skin image path (shown while remote skin loads) */
+export const DEFAULT_SKIN_IMAGE = '/images/default-skin.png'
+
 /** Skin viewer default settings */
 export const SKIN_VIEWER_DEFAULTS = {
   /** Default animation state */

@@ -157,3 +157,30 @@ a.chat-nickname-link:hover {
   text-align: center;
   padding: var(--space-2) 0;
 }
+
+/* Game events (deaths, kills) */
+.chat-event {
+  font-family: var(--font-nirmala);
+  font-size: var(--text-sm);
+  line-height: 1.4;
+  margin-bottom: var(--space-1);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  transition: opacity 2s linear;
+}
+
+.chat-event:first-child {
+  margin-bottom: 0;
+}
+
+.chat-event-text {
+  color: var(--grey-500);
+}
+
+.chat-event-death .chat-nickname {
+  color: var(--grey-400);
+}
+
+.chat-event-kill .chat-nickname {
+  color: var(--grey-300);
+}
