@@ -24,6 +24,7 @@ import { LoginPage } from './pages/LoginPage'
 import { SettingsPage } from './pages/SettingsPage'
 import { StorePage } from './pages/StorePage'
 import { GalleryPage } from './pages/GalleryPage'
+import { EventsPage } from './pages/EventsPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import ErrorBoundary from './components/ErrorBoundary'
 import { ToastProvider } from './components/Toast'
@@ -35,6 +36,7 @@ import { useSettingsStore } from './stores/settingsStore'
 
 function App() {
   const customCursor = useSettingsStore((state) => state.customCursor)
+  const circuitBackground = useSettingsStore((state) => state.circuitBackground)
 
   return (
     <ErrorBoundary>
@@ -43,6 +45,7 @@ function App() {
           {/* basename comes from Vite's base config - '/' in dev, '/requiem-web-view/' in prod */}
           <BrowserRouter basename={import.meta.env.BASE_URL}>
             <div className={`app-wrapper ${customCursor ? 'custom-cursor' : ''}`}>
+              {circuitBackground && <div className="circuit-pattern-overlay" />}
               <Sidebar />
               <Header />
               <main className="main-content">
@@ -72,6 +75,7 @@ function App() {
                   <Route path={ROUTES.SETTINGS} element={<SettingsPage />} />
                   <Route path={ROUTES.STORE} element={<StorePage />} />
                   <Route path={ROUTES.GALLERY} element={<GalleryPage />} />
+                  <Route path={ROUTES.EVENTS} element={<EventsPage />} />
                   <Route path="*" element={<NotFoundPage />} />
                 </Routes>
               </main>

@@ -18,6 +18,8 @@ export function SettingsPage() {
     setCustomCursor,
     isometricHeaderAvatar,
     setIsometricHeaderAvatar,
+    circuitBackground,
+    setCircuitBackground,
     playerAnimate,
     setPlayerAnimate,
     playerRotate,
@@ -79,6 +81,27 @@ export function SettingsPage() {
                   type="checkbox"
                   checked={isometricHeaderAvatar}
                   onChange={(e) => setIsometricHeaderAvatar(e.target.checked)}
+                />
+                <span className="settings-toggle-slider" />
+              </label>
+            </Tooltip>
+          </div>
+
+          <div className="settings-option">
+            <div className="settings-option-info">
+              <Typography variant={TypographyVariant.Label} className="settings-option-label">
+                Circuit Background
+              </Typography>
+              <Typography variant={TypographyVariant.BodySmall} color="var(--grey-500)" className="settings-option-description">
+                Show circuit pattern on the background
+              </Typography>
+            </div>
+            <Tooltip content={`Currently: ${circuitBackground ? 'On' : 'Off'}`} position="top">
+              <label className="settings-toggle">
+                <input
+                  type="checkbox"
+                  checked={circuitBackground}
+                  onChange={(e) => setCircuitBackground(e.target.checked)}
                 />
                 <span className="settings-toggle-slider" />
               </label>

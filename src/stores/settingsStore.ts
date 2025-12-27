@@ -17,6 +17,8 @@ interface AppSettings {
   customCursor: boolean
   /** Show isometric 3D head in header instead of 2D face */
   isometricHeaderAvatar: boolean
+  /** Show circuit pattern background */
+  circuitBackground: boolean
 }
 
 interface SettingsState extends ViewerSettings, AppSettings {
@@ -32,6 +34,8 @@ interface SettingsState extends ViewerSettings, AppSettings {
   setCustomCursor: (value: boolean) => void
   /** Toggle isometric header avatar */
   setIsometricHeaderAvatar: (value: boolean) => void
+  /** Toggle circuit background */
+  setCircuitBackground: (value: boolean) => void
 }
 
 /**
@@ -51,6 +55,7 @@ export const useSettingsStore = create<SettingsState>()(
       // Default values - App settings
       customCursor: false,
       isometricHeaderAvatar: true,
+      circuitBackground: false,
 
       setPlayerAnimate: (value) => set({ playerAnimate: value }),
       setPlayerRotate: (value) => set({ playerRotate: value }),
@@ -58,6 +63,7 @@ export const useSettingsStore = create<SettingsState>()(
       setEnemyRotate: (value) => set({ enemyRotate: value }),
       setCustomCursor: (value) => set({ customCursor: value }),
       setIsometricHeaderAvatar: (value) => set({ isometricHeaderAvatar: value }),
+      setCircuitBackground: (value) => set({ circuitBackground: value }),
     }),
     {
       name: 'requiem-settings',

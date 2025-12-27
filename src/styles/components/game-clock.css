@@ -1,0 +1,42 @@
+/**
+ * Game Clock Component Styles
+ *
+ * Displays in-game time with sun/moon indicator
+ * Uses Orbitron font for digital clock aesthetic
+ */
+
+.game-clock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--grey-800);
+}
+
+.game-clock-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.game-clock-time {
+  display: flex;
+  align-items: center;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  color: var(--color-text-primary);
+}
+
+.game-clock-digit {
+  display: inline-block;
+  width: 1em;
+  text-align: center;
+}
+
+.game-clock-separator {
+  display: inline-block;
+  width: 0.5em;
+  text-align: center;
+}

@@ -22,7 +22,9 @@ body {
   font-size: var(--text-base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: var(--color-bg-primary);
+  background-color: var(--color-bg-primary);
+  background-repeat: repeat;
+  background-size: 256px 256px;
   color: var(--color-text-primary);
 }
 

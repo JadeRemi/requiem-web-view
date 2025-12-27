@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { EXTERNAL_URLS, MAP_ROTATION, CYCLE_RULES } from '../config'
 import { ChatWidget } from '../components/ChatWidget'
+import { GameClock } from '../components/GameClock'
 import { Icon } from '../components/Icon'
 import { Typography, TypographyVariant } from '../components/Typography'
 import { usePageTitle } from '../hooks/usePageTitle'
@@ -178,6 +179,7 @@ export function MapPage() {
 
   return (
     <div className="page map-page">
+      <GameClock className="map-game-clock" />
       <div className="map-carousel">
         {canGoBack && (
           <button className="map-nav-btn map-nav-prev" onClick={handlePrev}>

@@ -1,0 +1,83 @@
+/**
+ * Events Page Styles
+ */
+
+.events-page {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-8);
+  padding-top: calc(var(--space-8) + 60px);
+  padding-bottom: var(--space-16);
+  overflow-y: auto;
+}
+
+.events-content {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* Event Card */
+.event-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--grey-850);
+  border: 1px solid var(--grey-700);
+  border-radius: var(--radius-md);
+}
+
+.event-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-5);
+  /* Gradient background similar to unread changelog items */
+  background: linear-gradient(135deg, var(--grey-800) 0%, rgba(128, 0, 128, 0.15) 100%);
+  border-bottom: 1px solid var(--grey-700);
+}
+
+.event-name {
+  margin: 0;
+}
+
+.event-name-divider {
+  width: 100%;
+  height: 1px;
+  background: var(--grey-700);
+  margin: var(--space-3) 0;
+}
+
+.event-dates {
+  font-family: var(--font-mono);
+}
+
+.event-description {
+  color: var(--grey-400);
+  margin-top: var(--space-1);
+  white-space: pre-line;
+}
+
+.event-calendar {
+  align-self: center;
+  margin: var(--space-4);
+}
+
+/* Responsive: side by side layout on larger screens */
+@media (min-width: 640px) {
+  .event-card {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .event-card-header {
+    flex: 1;
+    border-bottom: none;
+    border-right: 1px solid var(--grey-700);
+  }
+
+  .event-calendar {
+    align-self: center;
+  }
+}

@@ -52,6 +52,7 @@ export const ROUTES = {
   SETTINGS: '/settings',
   STORE: '/store',
   GALLERY: '/gallery',
+  EVENTS: '/events',
 } as const
 
 /** Site name for page titles */
@@ -84,6 +85,7 @@ export const PAGE_TITLES: Record<string, string> = {
   [ROUTES.SETTINGS]: 'Settings',
   [ROUTES.STORE]: 'Store',
   [ROUTES.GALLERY]: 'Gallery',
+  [ROUTES.EVENTS]: 'Events',
 }
 
 /** Default fallback skin image path (shown while remote skin loads) */
