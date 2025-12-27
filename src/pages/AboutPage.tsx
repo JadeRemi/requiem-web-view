@@ -7,7 +7,8 @@ import { ItemTooltip } from '../components/ItemTooltip'
 import { DiscordMessage } from '../components/DiscordMessage'
 import { useToast } from '../components/Toast'
 import { usePageTitle } from '../hooks/usePageTitle'
-import { SHARE_CONFIG, SERVER_VERSION } from '../config'
+import { Link } from 'react-router-dom'
+import { SHARE_CONFIG, SERVER_VERSION, ROUTES } from '../config'
 import { EQUIPMENT_MODELS } from '../mock/equipment'
 import { MOCK_PLAYER_REVIEWS } from '../mock/discord'
 import { assetPath } from '../utils/assetPath'
@@ -260,6 +261,16 @@ export function AboutPage() {
             Runs on vanilla client with no mods required. The server uses an automatically
             downloaded resource pack for custom textures and models.
           </Typography>
+        </div>
+
+        {/* Rules and Guides Links */}
+        <div className="about-links-row">
+          <Link to={ROUTES.RULES} className="about-large-link">
+            <Typography variant={TypographyVariant.H3}>Rules</Typography>
+          </Link>
+          <Link to={ROUTES.GUIDES} className="about-large-link">
+            <Typography variant={TypographyVariant.H3}>Guides</Typography>
+          </Link>
         </div>
 
         {/* Article Blocks */}

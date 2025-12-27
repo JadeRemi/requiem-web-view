@@ -223,6 +223,9 @@ export function WikiPage() {
           <button className="wiki-toc-link" onClick={() => scrollToSection('recipes')}>
             Recipes
           </button>
+          <button className="wiki-toc-link" onClick={() => scrollToSection('rules')}>
+            Rules
+          </button>
         </nav>
       </div>
 
@@ -386,6 +389,15 @@ export function WikiPage() {
         <Typography variant={TypographyVariant.H2}>Recipes</Typography>
         <Link to={ROUTES.WIKI_RECIPES} className="wiki-view-all-link">
           <Typography variant={TypographyVariant.Body}>View all recipes</Typography>
+          <Icon name="chevron-right" size={16} />
+        </Link>
+      </div>
+
+      {/* Rules Section */}
+      <div id="rules" className="wiki-section">
+        <Typography variant={TypographyVariant.H2}>Rules</Typography>
+        <Link to={ROUTES.RULES} className="wiki-view-all-link">
+          <Typography variant={TypographyVariant.Body}>View all rules</Typography>
           <Icon name="chevron-right" size={16} />
         </Link>
       </div>

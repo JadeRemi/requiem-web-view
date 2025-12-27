@@ -13,6 +13,8 @@ import { WikiTermsPage } from './pages/WikiTermsPage'
 import { WikiCardsPage } from './pages/WikiCardsPage'
 import { WikiCommandsPage } from './pages/WikiCommandsPage'
 import { WikiRecipesPage } from './pages/WikiRecipesPage'
+import { RulesPage } from './pages/RulesPage'
+import { GuidesPage } from './pages/GuidesPage'
 import { GuildsPage } from './pages/GuildsPage'
 import { ChangelogPage } from './pages/ChangelogPage'
 import { JoinTeamPage } from './pages/JoinTeamPage'
@@ -58,6 +60,8 @@ function App() {
                   <Route path={ROUTES.WIKI_CARDS} element={<WikiCardsPage />} />
                   <Route path={ROUTES.WIKI_COMMANDS} element={<WikiCommandsPage />} />
                   <Route path={ROUTES.WIKI_RECIPES} element={<WikiRecipesPage />} />
+                  <Route path={ROUTES.RULES} element={<RulesPage />} />
+                  <Route path={ROUTES.GUIDES} element={<GuidesPage />} />
                   <Route path={ROUTES.GUILDS} element={<GuildsPage />} />
                   <Route path={ROUTES.CHANGELOG} element={<ChangelogPage />} />
                   <Route path={ROUTES.JOIN_TEAM} element={<JoinTeamPage />} />

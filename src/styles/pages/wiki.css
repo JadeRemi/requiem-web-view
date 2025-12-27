@@ -986,3 +986,107 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
+
+/* Rules Page (standalone, not wiki subpage) */
+.rules-page {
+  padding: var(--space-8);
+  padding-top: calc(var(--space-8) + 60px);
+  padding-bottom: var(--space-16);
+  height: 100%;
+  overflow-y: auto;
+}
+
+.rules-table-container {
+  width: 100%;
+  max-width: 700px;
+  overflow-x: auto;
+}
+
+.rules-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--grey-900);
+  border: 1px solid var(--grey-700);
+  border-radius: var(--radius-md);
+}
+
+.rules-table td {
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--font-nirmala);
+  font-size: var(--text-sm);
+  color: var(--grey-300);
+  border-bottom: 1px solid var(--grey-800);
+  vertical-align: middle;
+}
+
+.rules-table tbody tr:hover {
+  background: var(--grey-850);
+}
+
+.rules-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.rule-name {
+  font-weight: 500;
+  color: var(--grey-100);
+}
+
+.rule-status {
+  text-align: right;
+  white-space: nowrap;
+  width: 100px;
+  font-weight: 600;
+}
+
+.rules-table td.rule-status-controlled {
+  color: #aa7700;
+}
+
+.rules-table td.rule-status-allowed {
+  color: var(--mc-dark-green);
+}
+
+/* Rules preview mini-table on main wiki page */
+.wiki-rules-preview {
+  max-width: 700px;
+}
+
+.rules-preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--grey-900);
+  border: 1px solid var(--grey-700);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.rules-preview-table td {
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-nirmala);
+  font-size: var(--text-sm);
+  border-bottom: 1px solid var(--grey-800);
+}
+
+.rules-preview-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.rules-preview-table .rule-name {
+  font-weight: 500;
+  color: var(--grey-200);
+}
+
+.rules-preview-table .rule-status {
+  text-align: right;
+  font-weight: 600;
+}
+
+.rules-preview-table .rule-status-controlled {
+  color: #aa7700;
+}
+
+.rules-preview-table .rule-status-allowed {
+  color: var(--mc-dark-green);
+}

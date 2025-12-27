@@ -393,3 +393,27 @@
   align-items: center;
   gap: var(--space-3);
 }
+
+/* Rules and Guides Links */
+.about-links-row {
+  display: flex;
+  justify-content: center;
+  gap: 120px;
+  width: 100%;
+}
+
+.about-large-link {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.about-large-link,
+.about-large-link h3 {
+  color: var(--grey-500);
+  transition: color var(--transition-fast);
+}
+
+.about-large-link:hover,
+.about-large-link:hover h3 {
+  color: var(--grey-300);
+}
