@@ -7,6 +7,7 @@ import { ItemTooltip } from '../components/ItemTooltip'
 import { DiscordMessage } from '../components/DiscordMessage'
 import { useToast } from '../components/Toast'
 import { usePageTitle } from '../hooks/usePageTitle'
+import { useAuth } from '../contexts/AuthContext'
 import { Link } from 'react-router-dom'
 import { SHARE_CONFIG, SERVER_VERSION, ROUTES } from '../config'
 import { EQUIPMENT_MODELS } from '../mock/equipment'
@@ -14,6 +15,7 @@ import { MOCK_PLAYER_REVIEWS } from '../mock/discord'
 import { assetPath } from '../utils/assetPath'
 
 const SERVER_IP = 'play.requiem.com:25565'
+const VOTING_URL = 'https://minecraftrating.ru/server/legendary_rpg/'
 
 const SCREENSHOTS = [
   {
@@ -167,16 +169,23 @@ function ArticleItemCard({ itemIndex, tooltipSide }: { itemIndex: number; toolti
 export function AboutPage() {
   usePageTitle()
   const toast = useToast()
+  const { isLoggedIn } = useAuth()
   const [ipCopied, setIpCopied] = useState(false)
   const [discordCopied, setDiscordCopied] = useState(false)
   const [shareExpanded, setShareExpanded] = useState(false)
   const [expandedReviewIndex, setExpandedReviewIndex] = useState<number | null>(null)
+  // Mock: whether user has voted today (would come from API in real implementation)
+  const hasVotedToday = false
 
   const handleCopyIP = async () => {
     try {
       await navigator.clipboard.writeText(SERVER_IP)
       setIpCopied(true)
-      toast.success('IP copied to clipboard')
+      toast.achievement({
+        title: 'Server Address Copied!',
+        description: 'Paste it in game',
+        icon: 'copy',
+      })
       setTimeout(() => setIpCopied(false), 2000)
     } catch {
       toast.error('Failed to copy IP')
@@ -187,11 +196,19 @@ export function AboutPage() {
     try {
       await navigator.clipboard.writeText(SHARE_CONFIG.DISCORD_INVITE)
       setDiscordCopied(true)
-      toast.success('Discord link copied to clipboard')
+      toast.achievement({
+        title: 'Discord Link Copied!',
+        description: 'Paste it to join',
+        icon: 'discord',
+      })
       setTimeout(() => setDiscordCopied(false), 2000)
     } catch {
       toast.error('Failed to copy Discord link')
     }
+  }
+
+  const handleVote = () => {
+    window.open(VOTING_URL, '_blank', 'noopener,noreferrer')
   }
 
   const handleShare = (social: SocialLink) => {
@@ -248,6 +265,21 @@ export function AboutPage() {
             </div>
           </div>
         )}
+
+        <button className="vote-button" onClick={handleVote}>
+          <Icon name="thumb-up" size={18} className="vote-button-icon" />
+          <span className="vote-button-text">Vote for the Project</span>
+          <span className="vote-button-divider" />
+          <span className="vote-button-counter">Votes: 87</span>
+          {isLoggedIn && (
+            <>
+              <span className="vote-button-divider" />
+              <span className={`vote-button-status ${hasVotedToday ? 'vote-button-status-voted' : 'vote-button-status-pending'}`}>
+                {hasVotedToday ? 'You have voted today' : 'You have not voted today'}
+              </span>
+            </>
+          )}
+        </button>
 
         <div className="about-description">
           <Typography variant={TypographyVariant.Body}>

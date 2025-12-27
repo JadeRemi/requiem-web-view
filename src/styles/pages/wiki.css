@@ -345,8 +345,13 @@
   overflow-y: auto;
 }
 
+.wiki-attributes-page .wiki-section {
+  align-items: center;
+}
+
 .attributes-table-container {
   width: 100%;
+  max-width: 700px;
   overflow-x: auto;
 }
 
@@ -410,6 +415,19 @@
   font-family: var(--font-mono);
   color: var(--grey-400);
   white-space: nowrap;
+}
+
+/* Attribute row tooltip (hidden cell for positioning) */
+.attribute-tooltip-cell {
+  position: absolute;
+  width: 0;
+  padding: 0 !important;
+  border: none !important;
+}
+
+.attribute-row-tooltip {
+  z-index: 100;
+  pointer-events: none;
 }
 
 /* Attributes preview mini-table on main wiki page */

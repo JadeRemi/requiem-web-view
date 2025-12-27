@@ -50,14 +50,14 @@ export type ItemType =
 
 /** Complete item tooltip data */
 export interface ItemTooltipData {
-  /** Item display name (first line) */
-  name: string
+  /** Item display name (first line, optional - hidden if not provided) */
+  name?: string
   /** Color for the item name */
-  nameColor: MCColor
-  /** Item rarity */
-  rarity: ItemRarity
-  /** Item type */
-  type: ItemType
+  nameColor?: MCColor
+  /** Item rarity (optional - hidden if not provided) */
+  rarity?: ItemRarity
+  /** Item type (optional - hidden if not provided) */
+  type?: ItemType
   /** Lines of tooltip content (stats, abilities, lore, etc.) */
   lines: TooltipLine[]
 }

@@ -29,8 +29,8 @@ function TextSegmentSpan({ segment }: { segment: TextSegment }) {
  * - Star-based rarity display
  */
 export function ItemTooltip({ item, className = '' }: ItemTooltipProps) {
-  const nameColorClass = MC_COLOR_CLASS_MAP[item.nameColor]
-  const rarityStars = getRarityStars(item.rarity)
+  const nameColorClass = item.nameColor ? MC_COLOR_CLASS_MAP[item.nameColor] : ''
+  const rarityStars = item.rarity ? getRarityStars(item.rarity) : null
 
   return (
     <div className={`mc-tooltip ${className}`}>
@@ -50,18 +50,22 @@ export function ItemTooltip({ item, className = '' }: ItemTooltipProps) {
 
         {/* Content */}
         <div className="mc-tooltip-content">
-          {/* Item name */}
-          <p className={`mc-tooltip-name ${nameColorClass}`}>
-            {item.name}
-          </p>
+          {/* Item name - only shown if name is provided */}
+          {item.name && (
+            <p className={`mc-tooltip-name ${nameColorClass}`}>
+              {item.name}
+            </p>
+          )}
 
-          {/* Rarity stars - first line after title */}
-          <p className="mc-tooltip-rarity">
-            <span className="mc-gray">Rarity: </span>
-            <span className="mc-gold">{rarityStars}</span>
-          </p>
+          {/* Rarity stars - only shown if rarity is provided */}
+          {rarityStars && (
+            <p className="mc-tooltip-rarity">
+              <span className="mc-gray">Rarity: </span>
+              <span className="mc-gold">{rarityStars}</span>
+            </p>
+          )}
 
-          {/* Type - second line after title */}
+          {/* Type - only shown if type is provided */}
           {item.type && (
             <p className="mc-tooltip-type">
               <span className="mc-gray">Type: </span>

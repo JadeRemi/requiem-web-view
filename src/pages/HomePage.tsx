@@ -221,7 +221,11 @@ export function HomePage() {
     try {
       await navigator.clipboard.writeText(SERVER_IP)
       setIpCopied(true)
-      toast.success('IP copied to clipboard')
+      toast.achievement({
+        title: 'Server Address Copied!',
+        description: 'Paste it in game',
+        icon: 'copy',
+      })
       setTimeout(() => setIpCopied(false), 2000)
     } catch {
       toast.error('Failed to copy IP')

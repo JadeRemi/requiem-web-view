@@ -6,14 +6,13 @@
   position: fixed;
   top: var(--space-4);
   right: var(--space-4);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
   z-index: 9999;
   pointer-events: none;
 }
 
 .toast {
+  position: absolute;
+  right: 0;
   display: flex;
   align-items: center;
   gap: var(--space-3);
@@ -40,6 +39,21 @@
     transform: translateX(0);
     opacity: 1;
   }
+}
+
+@keyframes toast-slide-out {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.toast.toast-exiting {
+  animation: toast-slide-out 0.3s ease forwards;
 }
 
 .toast:hover {
@@ -102,4 +116,88 @@
 .toast-close:hover {
   background: var(--grey-700);
   color: var(--grey-200);
+}
+
+/* Achievement Toast (Minecraft-style) */
+@keyframes toast-slide-down {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes toast-slide-up {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+.toast-achievement.toast-exiting {
+  animation: toast-slide-up 0.3s ease forwards;
+}
+
+.toast-achievement {
+  position: absolute;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 320px;
+  padding: var(--space-3);
+  background: var(--grey-900);
+  border: 2px solid var(--grey-700);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  pointer-events: auto;
+  cursor: pointer;
+  animation: toast-slide-down 0.3s ease;
+}
+
+.toast-achievement-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--grey-800);
+  border: 1px solid var(--grey-600);
+  border-radius: var(--radius-md);
+  color: var(--grey-300);
+}
+
+.toast-achievement-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.toast-achievement-title {
+  font-family: var(--font-minecraftia);
+  font-size: 14px;
+  color: var(--mc-yellow);
+  text-shadow: 2px 2px var(--mc-shadow-yellow);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toast-achievement-description {
+  font-family: var(--font-minecraftia);
+  font-size: 12px;
+  color: var(--mc-white);
+  text-shadow: 2px 2px var(--mc-shadow-white);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
