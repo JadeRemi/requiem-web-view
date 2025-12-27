@@ -79,15 +79,118 @@
   text-decoration: underline;
 }
 
+/* Server MOTD */
+.home-motd {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  background: var(--grey-850);
+  border: 2px solid var(--grey-700);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+  width: 100%;
+  max-width: 540px;
+}
+
+.home-motd-icon {
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  image-rendering: pixelated;
+}
+
+.home-motd-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+  flex: 1;
+}
+
+.home-motd-line {
+  font-family: var(--font-minecraftia);
+  font-size: var(--text-sm);
+  color: var(--grey-100);
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.home-motd-line-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.home-motd-status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-left: auto;
+}
+
+.home-motd-players {
+  font-family: var(--font-minecraftia);
+  font-size: var(--text-lg);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.home-motd-latency {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 16px;
+  position: relative;
+}
+
+.home-motd-bar {
+  display: inline-block;
+  width: 3px;
+  position: relative;
+  isolation: isolate;
+}
+
+/* Bright green bar on top */
+.home-motd-bar::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: var(--mc-green);
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+
+/* Shadow bar - darker green offset behind, 3px right, 2px down */
+.home-motd-bar::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: var(--mc-shadow-green);
+  left: 3px;
+  top: 2px;
+  z-index: 0;
+}
+
+.home-motd-bar:nth-child(1) { height: 4px; }
+.home-motd-bar:nth-child(2) { height: 7px; }
+.home-motd-bar:nth-child(3) { height: 10px; }
+.home-motd-bar:nth-child(4) { height: 13px; }
+.home-motd-bar:nth-child(5) { height: 16px; }
+
 /* Home Online Section */
 .home-online-section {
+  margin-top: calc(-1 * var(--space-2));
   margin-bottom: var(--space-6);
   width: 100%;
   max-width: 540px;
 }
 
 .home-online-header {
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-4);
 }
 
 .home-online-header .online-count {

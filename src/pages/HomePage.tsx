@@ -6,7 +6,7 @@ import { FacePreview } from '../components/FacePreview'
 import { Markdown } from '../utils/markdown'
 import { useToast } from '../components/Toast'
 import { usePageTitle } from '../hooks/usePageTitle'
-import { ROUTES, SHARE_CONFIG } from '../config'
+import { ROUTES, SHARE_CONFIG, SERVER_VERSION, SERVER_CAPACITY } from '../config'
 import { MOCK_PATCHES } from '../mock/changelog'
 import { formatShortDate } from '../utils/dateFormat'
 import { getOnlinePlayers, getOnlineCount, isServerOnline } from '../mock/online-players'
@@ -16,6 +16,7 @@ import {
   type TimeRange,
   type HistoricalDataPoint,
 } from '../mock/historical-online'
+import { assetPath } from '../utils/assetPath'
 
 const SERVER_IP = 'play.requiem.com:25565'
 
@@ -293,6 +294,54 @@ export function HomePage() {
               </div>
             </div>
           )}
+        </div>
+
+        {/* Server MOTD */}
+        <div className="home-motd">
+          <img
+            src={assetPath('/images/server-icon.png')}
+            alt="Server icon"
+            className="home-motd-icon"
+          />
+          <div className="home-motd-text">
+            <div className="home-motd-line home-motd-line-top">
+              <strong>play.requiem.com</strong>
+              <span className="home-motd-status">
+                <span className="home-motd-players mc-gray">{onlineCount}/{SERVER_CAPACITY.MAX_PLAYERS}</span>
+                <span className="home-motd-latency">
+                  <span className="home-motd-bar" />
+                  <span className="home-motd-bar" />
+                  <span className="home-motd-bar" />
+                  <span className="home-motd-bar" />
+                  <span className="home-motd-bar" />
+                </span>
+              </span>
+            </div>
+            <div className="home-motd-line">
+              <strong><span className="mc-light-purple">REQUIEM</span></strong>
+              {' '}
+              <span className="mc-gray">»</span>
+              {' '}
+              <span className="mc-gray">Sci-fi Action RPG</span>
+              {' '}
+              <span className="mc-dark-gray">[{SERVER_VERSION.MIN}–{SERVER_VERSION.MAX}]</span>
+            </div>
+            <div className="home-motd-line">
+              <span className="mc-green">Classes</span>
+              {' '}
+              <span className="mc-dark-gray">|</span>
+              {' '}
+              <span className="mc-aqua">Skills</span>
+              {' '}
+              <span className="mc-dark-gray">|</span>
+              {' '}
+              <span className="mc-dark-aqua">Quests</span>
+              {' '}
+              <span className="mc-dark-gray">|</span>
+              {' '}
+              <span className="mc-red">Permadeath</span>
+            </div>
+          </div>
         </div>
 
         {/* Online Players Section */}

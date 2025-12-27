@@ -244,3 +244,9 @@ export const SERVER_VERSION = {
   /** Maximum supported Minecraft version */
   MAX: '1.21.5',
 } as const
+
+/** Server capacity configuration */
+export const SERVER_CAPACITY = {
+  /** Maximum number of players */
+  MAX_PLAYERS: 100,
+} as const
