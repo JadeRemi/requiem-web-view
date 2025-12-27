@@ -15,6 +15,8 @@ interface ViewerSettings {
 interface AppSettings {
   /** Custom Minecraft-style cursor enabled */
   customCursor: boolean
+  /** Show isometric 3D head in header instead of 2D face */
+  isometricHeaderAvatar: boolean
 }
 
 interface SettingsState extends ViewerSettings, AppSettings {
@@ -28,6 +30,8 @@ interface SettingsState extends ViewerSettings, AppSettings {
   setEnemyRotate: (value: boolean) => void
   /** Toggle custom cursor */
   setCustomCursor: (value: boolean) => void
+  /** Toggle isometric header avatar */
+  setIsometricHeaderAvatar: (value: boolean) => void
 }
 
 /**
@@ -46,12 +50,14 @@ export const useSettingsStore = create<SettingsState>()(
 
       // Default values - App settings
       customCursor: false,
+      isometricHeaderAvatar: true,
 
       setPlayerAnimate: (value) => set({ playerAnimate: value }),
       setPlayerRotate: (value) => set({ playerRotate: value }),
       setEquipmentRotate: (value) => set({ equipmentRotate: value }),
       setEnemyRotate: (value) => set({ enemyRotate: value }),
       setCustomCursor: (value) => set({ customCursor: value }),
+      setIsometricHeaderAvatar: (value) => set({ isometricHeaderAvatar: value }),
     }),
     {
       name: 'requiem-settings',

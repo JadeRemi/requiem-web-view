@@ -16,6 +16,8 @@ export function SettingsPage() {
   const {
     customCursor,
     setCustomCursor,
+    isometricHeaderAvatar,
+    setIsometricHeaderAvatar,
     playerAnimate,
     setPlayerAnimate,
     playerRotate,
@@ -56,6 +58,27 @@ export function SettingsPage() {
                   type="checkbox"
                   checked={customCursor}
                   onChange={(e) => setCustomCursor(e.target.checked)}
+                />
+                <span className="settings-toggle-slider" />
+              </label>
+            </Tooltip>
+          </div>
+
+          <div className="settings-option">
+            <div className="settings-option-info">
+              <Typography variant={TypographyVariant.Label} className="settings-option-label">
+                3D Header Avatar
+              </Typography>
+              <Typography variant={TypographyVariant.BodySmall} color="var(--grey-500)" className="settings-option-description">
+                Show isometric 3D head instead of flat face in header
+              </Typography>
+            </div>
+            <Tooltip content={`Currently: ${isometricHeaderAvatar ? 'On' : 'Off'}`} position="top">
+              <label className="settings-toggle">
+                <input
+                  type="checkbox"
+                  checked={isometricHeaderAvatar}
+                  onChange={(e) => setIsometricHeaderAvatar(e.target.checked)}
                 />
                 <span className="settings-toggle-slider" />
               </label>
