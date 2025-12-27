@@ -4,10 +4,12 @@ import { Icon, IconName } from '../components/Icon'
 import { ImageCard } from '../components/ImageCard'
 import { EquipmentViewer } from '../components/EquipmentViewer'
 import { ItemTooltip } from '../components/ItemTooltip'
+import { DiscordMessage } from '../components/DiscordMessage'
 import { useToast } from '../components/Toast'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { SHARE_CONFIG, SERVER_VERSION } from '../config'
 import { EQUIPMENT_MODELS } from '../mock/equipment'
+import { MOCK_PLAYER_REVIEWS } from '../mock/discord'
 import { assetPath } from '../utils/assetPath'
 
 const SERVER_IP = 'play.requiem.com:25565'
@@ -167,6 +169,7 @@ export function AboutPage() {
   const [ipCopied, setIpCopied] = useState(false)
   const [discordCopied, setDiscordCopied] = useState(false)
   const [shareExpanded, setShareExpanded] = useState(false)
+  const [expandedReviewIndex, setExpandedReviewIndex] = useState<number | null>(null)
 
   const handleCopyIP = async () => {
     try {
@@ -297,6 +300,27 @@ export function AboutPage() {
               height={360}
             />
           ))}
+        </div>
+
+        {/* Player Reviews */}
+        <div className="about-reviews">
+          <Typography variant={TypographyVariant.H3} className="about-reviews-title">
+            Reviews
+          </Typography>
+          <div className="about-reviews-list">
+            {MOCK_PLAYER_REVIEWS.map((review, index) => (
+              <DiscordMessage
+                key={index}
+                username={review.username}
+                avatarUrl={review.avatarUrl}
+                timestamp={review.timestamp}
+                content={review.content}
+                userCard={review.userCard}
+                isCardVisible={expandedReviewIndex === index}
+                onUserClick={() => setExpandedReviewIndex(expandedReviewIndex === index ? null : index)}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>

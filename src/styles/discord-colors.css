@@ -1,0 +1,65 @@
+/**
+ * Discord Design Tokens
+ *
+ * Tokenized styles for Discord-style components.
+ * All variables are prefixed with --discord- to avoid conflicts
+ * with the main design system tokens (--grey-*, --magenta-*, etc.)
+ *
+ * These components are "windows" into Discord's UI - they should
+ * use Discord's native styling, not the app's design system.
+ */
+
+:root {
+  /* Typography */
+  --discord-font-username: 'Roboto', sans-serif;
+  --discord-font-body: 'Segoe UI', sans-serif;
+
+  /* Background colors */
+  --discord-bg-primary: #292b2f;
+  --discord-bg-secondary: #18191c;
+  --discord-bg-tertiary: #202225;
+
+  /* Text colors */
+  --discord-text-primary: #eeeeee;
+  --discord-text-secondary: #b9bbbe;
+  --discord-text-muted: #72767d;
+  --discord-text-link: #00b0f4;
+
+  /* UI colors */
+  --discord-divider: #33353b;
+  --discord-role-bg: #292b2f;
+  --discord-role-text: #c4c4c4;
+
+  /* Category/label colors */
+  --discord-category-text: #d6d6d6;
+  --discord-info-text: #bdbebf;
+
+  /* Discord brand color (blurple) */
+  --discord-blurple: #5865f2;
+
+  /* Default banner color */
+  --discord-banner-default: var(--discord-blurple);
+
+  /* Shadow */
+  --discord-shadow: 0 0 16px 3px rgba(0, 0, 0, 0.2);
+
+  /* Message colors */
+  --discord-message-bg: #36393f;
+  --discord-message-hover: #32353b;
+  --discord-timestamp: hsla(0, 0%, 100%, 0.2);
+  --discord-username-hover: #fff;
+
+  /* Role colors */
+  --discord-role-owner: #f04747;
+  --discord-role-admin: #e91e63;
+  --discord-role-moderator: #9b59b6;
+  --discord-role-developer: #3498db;
+  --discord-role-creator: #e67e22;
+  --discord-role-blogger: #1abc9c;
+  --discord-role-partner: #f1c40f;
+  --discord-role-vip: #9b59b6;
+  --discord-role-active: #2ecc71;
+  --discord-role-member: #95a5a6;
+  --discord-role-silent: #607d8b;
+  --discord-role-newcomer: #00bcd4;
+}

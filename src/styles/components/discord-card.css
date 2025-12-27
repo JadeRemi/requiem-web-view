@@ -1,0 +1,110 @@
+/**
+ * Discord User Card Styles
+ * Uses tokens from discord-colors.css (--discord-* prefix)
+ */
+
+.discord-card {
+  background: var(--discord-bg-primary);
+  width: 345px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--discord-shadow);
+}
+
+.discord-card-header .discord-banner {
+  width: 100%;
+  height: 60px;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.discord-card-body {
+  padding: var(--space-4);
+  position: relative;
+}
+
+.discord-profile-header {
+  position: absolute;
+  top: -50px;
+}
+
+.discord-avatar {
+  border: 6px solid var(--discord-bg-primary);
+  border-radius: var(--radius-full);
+}
+
+.discord-avatar img {
+  display: block;
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+
+.discord-profile-body {
+  background: var(--discord-bg-secondary);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  margin-top: 40px;
+}
+
+.discord-username {
+  color: var(--discord-text-primary);
+  font-family: var(--discord-font-username);
+  font-weight: 600;
+  font-size: var(--text-lg);
+}
+
+.discord-divider {
+  border: none;
+  border-top: 1px solid var(--discord-divider);
+  margin: var(--space-3) 0;
+}
+
+.discord-category-title {
+  color: var(--discord-category-text);
+  font-family: var(--discord-font-body);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: var(--text-xs);
+  margin-bottom: var(--space-2);
+}
+
+.discord-info-section {
+  margin-bottom: var(--space-3);
+}
+
+.discord-info-text {
+  color: var(--discord-info-text);
+  font-family: var(--discord-font-body);
+  font-size: var(--text-sm);
+  margin: 0;
+}
+
+.discord-roles-section {
+  margin-bottom: var(--space-3);
+}
+
+.discord-roles-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.discord-role {
+  background: var(--discord-role-bg);
+  color: var(--discord-role-text);
+  border-radius: var(--radius-sm);
+  font-family: var(--discord-font-body);
+  font-size: var(--text-xs);
+  font-weight: 400;
+  padding: var(--space-1) var(--space-2);
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.discord-role-color {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
