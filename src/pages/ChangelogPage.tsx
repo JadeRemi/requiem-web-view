@@ -1,11 +1,77 @@
-import { useMemo } from 'react'
+import { useMemo, useState, useRef, useEffect } from 'react'
 import { Typography, TypographyVariant } from '../components/Typography'
 import { Tooltip } from '../components/Tooltip'
+import { Icon } from '../components/Icon'
 import { Markdown } from '../utils/markdown'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { useAuth } from '../contexts/AuthContext'
 import { fetchChangelog, getPatchesSinceDate, type PatchDTO } from '../mock/changelog'
 import { formatShortDate, formatRelativeTime } from '../utils/dateFormat'
+
+interface PlannedUpdate {
+  id: string
+  title: string
+  year: string
+}
+
+const PLANNED_UPDATES: PlannedUpdate[] = [
+  { id: 'inventor', title: 'Inventor class', year: '2026' },
+  { id: 'bedrock', title: 'Bedrock edition compatibility', year: '2026' },
+  { id: 'maglev', title: 'Underground maglev transportation system and new biomes for temporal regions', year: '2027' }
+]
+
+function PlannedTimeline() {
+  const [isExpanded, setIsExpanded] = useState(false)
+  const contentRef = useRef<HTMLDivElement>(null)
+  const [contentHeight, setContentHeight] = useState(0)
+
+  useEffect(() => {
+    if (contentRef.current) {
+      setContentHeight(contentRef.current.scrollHeight)
+    }
+  }, [isExpanded])
+
+  return (
+    <div className="planned-timeline">
+      <button className="planned-timeline-toggle" onClick={() => setIsExpanded(!isExpanded)}>
+        <Typography variant={TypographyVariant.BodySmall} color="var(--grey-500)">
+          Planned content timeline
+        </Typography>
+        <Icon
+          name="chevron-down"
+          size={16}
+          className={`planned-timeline-chevron ${isExpanded ? 'planned-timeline-chevron-open' : ''}`}
+        />
+      </button>
+      <div
+        className="planned-timeline-list-wrapper"
+        style={{ height: isExpanded ? contentHeight : 0 }}
+      >
+        <div ref={contentRef} className="planned-timeline-list">
+          {PLANNED_UPDATES.map((update, index) => (
+            <div
+              key={update.id}
+              className={`planned-timeline-item ${index === PLANNED_UPDATES.length - 1 ? 'planned-timeline-item-last' : ''}`}
+            >
+              <div className="planned-timeline-track">
+                <div className="planned-timeline-circle">○</div>
+                {index < PLANNED_UPDATES.length - 1 && <div className="planned-timeline-line" />}
+              </div>
+              <div className="planned-timeline-content">
+                <Typography variant={TypographyVariant.BodySmall} color="var(--grey-200)">
+                  {update.title}
+                </Typography>
+                <Typography variant={TypographyVariant.Caption} color="var(--grey-500)">
+                  {update.year}
+                </Typography>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 interface PatchCardProps {
   patch: PatchDTO
@@ -105,6 +171,8 @@ export function ChangelogPage() {
   return (
     <div className="page changelog-page">
       <div className="changelog-content">
+        <PlannedTimeline />
+
         {user?.type === 'game' && lastVisit && (
           <SinceLastVisit patches={newPatches} lastVisitDate={lastVisit} />
         )}

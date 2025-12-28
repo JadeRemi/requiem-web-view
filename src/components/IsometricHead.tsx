@@ -17,14 +17,14 @@ interface IsometricHeadProps {
  * Skin layout for head:
  * - Top: (8, 0)
  * - Front: (8, 8)
- * - Left: (16, 8) - visible on the right side when viewing isometrically
- * - Right: (0, 8)
+ * - Right: (0, 8) - visible on the right side when viewing isometrically
+ * - Left: (16, 8)
  */
 const HEAD_TEXTURES = {
   /** Front face (at position 8, 8) */
   front: { x: 8, y: 8, w: 8, h: 8 },
-  /** Left face (at position 16, 8) - shown on right side of isometric view */
-  left: { x: 16, y: 8, w: 8, h: 8 },
+  /** Right face (at position 0, 8) - shown on right side of isometric view */
+  right: { x: 0, y: 8, w: 8, h: 8 },
   /** Top face (at position 8, 0) */
   top: { x: 8, y: 0, w: 8, h: 8 },
 }
@@ -34,13 +34,13 @@ const HEAD_TEXTURES = {
  */
 const HELMET_TEXTURES = {
   front: { x: 40, y: 8, w: 8, h: 8 },
-  left: { x: 48, y: 8, w: 8, h: 8 },
+  right: { x: 32, y: 8, w: 8, h: 8 },
   top: { x: 40, y: 0, w: 8, h: 8 },
 }
 
 interface FaceImages {
   front: string | null
-  left: string | null
+  right: string | null
   top: string | null
 }
 
@@ -101,7 +101,7 @@ export function IsometricHead({ skinHash, size = 24, className }: IsometricHeadP
 
         setFaces({
           front: extractFace(HEAD_TEXTURES.front, HELMET_TEXTURES.front),
-          left: extractFace(HEAD_TEXTURES.left, HELMET_TEXTURES.left),
+          right: extractFace(HEAD_TEXTURES.right, HELMET_TEXTURES.right),
           top: extractFace(HEAD_TEXTURES.top, HELMET_TEXTURES.top),
         })
         setLoading(false)
@@ -166,14 +166,14 @@ export function IsometricHead({ skinHash, size = 24, className }: IsometricHeadP
               transform: `translateZ(${faceSize / 2}px)`,
             }}
           />
-          {/* Left face (visible on right side of isometric view) */}
+          {/* Right face (visible on right side of isometric view) */}
           <div
-            className="isometric-head-face isometric-head-left"
+            className="isometric-head-face isometric-head-right"
             style={{
               width: faceSize,
               height: faceSize,
               position: 'absolute',
-              backgroundImage: `url(${faces.left})`,
+              backgroundImage: `url(${faces.right})`,
               backgroundSize: 'cover',
               imageRendering: 'pixelated',
               transform: `rotateY(90deg) translateZ(${faceSize / 2}px) scaleX(-1)`,
@@ -189,7 +189,7 @@ export function IsometricHead({ skinHash, size = 24, className }: IsometricHeadP
               backgroundImage: `url(${faces.top})`,
               backgroundSize: 'cover',
               imageRendering: 'pixelated',
-              transform: `rotateX(90deg) translateZ(${faceSize / 2}px) scaleY(-1)`,
+              transform: `rotateX(90deg) translateZ(${faceSize / 2}px) scaleX(-1)`,
             }}
           />
         </div>

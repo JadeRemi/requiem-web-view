@@ -389,3 +389,45 @@
   background: var(--grey-700);
   color: var(--grey-100);
 }
+
+/* Punishment Status */
+.profile-punishments-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  margin-top: var(--space-6);
+}
+
+.profile-punishments {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  background: var(--grey-850);
+  border: 1px solid var(--grey-700);
+  border-radius: var(--radius-md);
+}
+
+.profile-punishment {
+  font-family: var(--font-nirmala);
+  font-size: var(--text-sm);
+  color: var(--grey-400);
+}
+
+.profile-punishment-jailed {
+  color: var(--grey-400);
+}
+
+.profile-punishment-muted {
+  color: var(--grey-400);
+}
+
+.profile-punishment-separator {
+  color: var(--grey-600);
+}
+
+.profile-punishment-time {
+  color: var(--grey-300);
+  cursor: pointer;
+  border-bottom: 1px dotted var(--grey-500);
+}

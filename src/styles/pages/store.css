@@ -238,12 +238,14 @@
   font-family: var(--font-orbitron);
   font-size: var(--text-lg);
   color: var(--grey-500);
+  margin-right: calc(-1 * var(--space-1));
 }
 
 .store-currency-x-sm {
   font-family: var(--font-orbitron);
   font-size: var(--text-sm);
   color: var(--grey-500);
+  margin-right: calc(-1 * var(--space-1));
 }
 
 /* Privileges List */

@@ -3,6 +3,7 @@ import { Icon } from '../components/Icon'
 import { Tooltip } from '../components/Tooltip'
 import { useSettingsStore } from '../stores/settingsStore'
 import { useAuth } from '../contexts/AuthContext'
+import { usePageTitle } from '../hooks/usePageTitle'
 
 /**
  * Settings Page
@@ -13,6 +14,7 @@ import { useAuth } from '../contexts/AuthContext'
  * - Connected accounts status (readonly)
  */
 export function SettingsPage() {
+  usePageTitle()
   const {
     customCursor,
     setCustomCursor,

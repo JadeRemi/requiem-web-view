@@ -1,11 +1,12 @@
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { SkinViewer } from '../components/SkinViewer'
 import { EquipmentViewer } from '../components/EquipmentViewer'
 import { Typography, TypographyVariant } from '../components/Typography'
 import { Loader } from '../components/Loader'
 import { HexagonOverlay } from '../components/HexagonOverlay'
 import { Blinker } from '../components/Blinker'
+import { Tooltip } from '../components/Tooltip'
 import { fetchPlayer } from '../api/client'
 import { useSettingsStore } from '../stores/settingsStore'
 import { usePageTitle } from '../hooks/usePageTitle'
@@ -18,7 +19,84 @@ import { getUnlockedAchievementsWithData } from '../mock/achievements'
 import { isPlayerOnline } from '../mock/online-players'
 import type { RankedStat, PlayerDTO } from '../types/api'
 import type { SkinViewerConfig } from '../types/skin'
-import { formatShortDate as formatTooltipDate } from '../utils/dateFormat'
+
+/** Punishment status for a player */
+interface PunishmentStatus {
+  jailed: { since: Date } | null
+  muted: { since: Date } | null
+}
+
+/**
+ * Mock function to get punishment status for a player
+ * 20% chance for each punishment type
+ * Re-rolls on every page refresh
+ */
+function getPlayerPunishmentStatus(_uuid: string): PunishmentStatus {
+  const now = new Date()
+
+  // Random duration: 1-14 days for jail, 1-48 hours for mute
+  const jailDays = Math.floor(Math.random() * 14) + 1
+  const muteHours = Math.floor(Math.random() * 48) + 1
+
+  return {
+    jailed: Math.random() < 0.2 ? { since: new Date(now.getTime() - jailDays * 24 * 60 * 60 * 1000) } : null,
+    muted: Math.random() < 0.2 ? { since: new Date(now.getTime() - muteHours * 60 * 60 * 1000) } : null,
+  }
+}
+
+/**
+ * Format date with time in 24-hour format (e.g., "Dec 28, 2025, 14:30")
+ */
+function formatDateTime(date: Date): string {
+  return date.toLocaleString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  })
+}
+
+/**
+ * Format relative time with full words (e.g., "7 days ago", "10 hours ago")
+ */
+function formatRelativeTimeFull(date: Date): string {
+  const now = new Date()
+  const diffMs = now.getTime() - date.getTime()
+  const diffMins = Math.floor(diffMs / 60000)
+  const diffHours = Math.floor(diffMins / 60)
+  const diffDays = Math.floor(diffHours / 24)
+  const diffMonths = Math.floor(diffDays / 30)
+
+  if (diffMins < 60) {
+    return `${diffMins} minute${diffMins !== 1 ? 's' : ''} ago`
+  } else if (diffHours < 24) {
+    return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`
+  } else if (diffDays < 30) {
+    return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`
+  } else {
+    return `${diffMonths} month${diffMonths !== 1 ? 's' : ''} ago`
+  }
+}
+
+/**
+ * Format achievement tooltip content
+ * Shows "Obtained x hours/days ago" + "On [date with time]"
+ */
+function formatAchievementTooltip(unlockedAt: string): React.ReactNode {
+  const date = new Date(unlockedAt)
+  const relativeTime = formatRelativeTimeFull(date)
+  const dateTime = formatDateTime(date)
+
+  return (
+    <>
+      Obtained {relativeTime}
+      <br />
+      On {dateTime}
+    </>
+  )
+}
 
 /** Display a ranked stat with value and rank */
 function StatDisplay({ label, stat }: { label: string; stat: RankedStat }) {
@@ -86,7 +164,13 @@ export function ProfilePage() {
   const setEquipmentRotate = useSettingsStore((s) => s.setEquipmentRotate)
 
   const uuid = searchParams.get('uuid')
-  
+
+  // Get punishment status for the player (mocked with 20% chance each)
+  const punishmentStatus = useMemo(() => {
+    if (!uuid) return null
+    return getPlayerPunishmentStatus(uuid)
+  }, [uuid])
+
   // Handle skin viewer config changes
   const handleSkinViewerConfigChange = useCallback((key: keyof SkinViewerConfig, value: boolean) => {
     if (key === 'animate') {
@@ -351,6 +435,37 @@ export function ProfilePage() {
           )}
         </div>
 
+        {/* Punishment Status */}
+        {punishmentStatus && (punishmentStatus.jailed || punishmentStatus.muted) && (
+          <div className="profile-punishments-wrapper">
+            <div className="profile-punishments">
+              {punishmentStatus.jailed && (
+                <span className="profile-punishment profile-punishment-jailed">
+                  Jailed{' '}
+                  <Tooltip content={formatDateTime(punishmentStatus.jailed.since)} position="top">
+                    <span className="profile-punishment-time">
+                      {formatRelativeTimeFull(punishmentStatus.jailed.since)}
+                    </span>
+                  </Tooltip>
+                </span>
+              )}
+              {punishmentStatus.jailed && punishmentStatus.muted && (
+                <span className="profile-punishment-separator">|</span>
+              )}
+              {punishmentStatus.muted && (
+                <span className="profile-punishment profile-punishment-muted">
+                  Muted{' '}
+                  <Tooltip content={formatDateTime(punishmentStatus.muted.since)} position="top">
+                    <span className="profile-punishment-time">
+                      {formatRelativeTimeFull(punishmentStatus.muted.since)}
+                    </span>
+                  </Tooltip>
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Last Achievements Section */}
         <div className="profile-achievements" ref={profileAchievementsRef}>
           <div className="profile-achievements-header">
@@ -386,15 +501,19 @@ export function ProfilePage() {
               return (
                 <>
                   {displayedAchievements.map((achievement) => (
-                    <Link
+                    <Tooltip
                       key={achievement.id}
-                      to={`${ROUTES.WIKI_ACHIEVEMENTS}#${achievement.id}`}
-                      className="profile-achievement-btn"
-                      title={`Unlocked: ${formatTooltipDate(achievement.unlockedAt)}`}
+                      content={formatAchievementTooltip(achievement.unlockedAt)}
+                      position="top"
                     >
-                      <span className="profile-achievement-trophy">♔</span>
-                      <span className="profile-achievement-name">{achievement.name}</span>
-                    </Link>
+                      <Link
+                        to={`${ROUTES.WIKI_ACHIEVEMENTS}#${achievement.id}`}
+                        className="profile-achievement-btn"
+                      >
+                        <span className="profile-achievement-trophy">♔</span>
+                        <span className="profile-achievement-name">{achievement.name}</span>
+                      </Link>
+                    </Tooltip>
                   ))}
                   {hiddenCount > 0 && !achievementsExpanded && hasMeasured && (
                     <button

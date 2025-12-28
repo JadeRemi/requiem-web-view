@@ -95,7 +95,7 @@ export function uvmap(
   const u1 = x * tileUvWidth + w * tileUvWidth
   const v0 = y * tileUvHeight
   const v1 = y * tileUvHeight + h * tileUvHeight
-  
+
   const legacyUVs: [number, number][] = [
     [u1, v1],  // 0: was top-left, now bottom-right
     [u1, v0],  // 1: was bottom-left, now top-right
@@ -142,10 +142,10 @@ export function uvmap(
 export function applyHeadUVs(geometry: BufferGeometry, texWidth = 64, texHeight = 64): void {
   uvmap(geometry, 0, 8, 8, 8, 8, texWidth, texHeight)      // Front
   uvmap(geometry, 1, 24, 8, 8, 8, texWidth, texHeight)     // Back
-  uvmap(geometry, 2, 8, 0, 8, 8, texWidth, texHeight, 1)   // Top
-  uvmap(geometry, 3, 16, 0, 8, 8, texWidth, texHeight, 3)  // Bottom
-  uvmap(geometry, 4, 0, 8, 8, 8, texWidth, texHeight)      // Left
-  uvmap(geometry, 5, 16, 8, 8, 8, texWidth, texHeight)     // Right
+  uvmap(geometry, 2, 8, 0, 8, 8, texWidth, texHeight, 3)   // Top
+  uvmap(geometry, 3, 16, 0, 8, 8, texWidth, texHeight, 1)  // Bottom
+  uvmap(geometry, 4, 16, 8, 8, 8, texWidth, texHeight)     // Left (skin pos 16,8)
+  uvmap(geometry, 5, 0, 8, 8, 8, texWidth, texHeight)      // Right (skin pos 0,8)
 }
 
 /**
@@ -155,10 +155,10 @@ export function applyHeadUVs(geometry: BufferGeometry, texWidth = 64, texHeight 
 export function applyHelmetUVs(geometry: BufferGeometry, texWidth = 64, texHeight = 64): void {
   uvmap(geometry, 0, 40, 8, 8, 8, texWidth, texHeight)     // Front
   uvmap(geometry, 1, 56, 8, 8, 8, texWidth, texHeight)     // Back
-  uvmap(geometry, 2, 40, 0, 8, 8, texWidth, texHeight, 1)  // Top
-  uvmap(geometry, 3, 48, 0, 8, 8, texWidth, texHeight, 3)  // Bottom
-  uvmap(geometry, 4, 32, 8, 8, 8, texWidth, texHeight)     // Left
-  uvmap(geometry, 5, 48, 8, 8, 8, texWidth, texHeight)     // Right
+  uvmap(geometry, 2, 40, 0, 8, 8, texWidth, texHeight, 3)  // Top
+  uvmap(geometry, 3, 48, 0, 8, 8, texWidth, texHeight, 1)  // Bottom
+  uvmap(geometry, 4, 48, 8, 8, 8, texWidth, texHeight)     // Left (skin pos 48,8)
+  uvmap(geometry, 5, 32, 8, 8, 8, texWidth, texHeight)     // Right (skin pos 32,8)
 }
 
 /**

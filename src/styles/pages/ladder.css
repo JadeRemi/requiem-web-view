@@ -103,3 +103,9 @@
 .ladder-table-container {
   width: 100%;
 }
+
+.ladder-last-updated {
+  color: var(--grey-300);
+  cursor: pointer;
+  border-bottom: 1px dotted var(--grey-500);
+}

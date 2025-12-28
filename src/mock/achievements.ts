@@ -192,24 +192,58 @@ export interface UnlockedAchievement {
   unlockedAt: string // ISO date string
 }
 
+/**
+ * Generate mock unlocked achievements with progressively older timestamps
+ * Newest achievement is a few hours ago, each subsequent one is older
+ */
+function generateUnlockedAchievements(): UnlockedAchievement[] {
+  const achievementIds = [
+    'scavenger',      // Newest - 3 hours ago
+    'damage-sponge',  // 18 hours ago
+    'meritocracy',    // 2 days ago
+    'biome-hunter',   // 4 days ago
+    'voter',          // 1 week ago
+    'self-destruct',  // 12 days ago
+    'craftsman',      // 3 weeks ago
+    'revenge',        // 1 month ago
+    'cartographer',   // 6 weeks ago
+    'trader',         // 2 months ago
+    'collector',      // 3 months ago
+    'kill-streak',    // 4 months ago
+    'health-nut',     // 5 months ago
+    'guild-member',   // 7 months ago
+    'novice',         // 10 months ago (oldest)
+  ]
+
+  // Time offsets in milliseconds (progressively older)
+  const timeOffsets = [
+    3 * 60 * 60 * 1000,            // 3 hours
+    18 * 60 * 60 * 1000,           // 18 hours
+    2 * 24 * 60 * 60 * 1000,       // 2 days
+    4 * 24 * 60 * 60 * 1000,       // 4 days
+    7 * 24 * 60 * 60 * 1000,       // 1 week
+    12 * 24 * 60 * 60 * 1000,      // 12 days
+    21 * 24 * 60 * 60 * 1000,      // 3 weeks
+    30 * 24 * 60 * 60 * 1000,      // 1 month
+    42 * 24 * 60 * 60 * 1000,      // 6 weeks
+    60 * 24 * 60 * 60 * 1000,      // 2 months
+    90 * 24 * 60 * 60 * 1000,      // 3 months
+    120 * 24 * 60 * 60 * 1000,     // 4 months
+    150 * 24 * 60 * 60 * 1000,     // 5 months
+    210 * 24 * 60 * 60 * 1000,     // 7 months
+    300 * 24 * 60 * 60 * 1000,     // 10 months
+  ]
+
+  const now = new Date()
+
+  return achievementIds.map((id, index) => ({
+    id,
+    unlockedAt: new Date(now.getTime() - (timeOffsets[index] ?? 0)).toISOString(),
+  }))
+}
+
 /** Mock list of unlocked achievements with timestamps for the current user */
-export const UNLOCKED_ACHIEVEMENTS: UnlockedAchievement[] = [
-  { id: 'novice', unlockedAt: '2024-01-15T14:23:00Z' },
-  { id: 'guild-member', unlockedAt: '2024-02-03T09:45:00Z' },
-  { id: 'health-nut', unlockedAt: '2024-02-28T18:12:00Z' },
-  { id: 'kill-streak', unlockedAt: '2024-03-10T22:08:00Z' },
-  { id: 'collector', unlockedAt: '2024-04-05T11:30:00Z' },
-  { id: 'trader', unlockedAt: '2024-05-12T16:55:00Z' },
-  { id: 'cartographer', unlockedAt: '2024-06-20T08:40:00Z' },
-  { id: 'revenge', unlockedAt: '2024-07-08T20:15:00Z' },
-  { id: 'craftsman', unlockedAt: '2024-08-14T13:22:00Z' },
-  { id: 'self-destruct', unlockedAt: '2024-09-01T23:59:00Z' },
-  { id: 'voter', unlockedAt: '2024-09-25T07:33:00Z' },
-  { id: 'biome-hunter', unlockedAt: '2024-10-18T15:48:00Z' },
-  { id: 'meritocracy', unlockedAt: '2024-11-02T10:05:00Z' },
-  { id: 'damage-sponge', unlockedAt: '2024-11-22T19:30:00Z' },
-  { id: 'scavenger', unlockedAt: '2024-12-10T12:17:00Z' },
-]
+export const UNLOCKED_ACHIEVEMENTS: UnlockedAchievement[] = generateUnlockedAchievements()
 
 /** Get list of unlocked achievement IDs */
 export const UNLOCKED_ACHIEVEMENT_IDS: string[] = UNLOCKED_ACHIEVEMENTS.map(a => a.id)

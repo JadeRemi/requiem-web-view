@@ -471,6 +471,48 @@ const TABS: { id: LadderTab; label: string }[] = [
   { id: 'progress', label: 'Progress' },
 ]
 
+/** Mock: Statistics last updated 20 hours ago from page load */
+function getLastUpdatedDate(): Date {
+  const date = new Date()
+  date.setHours(date.getHours() - 20)
+  return date
+}
+
+/**
+ * Format date with time in 24-hour format (e.g., "Dec 28, 2025, 14:30")
+ */
+function formatDateTime(isoString: string): string {
+  const date = new Date(isoString)
+  return date.toLocaleString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  })
+}
+
+/**
+ * Format relative time with full words (e.g., "20 hours ago")
+ */
+function formatRelativeTimeLong(isoString: string): string {
+  const date = new Date(isoString)
+  const now = new Date()
+  const diffMs = now.getTime() - date.getTime()
+  const diffMins = Math.floor(diffMs / 60000)
+  const diffHours = Math.floor(diffMins / 60)
+  const diffDays = Math.floor(diffHours / 24)
+
+  if (diffMins < 60) {
+    return `${diffMins} minute${diffMins !== 1 ? 's' : ''} ago`
+  } else if (diffHours < 24) {
+    return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`
+  } else {
+    return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`
+  }
+}
+
 /**
  * Ladder Page
  * Displays player rankings with sortable columns across three tabs
@@ -480,6 +522,10 @@ export function LadderPage() {
   const { user } = useAuth()
   const [activeTab, setActiveTab] = useState<LadderTab>('time')
 
+  // Mock last updated date - computed once on mount
+  const lastUpdated = useMemo(() => getLastUpdatedDate(), [])
+  const lastUpdatedFormatted = formatDateTime(lastUpdated.toISOString())
+
   return (
     <div className="page ladder-page">
       <div className="ladder-content">
@@ -488,7 +534,10 @@ export function LadderPage() {
           color="var(--color-text-tertiary)"
           style={{ marginBottom: 'var(--space-6)', textAlign: 'center' }}
         >
-          Statistics update once per day
+          Statistics update once per day. Last updated:{' '}
+          <Tooltip content={lastUpdatedFormatted} position="top">
+            <span className="ladder-last-updated">{formatRelativeTimeLong(lastUpdated.toISOString())}</span>
+          </Tooltip>
         </Typography>
 
         <div className="ladder-tabs">

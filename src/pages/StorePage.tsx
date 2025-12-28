@@ -7,6 +7,7 @@ import { Tooltip } from '../components/Tooltip'
 import { CURRENCY, STORE, ROUTES, DEFAULT_SKIN_HASH } from '../config'
 import { STORE_PRIVILEGES } from '../mock/store'
 import { MOCK_PURCHASES, PURCHASE_ITEM_NAMES, getPlayerByUuid, type PurchaseEntry } from '../mock/purchases'
+import { usePageTitle } from '../hooks/usePageTitle'
 
 type PaymentMethod = 'stripe' | 'spherepay' | null
 type PurchaseAmount = (typeof STORE.PURCHASE_OPTIONS)[number] | null
@@ -149,6 +150,7 @@ function PurchaseRow({ purchase }: { purchase: PurchaseEntry }) {
 }
 
 export function StorePage() {
+  usePageTitle()
   const [selectedPayment, setSelectedPayment] = useState<PaymentMethod>(null)
   const [selectedAmount, setSelectedAmount] = useState<PurchaseAmount>(null)
   const [expandedId, setExpandedId] = useState<string | null>(null)
