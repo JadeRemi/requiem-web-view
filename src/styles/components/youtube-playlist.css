@@ -1,0 +1,170 @@
+/**
+ * YouTube Playlist Component Styles
+ */
+
+.youtube-playlist-section {
+  margin-top: var(--space-12);
+  padding-top: var(--space-8);
+  border-top: 1px solid var(--grey-800);
+}
+
+.youtube-playlist-container {
+  display: flex;
+  gap: var(--space-6);
+}
+
+/* Video Player */
+.youtube-playlist-player {
+  flex: 1;
+  aspect-ratio: 16 / 9;
+  background: var(--grey-900);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--grey-700);
+}
+
+.youtube-playlist-player iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Sidebar wrapper containing list and sticky link */
+.youtube-playlist-sidebar {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  max-height: 450px;
+}
+
+/* Video List */
+.youtube-playlist-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  overflow-y: auto;
+  padding-right: var(--space-3);
+}
+
+/* Scrollbar styling */
+.youtube-playlist-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.youtube-playlist-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.youtube-playlist-list::-webkit-scrollbar-thumb {
+  background: var(--grey-700);
+  border-radius: var(--radius-full);
+}
+
+.youtube-playlist-list::-webkit-scrollbar-thumb:hover {
+  background: var(--grey-600);
+}
+
+/* Video Item */
+.youtube-playlist-item {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-2);
+  background: var(--grey-850);
+  border: 1px solid var(--grey-700);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: left;
+  flex-shrink: 0;
+}
+
+.youtube-playlist-item:hover {
+  background: var(--grey-800);
+  border-color: var(--grey-600);
+}
+
+.youtube-playlist-item.active {
+  background: var(--grey-800);
+  border-color: var(--grey-500);
+}
+
+/* Video Thumbnail */
+.youtube-playlist-thumbnail {
+  position: relative;
+  width: 120px;
+  height: 68px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--grey-900);
+}
+
+.youtube-playlist-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.youtube-playlist-playing {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.youtube-playlist-playing-icon {
+  font-size: var(--text-lg);
+  color: var(--grey-100);
+}
+
+/* Video Info */
+.youtube-playlist-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.youtube-playlist-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-sm);
+  color: var(--grey-200);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.youtube-playlist-meta {
+  font-size: var(--text-xs);
+  color: var(--grey-500);
+  line-height: 1.4;
+}
+
+/* Playlist Link - Sticky at bottom */
+.youtube-playlist-link {
+  display: block;
+  padding: var(--space-3);
+  margin-top: var(--space-2);
+  text-align: center;
+  text-decoration: underline;
+  font-size: var(--text-sm);
+  color: var(--grey-400);
+  background: var(--grey-900);
+  border: 1px solid var(--grey-700);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.youtube-playlist-link:hover {
+  color: var(--grey-100);
+  background: var(--grey-850);
+  border-color: var(--grey-600);
+}
