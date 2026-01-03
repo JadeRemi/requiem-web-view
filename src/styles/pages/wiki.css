@@ -760,6 +760,74 @@
   animation: achievement-border-rotate 12s linear infinite;
 }
 
+/* Tracked Achievements Section */
+.tracked-achievements-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.tracked-achievements-divider {
+  width: 100%;
+  height: 1px;
+  background: var(--grey-700);
+  margin: var(--space-4) 0;
+}
+
+.tracked-achievements-label {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Tracked Achievement Card - grey palette styling */
+.achievement-card-tracked {
+  background: linear-gradient(135deg, var(--grey-900) 0%, rgba(160, 160, 160, 0.08) 100%);
+  border: 1px solid var(--grey-600);
+}
+
+.achievement-icon-tracked {
+  background: var(--grey-800);
+  border-color: var(--grey-500);
+  color: var(--grey-300);
+}
+
+/* Achievement Progress Bar */
+.achievement-progress {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--space-2);
+}
+
+.achievement-progress-bar {
+  width: 100%;
+  height: 20px;
+  background: var(--grey-800);
+  border: 1px solid var(--grey-600);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.achievement-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--grey-600) 0%, var(--grey-500) 100%);
+  border-radius: var(--radius-full);
+  transition: width var(--transition-normal);
+}
+
+.achievement-progress-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-orbitron);
+  font-size: var(--text-xs);
+  color: var(--grey-200);
+  z-index: 1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
 /* Wiki Terms Table */
 .wiki-terms-page {
   overflow-y: auto;

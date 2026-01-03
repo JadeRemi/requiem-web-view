@@ -192,6 +192,11 @@ export interface UnlockedAchievement {
   unlockedAt: string // ISO date string
 }
 
+export interface TrackedAchievement {
+  id: string
+  progress: number // 0-100 percentage
+}
+
 /**
  * Generate mock unlocked achievements with progressively older timestamps
  * Newest achievement is a few hours ago, each subsequent one is older
@@ -284,4 +289,55 @@ export const getUnlockedAchievementsWithData = (): (Achievement & { unlockedAt: 
       return { ...achievement, unlockedAt: unlocked.unlockedAt }
     })
     .filter((a): a is Achievement & { unlockedAt: string } => a !== null)
+}
+
+/**
+ * Generate mock tracked achievements
+ * Randomly selects from incomplete achievements with fixed progress for demo
+ */
+function generateTrackedAchievements(): TrackedAchievement[] {
+  // Get incomplete achievement IDs
+  const incompleteIds = ACHIEVEMENTS
+    .filter(a => !UNLOCKED_ACHIEVEMENT_IDS.includes(a.id))
+    .map(a => a.id)
+
+  // Shuffle and pick one random achievement
+  const shuffled = [...incompleteIds].sort(() => Math.random() - 0.5)
+  const selectedId = shuffled[0]
+
+  if (!selectedId) return []
+
+  // Random progress between 10-90%
+  const progress = Math.floor(Math.random() * 81) + 10
+
+  return [{ id: selectedId, progress }]
+}
+
+/** Mock tracked achievements (regenerated on page load for demo) */
+export const TRACKED_ACHIEVEMENTS: TrackedAchievement[] = generateTrackedAchievements()
+
+/** Get tracked achievement IDs */
+export const getTrackedAchievementIds = (): string[] => {
+  return TRACKED_ACHIEVEMENTS.map(t => t.id)
+}
+
+/** Check if an achievement is tracked */
+export const isAchievementTracked = (achievementId: string): boolean => {
+  return TRACKED_ACHIEVEMENTS.some(t => t.id === achievementId)
+}
+
+/** Get tracked achievement data by ID */
+export const getTrackedAchievement = (achievementId: string): TrackedAchievement | undefined => {
+  return TRACKED_ACHIEVEMENTS.find(t => t.id === achievementId)
+}
+
+/** Get all tracked achievements with full data */
+export const getTrackedAchievementsWithData = (): (Achievement & TrackedAchievement)[] => {
+  return TRACKED_ACHIEVEMENTS
+    .map(tracked => {
+      const achievement = getAchievementById(tracked.id)
+      if (!achievement) return null
+      return { ...achievement, ...tracked }
+    })
+    .filter((a): a is Achievement & TrackedAchievement => a !== null)
 }

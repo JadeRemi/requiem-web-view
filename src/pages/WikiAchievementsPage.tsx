@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { Typography, TypographyVariant } from '../components/Typography'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { Icon } from '../components/Icon'
-import { ACHIEVEMENTS, isAchievementUnlocked, getUnlockedCount, getTotalCount, UNLOCKED_ACHIEVEMENTS } from '../mock/achievements'
+import { ACHIEVEMENTS, isAchievementUnlocked, getUnlockedCount, getTotalCount, UNLOCKED_ACHIEVEMENTS, getTrackedAchievementsWithData, getTrackedAchievement } from '../mock/achievements'
 import { useAuth } from '../contexts/AuthContext'
 
 type AchievementFilter = 'all' | 'completed' | 'incomplete'
@@ -24,6 +24,12 @@ export function WikiAchievementsPage() {
 
   // Sort is disabled when viewing incomplete achievements
   const sortDisabled = filter === 'incomplete'
+
+  // Get tracked achievements (only when logged in)
+  const trackedAchievements = useMemo(() => {
+    if (!isLoggedIn) return []
+    return getTrackedAchievementsWithData()
+  }, [isLoggedIn])
 
   const filteredAchievements = useMemo(() => {
     let result = [...ACHIEVEMENTS]
@@ -62,8 +68,14 @@ export function WikiAchievementsPage() {
       })
     }
 
+    // When viewing all or incomplete, put tracked achievements first (and exclude from main list)
+    if (isLoggedIn && filter !== 'completed') {
+      const trackedIds = trackedAchievements.map(t => t.id)
+      result = result.filter(a => !trackedIds.includes(a.id))
+    }
+
     return result
-  }, [isLoggedIn, filter, sort])
+  }, [isLoggedIn, filter, sort, trackedAchievements])
 
   // Scroll to achievement when hash is present
   useEffect(() => {
@@ -154,6 +166,58 @@ export function WikiAchievementsPage() {
       </div>
 
       <div className="wiki-section">
+        {/* Tracked Achievements Section - only show when logged in and not viewing completed */}
+        {isLoggedIn && filter !== 'completed' && trackedAchievements.length > 0 && (
+          <div className="tracked-achievements-section">
+            <Typography variant={TypographyVariant.Caption} color="var(--grey-500)" className="tracked-achievements-label">
+              Tracked
+            </Typography>
+            <div className="achievements-list">
+              {trackedAchievements.map((achievement) => {
+                const tracked = getTrackedAchievement(achievement.id)
+                return (
+                  <div
+                    key={achievement.id}
+                    id={achievement.id}
+                    className="achievement-card achievement-card-tracked"
+                  >
+                    <div className="achievement-icon achievement-icon-tracked">
+                      <Icon name="target" size={20} />
+                    </div>
+                    <div className="achievement-content">
+                      <Typography
+                        variant={TypographyVariant.Body}
+                        style={{ fontWeight: 500 }}
+                        color="var(--grey-100)"
+                      >
+                        {achievement.name}
+                      </Typography>
+                      <Typography
+                        variant={TypographyVariant.BodySmall}
+                        color="var(--grey-400)"
+                      >
+                        {achievement.description}
+                      </Typography>
+                      {tracked && (
+                        <div className="achievement-progress">
+                          <div className="achievement-progress-bar">
+                            <div
+                              className="achievement-progress-fill"
+                              style={{ width: `${tracked.progress}%` }}
+                            />
+                          </div>
+                          <span className="achievement-progress-text">{tracked.progress}%</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+            <div className="tracked-achievements-divider" />
+          </div>
+        )}
+
         <div className="achievements-list">
           {filteredAchievements.map((achievement) => {
             const unlocked = isLoggedIn && isAchievementUnlocked(achievement.id)

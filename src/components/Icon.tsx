@@ -47,6 +47,7 @@ export type IconName =
   | 'search'
   | 'thumb-up'
   | 'calendar'
+  | 'target'
 
 interface IconProps {
   name: IconName
@@ -106,6 +107,7 @@ const iconPaths: Record<IconName, string> = {
   search: 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z',
   'thumb-up': 'M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5',
   calendar: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z',
+  target: 'M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm0-4a6 6 0 100-12 6 6 0 000 12zm0-4a2 2 0 100-4 2 2 0 000 4z',
 }
 
 /** Icons that use fill instead of stroke */

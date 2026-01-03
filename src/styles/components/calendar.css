@@ -82,6 +82,7 @@
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 2px;
+  position: relative;
 }
 
 .calendar-day-name {
@@ -129,4 +130,25 @@
 
 .calendar-day-today.calendar-day-event {
   background: linear-gradient(135deg, rgba(128, 0, 128, 0.5) 0%, rgba(204, 0, 204, 0.4) 100%);
+}
+
+/* Event duration overlay - covers gaps between event cells */
+.calendar-event-overlay {
+  position: absolute;
+  pointer-events: auto;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, rgba(128, 0, 128, 0.3) 0%, rgba(204, 0, 204, 0.2) 100%);
+  transition: background var(--transition-normal);
+  z-index: 0;
+}
+
+.calendar-event-overlay-hover {
+  background: linear-gradient(135deg, rgba(128, 0, 128, 0.5) 0%, rgba(204, 0, 204, 0.4) 100%);
+}
+
+/* Event cells should be above overlay */
+.calendar-day-event {
+  position: relative;
+  z-index: 1;
 }

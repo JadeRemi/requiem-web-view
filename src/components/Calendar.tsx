@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useCallback } from 'react'
+import { useState, useMemo, useRef, useCallback, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 
 interface CalendarProps {
@@ -66,6 +66,8 @@ export function Calendar({ eventDates, initialDate, startTooltip, endTooltip, cl
   const [endTooltipRect, setEndTooltipRect] = useState<DOMRect | null>(null)
   const startDateRef = useRef<HTMLDivElement>(null)
   const endDateRef = useRef<HTMLDivElement>(null)
+  const gridRef = useRef<HTMLDivElement>(null)
+  const [overlayRects, setOverlayRects] = useState<Array<{ top: number; left: number; width: number; height: number }>>([])
 
   // Get start and end dates from eventDates array
   const startDate = eventDates.length > 0 ? eventDates[0] : null
@@ -89,6 +91,94 @@ export function Calendar({ eventDates, initialDate, startTooltip, endTooltip, cl
     setStartTooltipRect(null)
     setEndTooltipRect(null)
   }, [])
+
+  // Calculate overlay rectangles for event rows (to fill gaps between cells)
+  const calculateOverlayRects = useCallback(() => {
+    if (!gridRef.current) return
+
+    const grid = gridRef.current
+    const gridRect = grid.getBoundingClientRect()
+    const eventCells = grid.querySelectorAll('.calendar-day-event')
+
+    if (eventCells.length === 0) {
+      setOverlayRects([])
+      return
+    }
+
+    // Group cells by their row (based on top position)
+    const rowGroups = new Map<number, DOMRect[]>()
+
+    eventCells.forEach(cell => {
+      const rect = cell.getBoundingClientRect()
+      // Round to avoid floating point issues
+      const rowKey = Math.round(rect.top)
+
+      if (!rowGroups.has(rowKey)) {
+        rowGroups.set(rowKey, [])
+      }
+      rowGroups.get(rowKey)!.push(rect)
+    })
+
+    // Create overlay rect for each row spanning from first to last cell
+    const rects: Array<{ top: number; left: number; width: number; height: number }> = []
+
+    // Sort rows by their top position
+    const sortedRows = Array.from(rowGroups.entries()).sort((a, b) => a[0] - b[0])
+
+    sortedRows.forEach(([, cells], rowIndex) => {
+      if (cells.length === 0) return
+
+      // Sort cells by left position
+      cells.sort((a, b) => a.left - b.left)
+
+      const firstCell = cells[0]!
+      const lastCell = cells[cells.length - 1]!
+
+      // Horizontal overlay for this row
+      rects.push({
+        top: firstCell.top - gridRect.top,
+        left: firstCell.left - gridRect.left,
+        width: lastCell.right - firstCell.left,
+        height: firstCell.height,
+      })
+
+      // Vertical connector to next row (if there is one)
+      if (rowIndex < sortedRows.length - 1) {
+        const nextRowCells = sortedRows[rowIndex + 1]![1]
+        if (nextRowCells.length === 0) return
+
+        nextRowCells.sort((a, b) => a.left - b.left)
+        const nextFirstCell = nextRowCells[0]!
+
+        // The vertical connector spans from current row bottom to next row top
+        const connectorTop = firstCell.bottom - gridRect.top
+        const connectorBottom = nextFirstCell.top - gridRect.top
+
+        // Only add if there's actually a gap
+        if (connectorBottom > connectorTop) {
+          // Connector between rows spans from next row's first cell to current row's last cell
+          const overlapLeft = nextFirstCell.left - gridRect.left
+          const overlapRight = lastCell.right - gridRect.left
+
+          rects.push({
+            top: connectorTop,
+            left: Math.min(overlapLeft, overlapRight),
+            width: Math.abs(overlapRight - overlapLeft),
+            height: connectorBottom - connectorTop,
+          })
+        }
+      }
+    })
+
+    setOverlayRects(rects)
+  }, [])
+
+  // Recalculate overlays when month changes or on mount
+  useEffect(() => {
+    // Small delay to ensure DOM has rendered
+    const timer = setTimeout(calculateOverlayRects, 0)
+    return () => clearTimeout(timer)
+  }, [currentMonth, currentYear, eventDates, calculateOverlayRects])
 
   const daysInMonth = useMemo(() => getDaysInMonth(currentYear, currentMonth), [currentYear, currentMonth])
   const firstDayOfMonth = useMemo(() => getFirstDayOfMonth(currentYear, currentMonth), [currentYear, currentMonth])
@@ -151,7 +241,23 @@ export function Calendar({ eventDates, initialDate, startTooltip, endTooltip, cl
         </button>
       </div>
 
-      <div className="calendar-grid">
+      <div className="calendar-grid" ref={gridRef}>
+        {/* Event row overlays - fill gaps between cells */}
+        {overlayRects.map((rect, i) => (
+          <div
+            key={`overlay-${i}`}
+            className={`calendar-event-overlay ${isEventHovered ? 'calendar-event-overlay-hover' : ''}`}
+            style={{
+              top: rect.top,
+              left: rect.left,
+              width: rect.width,
+              height: rect.height,
+            }}
+            onMouseEnter={handleEventMouseEnter}
+            onMouseLeave={handleEventMouseLeave}
+          />
+        ))}
+
         {/* Day name headers */}
         {DAY_NAMES.map(day => (
           <div key={day} className="calendar-day-name">

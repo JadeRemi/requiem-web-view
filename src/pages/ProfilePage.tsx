@@ -381,12 +381,12 @@ export function ProfilePage() {
 
               {/* Equipment Buttons */}
               <div className="equipment-buttons">
-                <Typography 
-                  variant={TypographyVariant.Caption} 
+                <Typography
+                  variant={TypographyVariant.Caption}
                   color="var(--color-text-secondary)"
                   style={{ marginBottom: 'var(--space-2)' }}
                 >
-                  Equipment
+                  Equipment showcase
                 </Typography>
                 <div className="equipment-grid">
                   {EQUIPMENT_MODELS.map((equipment, index) => (
