@@ -91,7 +91,7 @@
   font-family: var(--font-nirmala);
   font-size: var(--text-xs);
   color: var(--grey-100);
-  white-space: nowrap;
+  white-space: pre-line;
   box-shadow: var(--shadow-lg);
 }
 

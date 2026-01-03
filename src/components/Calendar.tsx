@@ -1,11 +1,15 @@
-import { useState, useMemo } from 'react'
-import { Tooltip } from './Tooltip'
+import { useState, useMemo, useRef, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 
 interface CalendarProps {
   /** Dates to highlight as event dates */
   eventDates: Date[]
   /** Initial month to display (defaults to first event date's month) */
   initialDate?: Date
+  /** Tooltip text for start date cell */
+  startTooltip?: string
+  /** Tooltip text for end date cell */
+  endTooltip?: string
   className?: string
 }
 
@@ -50,11 +54,41 @@ function isEventDate(date: Date, eventDates: Date[]): boolean {
  * Displays a month view calendar with highlighted event dates.
  * Navigation via triangle buttons to adjacent months.
  */
-export function Calendar({ eventDates, initialDate, className = '' }: CalendarProps) {
+export function Calendar({ eventDates, initialDate, startTooltip, endTooltip, className = '' }: CalendarProps) {
   // Default to first event date's month, or current month
   const defaultDate = initialDate || eventDates[0] || new Date()
   const [currentMonth, setCurrentMonth] = useState(defaultDate.getMonth())
   const [currentYear, setCurrentYear] = useState(defaultDate.getFullYear())
+
+  // Hover state for event days (controls both tooltips and highlight)
+  const [isEventHovered, setIsEventHovered] = useState(false)
+  const [startTooltipRect, setStartTooltipRect] = useState<DOMRect | null>(null)
+  const [endTooltipRect, setEndTooltipRect] = useState<DOMRect | null>(null)
+  const startDateRef = useRef<HTMLDivElement>(null)
+  const endDateRef = useRef<HTMLDivElement>(null)
+
+  // Get start and end dates from eventDates array
+  const startDate = eventDates.length > 0 ? eventDates[0] : null
+  const endDate = eventDates.length > 0 ? eventDates[eventDates.length - 1] : null
+  const isSameDayEvent = startDate && endDate && isSameDay(startDate, endDate)
+
+  const handleEventMouseEnter = useCallback(() => {
+    setIsEventHovered(true)
+    // Get rect for start date cell if visible
+    if (startTooltip && startDateRef.current) {
+      setStartTooltipRect(startDateRef.current.getBoundingClientRect())
+    }
+    // Get rect for end date cell if visible
+    if (endTooltip && endDateRef.current) {
+      setEndTooltipRect(endDateRef.current.getBoundingClientRect())
+    }
+  }, [startTooltip, endTooltip])
+
+  const handleEventMouseLeave = useCallback(() => {
+    setIsEventHovered(false)
+    setStartTooltipRect(null)
+    setEndTooltipRect(null)
+  }, [])
 
   const daysInMonth = useMemo(() => getDaysInMonth(currentYear, currentMonth), [currentYear, currentMonth])
   const firstDayOfMonth = useMemo(() => getFirstDayOfMonth(currentYear, currentMonth), [currentYear, currentMonth])
@@ -134,27 +168,76 @@ export function Calendar({ eventDates, initialDate, className = '' }: CalendarPr
           const date = new Date(currentYear, currentMonth, day)
           const isEvent = isEventDate(date, eventDates)
           const isToday = isSameDay(date, new Date())
+          const isStartDate = startDate && isSameDay(date, startDate)
+          const isEndDate = endDate && isSameDay(date, endDate)
 
-          const dayElement = (
+          // Determine which ref to use (start takes priority if same day)
+          const cellRef = isStartDate ? startDateRef : isEndDate ? endDateRef : undefined
+
+          return (
             <div
               key={day}
-              className={`calendar-day ${isEvent ? 'calendar-day-event' : ''} ${isToday ? 'calendar-day-today' : ''}`}
+              ref={cellRef}
+              className={`calendar-day ${isEvent ? 'calendar-day-event' : ''} ${isToday ? 'calendar-day-today' : ''} ${isEvent && isEventHovered ? 'calendar-day-event-hover' : ''}`}
+              onMouseEnter={isEvent ? handleEventMouseEnter : undefined}
+              onMouseLeave={isEvent ? handleEventMouseLeave : undefined}
             >
               {day}
             </div>
           )
-
-          if (isToday) {
-            return (
-              <Tooltip key={day} content="Today" position="top">
-                {dayElement}
-              </Tooltip>
-            )
-          }
-
-          return dayElement
         })}
       </div>
+
+      {/* Combined tooltip for same-day events */}
+      {isEventHovered && isSameDayEvent && startTooltipRect && startTooltip && endTooltip && (createPortal(
+        <div
+          className="tooltip tooltip-top"
+          style={{
+            position: 'fixed',
+            left: startTooltipRect.left + startTooltipRect.width / 2,
+            top: startTooltipRect.top - 8,
+            transform: 'translate(-50%, -100%)',
+          }}
+        >
+          <div className="tooltip-content">{startTooltip}{'\n'}{endTooltip}</div>
+          <div className="tooltip-beak tooltip-beak-top" />
+        </div>,
+        document.body
+      ) as React.ReactElement)}
+
+      {/* Start date tooltip (above) - only when not same day */}
+      {isEventHovered && !isSameDayEvent && startTooltipRect && startTooltip && (createPortal(
+        <div
+          className="tooltip tooltip-top"
+          style={{
+            position: 'fixed',
+            left: startTooltipRect.left + startTooltipRect.width / 2,
+            top: startTooltipRect.top - 8,
+            transform: 'translate(-50%, -100%)',
+          }}
+        >
+          <div className="tooltip-content">{startTooltip}</div>
+          <div className="tooltip-beak tooltip-beak-top" />
+        </div>,
+        document.body
+      ) as React.ReactElement)}
+
+      {/* End date tooltip (below) - only when not same day */}
+      {isEventHovered && !isSameDayEvent && endTooltipRect && endTooltip && (createPortal(
+        <div
+          className="tooltip tooltip-bottom"
+          style={{
+            position: 'fixed',
+            left: endTooltipRect.left + endTooltipRect.width / 2,
+            top: endTooltipRect.top + endTooltipRect.height + 8,
+            transform: 'translate(-50%, 0)',
+          }}
+        >
+          <div className="tooltip-content">{endTooltip}</div>
+          <div className="tooltip-beak tooltip-beak-bottom" />
+        </div>,
+        document.body
+      ) as React.ReactElement)}
     </div>
   )
 }

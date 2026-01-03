@@ -114,11 +114,11 @@
   color: var(--grey-100);
   font-weight: 600;
   cursor: pointer;
-  transition: background var(--transition-fast);
+  transition: background var(--transition-normal);
 }
 
-/* Hover effect for all event days when any event day is hovered */
-.calendar-grid:has(.calendar-day-event:hover) .calendar-day-event {
+/* Hover effect applied via JS class for smooth transition on all event cells */
+.calendar-day-event-hover {
   background: linear-gradient(135deg, rgba(128, 0, 128, 0.5) 0%, rgba(204, 0, 204, 0.4) 100%);
 }
 

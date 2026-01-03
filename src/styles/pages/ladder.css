@@ -109,3 +109,12 @@
   cursor: pointer;
   border-bottom: 1px dotted var(--grey-500);
 }
+
+/* Header row with stats text and checkbox */
+.ladder-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-6);
+}
+

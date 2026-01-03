@@ -87,10 +87,15 @@ function formatRelativeTime(isoString: string): string {
   }
 }
 
+interface LadderTableProps {
+  user: AuthUser | null
+  includeJailed: boolean
+}
+
 /**
  * Time Ladder Table
  */
-function TimeLadderTable({ user }: { user: AuthUser | null }) {
+function TimeLadderTable({ user, includeJailed }: LadderTableProps) {
   const [sort, setSort] = useState<SortParams>({ field: 'playtime', direction: 'desc' })
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(true)
@@ -104,6 +109,19 @@ function TimeLadderTable({ user }: { user: AuthUser | null }) {
     }, INITIAL_LOAD_DELAY)
     return () => clearTimeout(timer)
   }, [])
+
+  // Reload when includeJailed changes (simulates API request)
+  useEffect(() => {
+    if (!initialLoad) {
+      setLoading(true)
+      setPage(1)
+      const timer = setTimeout(() => {
+        setLoading(false)
+      }, INITIAL_LOAD_DELAY)
+      return () => clearTimeout(timer)
+    }
+    return undefined
+  }, [includeJailed])
 
   const sortedData = useMemo(() => {
     const data = [...TIME_LADDER]
@@ -213,7 +231,7 @@ function TimeLadderTable({ user }: { user: AuthUser | null }) {
 /**
  * Combat Ladder Table
  */
-function CombatLadderTable({ user }: { user: AuthUser | null }) {
+function CombatLadderTable({ user, includeJailed }: LadderTableProps) {
   const [sort, setSort] = useState<SortParams>({ field: 'pvpKills', direction: 'desc' })
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(true)
@@ -226,6 +244,19 @@ function CombatLadderTable({ user }: { user: AuthUser | null }) {
     }, INITIAL_LOAD_DELAY)
     return () => clearTimeout(timer)
   }, [])
+
+  // Reload when includeJailed changes (simulates API request)
+  useEffect(() => {
+    if (!initialLoad) {
+      setLoading(true)
+      setPage(1)
+      const timer = setTimeout(() => {
+        setLoading(false)
+      }, INITIAL_LOAD_DELAY)
+      return () => clearTimeout(timer)
+    }
+    return undefined
+  }, [includeJailed])
 
   const sortedData = useMemo(() => {
     const data = [...COMBAT_LADDER]
@@ -359,7 +390,7 @@ function CombatLadderTable({ user }: { user: AuthUser | null }) {
 /**
  * Progress Ladder Table
  */
-function ProgressLadderTable({ user }: { user: AuthUser | null }) {
+function ProgressLadderTable({ user, includeJailed }: LadderTableProps) {
   const [sort, setSort] = useState<SortParams>({ field: 'achievements', direction: 'desc' })
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(true)
@@ -372,6 +403,19 @@ function ProgressLadderTable({ user }: { user: AuthUser | null }) {
     }, INITIAL_LOAD_DELAY)
     return () => clearTimeout(timer)
   }, [])
+
+  // Reload when includeJailed changes (simulates API request)
+  useEffect(() => {
+    if (!initialLoad) {
+      setLoading(true)
+      setPage(1)
+      const timer = setTimeout(() => {
+        setLoading(false)
+      }, INITIAL_LOAD_DELAY)
+      return () => clearTimeout(timer)
+    }
+    return undefined
+  }, [includeJailed])
 
   const sortedData = useMemo(() => {
     const data = [...PROGRESS_LADDER]
@@ -521,24 +565,39 @@ export function LadderPage() {
   usePageTitle()
   const { user } = useAuth()
   const [activeTab, setActiveTab] = useState<LadderTab>('time')
+  const [showJailedPlayers, setShowJailedPlayers] = useState(false)
 
   // Mock last updated date - computed once on mount
   const lastUpdated = useMemo(() => getLastUpdatedDate(), [])
   const lastUpdatedFormatted = formatDateTime(lastUpdated.toISOString())
 
+  // TODO: In the future, showJailedPlayers will trigger an API call to reload data
+
   return (
     <div className="page ladder-page">
       <div className="ladder-content">
-        <Typography
-          variant={TypographyVariant.Caption}
-          color="var(--color-text-tertiary)"
-          style={{ marginBottom: 'var(--space-6)', textAlign: 'center' }}
-        >
-          Statistics update once per day. Last updated:{' '}
-          <Tooltip content={lastUpdatedFormatted} position="top">
-            <span className="ladder-last-updated">{formatRelativeTimeLong(lastUpdated.toISOString())}</span>
-          </Tooltip>
-        </Typography>
+        <div className="ladder-header-row">
+          <Typography
+            variant={TypographyVariant.Caption}
+            color="var(--color-text-tertiary)"
+          >
+            Statistics update once per day. Last updated:{' '}
+            <Tooltip content={lastUpdatedFormatted} position="top">
+              <span className="ladder-last-updated">{formatRelativeTimeLong(lastUpdated.toISOString())}</span>
+            </Tooltip>
+          </Typography>
+
+          <label className="checkbox-label">
+            <input
+              type="checkbox"
+              checked={showJailedPlayers}
+              onChange={(e) => setShowJailedPlayers(e.target.checked)}
+              className="checkbox-input"
+            />
+            <span className="checkbox-box" />
+            <span>Show jailed players</span>
+          </label>
+        </div>
 
         <div className="ladder-tabs">
           {TABS.map((tab) => (
@@ -553,9 +612,9 @@ export function LadderPage() {
         </div>
 
         <div className="ladder-table-container">
-          {activeTab === 'time' && <TimeLadderTable user={user} />}
-          {activeTab === 'combat' && <CombatLadderTable user={user} />}
-          {activeTab === 'progress' && <ProgressLadderTable user={user} />}
+          {activeTab === 'time' && <TimeLadderTable user={user} includeJailed={showJailedPlayers} />}
+          {activeTab === 'combat' && <CombatLadderTable user={user} includeJailed={showJailedPlayers} />}
+          {activeTab === 'progress' && <ProgressLadderTable user={user} includeJailed={showJailedPlayers} />}
         </div>
       </div>
     </div>
