@@ -32,7 +32,7 @@ export function AyumPracticeModalContent({ onClose }: AyumPracticeModalContentPr
   const [activeKey, setActiveKey] = useState<string | null>(null)
   const [history, setHistory] = useState<HistoricalAbility[]>([])
   const [castSuccess, setCastSuccess] = useState(false)
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Cleanup timeout on unmount only
   useEffect(() => {
@@ -95,10 +95,11 @@ export function AyumPracticeModalContent({ onClose }: AyumPracticeModalContentPr
           if (confirmedCombination) {
             setHistory(prev => {
               // Check if the last entry has the same name
-              if (prev.length > 0 && prev[0].name === confirmedCombination) {
+              const firstEntry = prev[0]
+              if (firstEntry && firstEntry.name === confirmedCombination) {
                 // Increment the count of the last entry
                 const updated = [...prev]
-                updated[0] = { ...updated[0], count: updated[0].count + 1 }
+                updated[0] = { name: firstEntry.name, timestamp: firstEntry.timestamp, count: firstEntry.count + 1 }
                 return updated
               } else {
                 // Add new entry
@@ -128,10 +129,11 @@ export function AyumPracticeModalContent({ onClose }: AyumPracticeModalContentPr
             // Add to history when confirmation disappears
             setHistory(prev => {
               // Check if the last entry has the same name
-              if (prev.length > 0 && prev[0].name === combinationText) {
+              const firstEntry = prev[0]
+              if (firstEntry && firstEntry.name === combinationText) {
                 // Increment the count of the last entry
                 const updated = [...prev]
-                updated[0] = { ...updated[0], count: updated[0].count + 1 }
+                updated[0] = { name: firstEntry.name, timestamp: firstEntry.timestamp, count: firstEntry.count + 1 }
                 return updated
               } else {
                 // Add new entry

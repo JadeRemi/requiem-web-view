@@ -30,6 +30,7 @@ export function Modal({ isOpen, onClose, children }: ModalProps) {
       }, 200) // Match animation duration
       return () => clearTimeout(timer)
     }
+    return undefined
   }, [isOpen, shouldRender])
 
   // Handle escape key
