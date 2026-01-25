@@ -5,6 +5,7 @@ import { LadderPage } from './pages/LadderPage'
 import { MapPage } from './pages/MapPage'
 import { WikiPage } from './pages/WikiPage'
 import { WikiClassesPage } from './pages/WikiClassesPage'
+import { WikiAbilitiesPage } from './pages/WikiAbilitiesPage'
 import { WikiItemsPage } from './pages/WikiItemsPage'
 import { WikiEnemiesPage } from './pages/WikiEnemiesPage'
 import { WikiAttributesPage } from './pages/WikiAttributesPage'
@@ -56,6 +57,7 @@ function App() {
                   <Route path={ROUTES.MAP} element={<MapPage />} />
                   <Route path={ROUTES.WIKI} element={<WikiPage />} />
                   <Route path={ROUTES.WIKI_CLASSES} element={<WikiClassesPage />} />
+                  <Route path={ROUTES.WIKI_ABILITIES} element={<WikiAbilitiesPage />} />
                   <Route path={ROUTES.WIKI_ITEMS} element={<WikiItemsPage />} />
                   <Route path={ROUTES.WIKI_ENEMIES} element={<WikiEnemiesPage />} />
                   <Route path={ROUTES.WIKI_ATTRIBUTES} element={<WikiAttributesPage />} />

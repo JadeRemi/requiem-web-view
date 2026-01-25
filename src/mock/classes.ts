@@ -436,6 +436,46 @@ export const PLAYER_CLASSES: PlayerClass[] = [
     modelPath: '/models/items/figurine.glb',
     scale: 1.0,
   },
+  {
+    id: 'ayum',
+    name: 'Ayum',
+    description: 'A unique master who manually casts 35 active abilities by combining 4 Aspects in different sequences. Each combination of colored Aspects creates different spell effects, with 200 possible outcomes.',
+    difficulty: 'Easy',
+    modelPath: '/models/items/figurine.glb',
+    scale: 1.0,
+  },
+  {
+    id: 'escapee',
+    name: 'Escapee',
+    description: 'A headless fugitive constantly chased by an unkillable mechanical spider called Skullower. Must maintain constant movement as the Skullower instantly kills on contact.',
+    difficulty: 'Easy',
+    modelPath: '/models/items/figurine.glb',
+    scale: 1.0,
+  },
+  {
+    id: 'sealanthe',
+    name: 'Sealanthe',
+    description: 'A talisman master who places ofuda Seals on block surfaces as traps and buffs. Cannot use weapons but creates circuit-based drawings that trigger various effects.',
+    difficulty: 'Easy',
+    modelPath: '/models/items/figurine.glb',
+    scale: 1.0,
+  },
+  {
+    id: 'savant',
+    name: 'Savant',
+    description: 'A gifted observer with 100% chance to proc offensive mechanics. Can only gain experience from rare Sparknodes scattered across the world. Abilities reroll on every level up.',
+    difficulty: 'Easy',
+    modelPath: '/models/items/figurine.glb',
+    scale: 1.0,
+  },
+  {
+    id: 'phalanx',
+    name: 'Phalanx',
+    description: 'A disciplined soldier themed around army tactics and brutal warfare. Wields roman shield and spear in heavy armor.',
+    difficulty: 'Easy',
+    modelPath: '/models/items/figurine.glb',
+    scale: 1.0,
+  },
 ]
 
 /** Get N random preview classes (shuffled based on current date for variety) */

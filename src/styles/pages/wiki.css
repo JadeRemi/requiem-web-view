@@ -1186,3 +1186,31 @@
 .rules-preview-table .rule-status-allowed {
   color: var(--mc-dark-green);
 }
+
+/* Abilities Page Styles */
+
+.abilities-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  align-items: flex-start;
+}
+
+.ability-class-button {
+  background: linear-gradient(135deg, var(--grey-900) 0%, rgba(139, 92, 246, 0.1) 100%);
+  border: 1px solid var(--grey-700);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-6);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  text-align: center;
+  min-width: 200px;
+  font-family: var(--font-nirmala);
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+}
+
+.ability-class-button:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.15);
+}

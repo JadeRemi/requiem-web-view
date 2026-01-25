@@ -1,0 +1,95 @@
+/* Modal Component Styles */
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+  animation: modal-fade-in var(--transition-normal) ease-out;
+}
+
+.modal-backdrop.closing {
+  animation: modal-fade-out var(--transition-normal) ease-in;
+}
+
+.modal-content {
+  background: var(--grey-900);
+  border: 1px solid var(--grey-700);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: modal-slide-in var(--transition-slow) ease-out;
+}
+
+.modal-content.closing {
+  animation: modal-slide-out var(--transition-normal) ease-in;
+}
+
+@keyframes modal-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes modal-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes modal-slide-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+}
+
+/* Scrollbar styling for modal content */
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: var(--grey-800);
+  border-radius: var(--radius-full);
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: var(--grey-600);
+  border-radius: var(--radius-full);
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: var(--grey-500);
+}

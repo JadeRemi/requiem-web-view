@@ -1,0 +1,304 @@
+/* Ayum Practice Modal Styles */
+
+.ayum-practice-modal {
+  min-width: 600px;
+  max-width: 800px;
+}
+
+/* Aspect Buttons Row */
+.aspect-buttons {
+  display: flex;
+  gap: var(--space-6);
+  justify-content: center;
+  margin: var(--space-8) 0;
+}
+
+.aspect-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.aspect-button {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid;
+  position: relative;
+  transition: all var(--transition-fast);
+  cursor: default;
+  user-select: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.aspect-button::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  padding: 3px;
+  background: linear-gradient(45deg, transparent, transparent);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.aspect-button.active::before {
+  opacity: 1;
+  animation: aspect-pulse 0.6s ease-out;
+}
+
+.aspect-initial {
+  font-size: 48px;
+  font-family: var(--font-orbitron);
+  font-weight: 700;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Aspect Color Variants - Darker, less cartoonish */
+.aspect-green {
+  background: radial-gradient(circle at 30% 30%, #16a34a, #15803d);
+  border-color: #22c55e;
+  color: #d1fae5;
+}
+
+.aspect-green.active {
+  box-shadow: 0 0 30px rgba(22, 163, 74, 0.5), 0 4px 16px rgba(0, 0, 0, 0.3);
+  transform: scale(1.1);
+}
+
+.aspect-green::before {
+  background: linear-gradient(45deg, #16a34a, #22c55e, #16a34a);
+}
+
+.aspect-yellow {
+  background: radial-gradient(circle at 30% 30%, #d97706, #b45309);
+  border-color: #f59e0b;
+  color: #fef3c7;
+}
+
+.aspect-yellow.active {
+  box-shadow: 0 0 30px rgba(217, 119, 6, 0.5), 0 4px 16px rgba(0, 0, 0, 0.3);
+  transform: scale(1.1);
+}
+
+.aspect-yellow::before {
+  background: linear-gradient(45deg, #d97706, #f59e0b, #d97706);
+}
+
+.aspect-red {
+  background: radial-gradient(circle at 30% 30%, #dc2626, #b91c1c);
+  border-color: #ef4444;
+  color: #fee2e2;
+}
+
+.aspect-red.active {
+  box-shadow: 0 0 30px rgba(220, 38, 38, 0.5), 0 4px 16px rgba(0, 0, 0, 0.3);
+  transform: scale(1.1);
+}
+
+.aspect-red::before {
+  background: linear-gradient(45deg, #dc2626, #ef4444, #dc2626);
+}
+
+.aspect-blue {
+  background: radial-gradient(circle at 30% 30%, #2563eb, #1d4ed8);
+  border-color: #3b82f6;
+  color: #dbeafe;
+}
+
+.aspect-blue.active {
+  box-shadow: 0 0 30px rgba(37, 99, 235, 0.5), 0 4px 16px rgba(0, 0, 0, 0.3);
+  transform: scale(1.1);
+}
+
+.aspect-blue::before {
+  background: linear-gradient(45deg, #2563eb, #3b82f6, #2563eb);
+}
+
+@keyframes aspect-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Combination Meter - 4 slots + Q button */
+.combination-meter {
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center;
+  align-items: center;
+  margin-top: var(--space-8);
+  padding: var(--space-4);
+  background: var(--grey-800);
+  border: 1px solid var(--grey-700);
+  border-radius: var(--radius-lg);
+  position: relative;
+}
+
+.combination-slot {
+  width: 60px;
+  height: 60px;
+  border: 2px dashed var(--grey-600);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--grey-900);
+  transition: border-color var(--transition-fast);
+}
+
+.combination-slot:has(.combination-dot) {
+  border-style: solid;
+  border-color: var(--grey-500);
+}
+
+.combination-dot {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid;
+  animation: dot-appear 0.2s ease-out;
+}
+
+@keyframes dot-appear {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Q Button - Absolutely positioned to not affect centering */
+.q-button {
+  position: absolute;
+  right: var(--space-6);
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 32px;
+  font-family: var(--font-orbitron);
+  font-weight: 700;
+  color: var(--color-primary);
+  transition: all var(--transition-fast);
+}
+
+.q-button.cast-success {
+  animation: q-cast-flash 0.6s ease-out;
+}
+
+.combination-slot.cast-success {
+  animation: cast-flash 0.6s ease-out;
+}
+
+@keyframes q-cast-flash {
+  0% {
+    transform: translateY(-50%) scale(1);
+    filter: brightness(1);
+  }
+  30% {
+    transform: translateY(-50%) scale(1.15);
+    filter: brightness(2) drop-shadow(0 0 20px rgba(139, 92, 246, 0.8));
+  }
+  100% {
+    transform: translateY(-50%) scale(1);
+    filter: brightness(1);
+  }
+}
+
+@keyframes cast-flash {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  30% {
+    transform: scale(1.15);
+    filter: brightness(2) drop-shadow(0 0 20px rgba(139, 92, 246, 0.8));
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
+/* Confirmed Combination - Reserved space to prevent modal stretching */
+.confirmed-combination {
+  margin-top: var(--space-6);
+  padding: var(--space-4);
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.05));
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity var(--transition-fast), border-color var(--transition-fast);
+}
+
+.confirmed-combination.visible {
+  opacity: 1;
+}
+
+.confirmed-combination h3 {
+  animation: confirmed-appear 0.4s ease-out;
+}
+
+@keyframes confirmed-appear {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.9);
+    filter: blur(4px);
+  }
+  50% {
+    transform: translateY(0) scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* Ability History - Fixed height to prevent modal stretching */
+.ability-history {
+  margin-top: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  height: 210px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--space-3);
+  background: var(--grey-900);
+  border: 1px solid var(--grey-800);
+  border-radius: var(--radius-md);
+}
+
+.ability-history-entry {
+  text-align: center;
+  transition: all var(--transition-fast);
+  color: var(--grey-400);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+  flex-shrink: 0;
+}

@@ -35,6 +35,7 @@ const SIDEBAR_ITEMS: SidebarItem[] = [
 // Wiki subpage paths that should show the back link
 const WIKI_SUBPAGES = [
   ROUTES.WIKI_CLASSES,
+  ROUTES.WIKI_ABILITIES,
   ROUTES.WIKI_ITEMS,
   ROUTES.WIKI_ENEMIES,
   ROUTES.WIKI_ATTRIBUTES,
